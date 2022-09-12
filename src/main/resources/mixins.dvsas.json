@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "com.firemerald.dvsas.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "mixins.dvsas.refmap.json",
+	"mixins": [
+		"MixinSlabBlock",
+		"MixinStairBlock"
+	],
+	"minVersion": "0.8"
+}

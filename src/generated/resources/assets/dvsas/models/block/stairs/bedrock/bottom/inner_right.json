@@ -1,0 +1,6 @@
+{
+  "parent": "dvsas:block/stairs/side_all/bottom/inner_right",
+  "textures": {
+    "all": "minecraft:block/bedrock"
+  }
+}

@@ -1,6 +1,0 @@
-{
-  "parent": "vsas:block/stairs/side_all/vertical/outer_down_ccw",
-  "textures": {
-    "all": "minecraft:block/granite"
-  }
-}

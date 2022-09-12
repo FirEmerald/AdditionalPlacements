@@ -1,0 +1,6 @@
+{
+  "parent": "dvsas:block/stairs/side_all/vertical/straight",
+  "textures": {
+    "all": "minecraft:block/cobbled_deepslate"
+  }
+}

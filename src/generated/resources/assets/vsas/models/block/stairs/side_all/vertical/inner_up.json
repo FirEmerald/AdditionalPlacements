@@ -1,8 +1,0 @@
-{
-  "parent": "vsas:block/stairs/base/vertical/inner_up",
-  "textures": {
-    "side": "#all",
-    "top": "#all",
-    "bottom": "#all"
-  }
-}

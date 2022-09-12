@@ -1,0 +1,7 @@
+{
+  "parent": "dvsas:block/slabs/column/side",
+  "textures": {
+    "side": "minecraft:block/quartz_block_side",
+    "end": "minecraft:block/quartz_block_top"
+  }
+}

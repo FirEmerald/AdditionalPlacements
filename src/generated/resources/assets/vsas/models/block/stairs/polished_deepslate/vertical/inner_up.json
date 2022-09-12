@@ -1,6 +1,0 @@
-{
-  "parent": "vsas:block/stairs/side_all/vertical/inner_up",
-  "textures": {
-    "all": "minecraft:block/polished_deepslate"
-  }
-}

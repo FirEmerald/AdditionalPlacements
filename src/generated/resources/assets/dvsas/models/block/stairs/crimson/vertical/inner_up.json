@@ -1,0 +1,6 @@
+{
+  "parent": "dvsas:block/stairs/side_all/vertical/inner_up",
+  "textures": {
+    "all": "minecraft:block/crimson_planks"
+  }
+}

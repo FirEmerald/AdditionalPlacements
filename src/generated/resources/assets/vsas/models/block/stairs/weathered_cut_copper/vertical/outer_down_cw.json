@@ -1,6 +1,0 @@
-{
-  "parent": "vsas:block/stairs/side_all/vertical/outer_down_cw",
-  "textures": {
-    "all": "minecraft:block/weathered_cut_copper"
-  }
-}

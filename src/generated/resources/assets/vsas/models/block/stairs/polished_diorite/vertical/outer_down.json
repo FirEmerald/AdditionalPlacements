@@ -1,6 +1,0 @@
-{
-  "parent": "vsas:block/stairs/side_all/vertical/outer_down",
-  "textures": {
-    "all": "minecraft:block/polished_diorite"
-  }
-}

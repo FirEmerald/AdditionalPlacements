@@ -1,0 +1,6 @@
+{
+  "parent": "dvsas:block/stairs/side_all/vertical/outer_down_cw",
+  "textures": {
+    "all": "minecraft:block/polished_blackstone_bricks"
+  }
+}

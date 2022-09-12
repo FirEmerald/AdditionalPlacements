@@ -1,16 +1,16 @@
 modLoader="javafml"
 loaderVersion="[40,)"
 license="MIT License"
-#issueTrackerURL="https://change.me.to.your.issue.tracker.example.invalid/" #TODO
+issueTrackerURL="https://github.com/FirEmerald/DynamicVerticalSlabsAndStairs/issues"
 [[mods]]
-modId="vsas"
+modId="dvsas"
 version="${file.jarVersion}"
-displayName="Vertical Slabs and Stairs"
+displayName="Dynamic Vertical Slabs and Stairs"
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
 #displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
-logoFile="vsas.png"
+logoFile="dvsas.png"
 credits="FirEmerald"
 authors="FirEmerald"
 description='''
@@ -18,7 +18,7 @@ Adds vertical slabs and stairs to all vanilla slabs and stairs.
 Extends the vanilla slabs and stairs instead of adding it's own items and crafting recipes for ease of use.
 Also acts as a framework for other mods to add their own slabs and stairs.
 '''
-[[dependencies.vsas]]
+[[dependencies.dvsas]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.18.2,1.19)"

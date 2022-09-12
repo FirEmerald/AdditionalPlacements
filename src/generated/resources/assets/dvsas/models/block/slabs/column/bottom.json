@@ -1,0 +1,7 @@
+{
+  "parent": "dvsas:block/slabs/base/bottom",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}

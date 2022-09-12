@@ -1,0 +1,327 @@
+{
+  "variants": {
+    "placing=north_east,shape=straight": {
+      "model": "dvsas:block/stairs/stone/vertical/straight",
+      "uvlock": true
+    },
+    "placing=east_south,shape=straight": {
+      "model": "dvsas:block/stairs/stone/vertical/straight",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=straight": {
+      "model": "dvsas:block/stairs/stone/vertical/straight",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=straight": {
+      "model": "dvsas:block/stairs/stone/vertical/straight",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=inner_up": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_up",
+      "uvlock": true
+    },
+    "placing=east_south,shape=inner_up": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_up",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=inner_up": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_up",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=inner_up": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_up",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_up": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_up": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_up": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_up": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_up_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_up_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_up_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_up_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_up_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_cw",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_up_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_up_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_up_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_up_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_up_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_up_ccw",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=inner_down": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_down",
+      "uvlock": true
+    },
+    "placing=east_south,shape=inner_down": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_down",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=inner_down": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_down",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=inner_down": {
+      "model": "dvsas:block/stairs/stone/vertical/inner_down",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_down": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_down": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_down": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_down": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_down_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_down_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_down_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_down_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_down_from_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_cw",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_down_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_down_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_down_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_down_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "y": 270,
+      "uvlock": true
+    },
+    "placing=north_east,shape=outer_flat_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "uvlock": true
+    },
+    "placing=east_south,shape=outer_flat_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "y": 90,
+      "uvlock": true
+    },
+    "placing=south_west,shape=outer_flat_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "y": 180,
+      "uvlock": true
+    },
+    "placing=west_north,shape=outer_flat_down_from_counter_clockwise": {
+      "model": "dvsas:block/stairs/stone/vertical/outer_down_ccw",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

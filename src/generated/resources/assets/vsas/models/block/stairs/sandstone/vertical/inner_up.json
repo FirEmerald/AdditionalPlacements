@@ -1,8 +1,0 @@
-{
-  "parent": "vsas:block/stairs/base/vertical/inner_up",
-  "textures": {
-    "side": "minecraft:block/sandstone",
-    "top": "minecraft:block/sandstone_top",
-    "bottom": "minecraft:block/sandstone_bottom"
-  }
-}

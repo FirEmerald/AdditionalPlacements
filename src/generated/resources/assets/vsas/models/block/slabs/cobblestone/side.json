@@ -1,6 +1,0 @@
-{
-  "parent": "vsas:block/slabs/side_all/side",
-  "textures": {
-    "all": "minecraft:block/cobblestone"
-  }
-}

@@ -20,8 +20,8 @@ apply plugin: 'org.spongepowered.mixin'
 
 
 version = '1.0'
-group = 'com.firemerald.vsas' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'vsas'
+group = 'com.firemerald.dvsas' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'dvsas'
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -64,10 +64,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'vsas'
+            property 'forge.enabledGameTestNamespaces', 'dvsas'
 
             mods {
-                vsas {
+                dvsas {
                     source sourceSets.main
                 }
             }
@@ -81,10 +81,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'vsas'
+            property 'forge.enabledGameTestNamespaces', 'dvsas'
 
             mods {
-                vsas {
+                dvsas {
                     source sourceSets.main
                 }
             }
@@ -109,10 +109,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'vsas'
+            property 'forge.enabledGameTestNamespaces', 'dvsas'
 
             mods {
-                vsas {
+                dvsas {
                     source sourceSets.main
                 }
             }
@@ -126,10 +126,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'vsas', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'dvsas', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                vsas {
+                dvsas {
                     source sourceSets.main
                 }
             }
@@ -173,15 +173,15 @@ dependencies {
 }
 
 mixin {
-    add sourceSets.main, 'mixins.vsas.refmap.json'
-    config 'mixins.vsas.json'
+    add sourceSets.main, 'mixins.dvsas.refmap.json'
+    config 'mixins.dvsas.json'
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "vsas",
+                "Specification-Title"     : "dvsas",
                 "Specification-Vendor"    : "FirEmerald",
                 "Specification-Version"   : "1", // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,

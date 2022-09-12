@@ -1,0 +1,6 @@
+{
+  "parent": "dvsas:block/slabs/side_all/side",
+  "textures": {
+    "all": "minecraft:block/prismarine_bricks"
+  }
+}

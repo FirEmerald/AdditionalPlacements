@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "dvsas:block/slabs/crimson/side",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "dvsas:block/slabs/crimson/side",
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "dvsas:block/slabs/crimson/side",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "dvsas:block/slabs/crimson/side",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

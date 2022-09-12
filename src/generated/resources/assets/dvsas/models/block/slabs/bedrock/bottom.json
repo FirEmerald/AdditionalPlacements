@@ -1,0 +1,6 @@
+{
+  "parent": "dvsas:block/slabs/side_all/bottom",
+  "textures": {
+    "all": "minecraft:block/bedrock"
+  }
+}

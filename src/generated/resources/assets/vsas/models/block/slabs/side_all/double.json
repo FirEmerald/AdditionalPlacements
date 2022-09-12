@@ -1,8 +1,0 @@
-{
-  "parent": "vsas:block/slabs/base/double",
-  "textures": {
-    "side": "#all",
-    "top": "#all",
-    "bottom": "#all"
-  }
-}

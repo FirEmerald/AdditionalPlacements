@@ -1,9 +1,0 @@
-{   
-	"parent": "minecraft:block/block",
-	"textures": {
-		"particle": "#side",
-		"side": "vsas:block/side",
-		"top": "vsas:block/top",
-		"bottom": "vsas:block/bottom"
-	}
-}
