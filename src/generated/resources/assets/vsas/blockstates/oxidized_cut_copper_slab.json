@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "vsas:block/slabs/oxidized_cut_copper/side",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "vsas:block/slabs/oxidized_cut_copper/side",
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "vsas:block/slabs/oxidized_cut_copper/side",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "vsas:block/slabs/oxidized_cut_copper/side",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

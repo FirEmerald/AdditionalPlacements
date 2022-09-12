@@ -1,0 +1,6 @@
+{
+  "parent": "vsas:block/stairs/side_all/top/straight",
+  "textures": {
+    "all": "minecraft:block/bedrock"
+  }
+}

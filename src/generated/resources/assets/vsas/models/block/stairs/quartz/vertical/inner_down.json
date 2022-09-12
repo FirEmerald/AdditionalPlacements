@@ -1,0 +1,7 @@
+{
+  "parent": "vsas:block/stairs/column/vertical/inner_down",
+  "textures": {
+    "side": "minecraft:block/quartz_block_side",
+    "end": "minecraft:block/quartz_block_top"
+  }
+}

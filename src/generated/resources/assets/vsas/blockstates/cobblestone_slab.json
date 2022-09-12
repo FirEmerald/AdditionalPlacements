@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "vsas:block/slabs/cobblestone/side",
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "vsas:block/slabs/cobblestone/side",
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "vsas:block/slabs/cobblestone/side",
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "vsas:block/slabs/cobblestone/side",
+      "y": 270,
+      "uvlock": true
+    }
+  }
+}

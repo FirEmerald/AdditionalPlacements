@@ -1,0 +1,6 @@
+{
+  "parent": "vsas:block/stairs/side_all/vertical/straight",
+  "textures": {
+    "all": "minecraft:block/quartz_block_bottom"
+  }
+}

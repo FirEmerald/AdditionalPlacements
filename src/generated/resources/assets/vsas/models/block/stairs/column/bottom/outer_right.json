@@ -1,0 +1,7 @@
+{
+  "parent": "vsas:block/stairs/base/bottom/outer_right",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}

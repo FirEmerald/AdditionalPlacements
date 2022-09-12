@@ -1,0 +1,8 @@
+{
+  "parent": "vsas:block/stairs/base/vertical/outer_down_cw",
+  "textures": {
+    "side": "#all",
+    "top": "#all",
+    "bottom": "#all"
+  }
+}

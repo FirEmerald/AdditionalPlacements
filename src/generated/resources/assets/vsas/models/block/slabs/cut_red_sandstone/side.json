@@ -1,0 +1,7 @@
+{
+  "parent": "vsas:block/slabs/column/side",
+  "textures": {
+    "side": "minecraft:block/cut_red_sandstone",
+    "end": "minecraft:block/red_sandstone_top"
+  }
+}

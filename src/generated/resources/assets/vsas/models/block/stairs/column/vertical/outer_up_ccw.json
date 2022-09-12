@@ -1,0 +1,7 @@
+{
+  "parent": "vsas:block/stairs/base/vertical/outer_up_ccw",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}

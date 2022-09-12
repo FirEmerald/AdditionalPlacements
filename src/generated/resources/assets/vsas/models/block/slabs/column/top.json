@@ -1,0 +1,7 @@
+{
+  "parent": "vsas:block/slabs/base/top",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}
