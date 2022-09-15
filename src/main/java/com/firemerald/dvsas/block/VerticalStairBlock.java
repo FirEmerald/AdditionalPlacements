@@ -45,7 +45,7 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 	
 	public VerticalStairBlock(StairBlock stairs)
 	{
-		this(stairs, stairs.baseState);
+		this(stairs, ((IVanillStairBlock) stairs).getModelStateImpl());
 	}
 
 	public VerticalStairBlock(StairBlock stairs, BlockState modelState)

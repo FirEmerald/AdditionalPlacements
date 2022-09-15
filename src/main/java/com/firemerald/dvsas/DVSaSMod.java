@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import com.firemerald.dvsas.block.VerticalBlock;
 import com.firemerald.dvsas.datagen.ModelGenerator;
-import com.firemerald.dvsas.init.VSASBlocks;
-import com.firemerald.dvsas.init.VSASItems;
+import com.firemerald.dvsas.init.DVSaSBlocks;
+import com.firemerald.dvsas.init.DVSaSItems;
 
 import net.minecraft.world.item.Item;
 import net.minecraftforge.event.RegistryEvent;
@@ -28,8 +28,8 @@ public class DVSaSMod
     {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::onGatherData);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Item.class, EventPriority.LOWEST, this::onItemsRegistered);
-        VSASBlocks.registerBlocks(FMLJavaModLoadingContext.get().getModEventBus());
-        VSASItems.registerItems(FMLJavaModLoadingContext.get().getModEventBus());
+        DVSaSBlocks.registerBlocks(FMLJavaModLoadingContext.get().getModEventBus());
+        DVSaSItems.registerItems(FMLJavaModLoadingContext.get().getModEventBus());
     }
 
 	public void onGatherData(GatherDataEvent event)

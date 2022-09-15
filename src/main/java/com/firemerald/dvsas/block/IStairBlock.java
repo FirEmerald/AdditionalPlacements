@@ -308,6 +308,8 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 	public static interface IVanillStairBlock extends IStairBlock
 	{
 		public void setStairs(VerticalStairBlock stairs);
+
+		public BlockState getModelStateImpl();
 	}
 	
 	public default Pair<EnumPlacing, EnumShape> getFullState(BlockState blockState)

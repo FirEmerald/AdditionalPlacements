@@ -1,6 +1,9 @@
 package com.firemerald.dvsas.mixin;
 
+import java.util.function.Supplier;
+
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -23,6 +26,8 @@ import net.minecraft.world.level.material.Fluids;
 public abstract class MixinStairBlock implements IVanillStairBlock
 {
 	public VerticalStairBlock stairs;
+	@Shadow(remap = false)
+	private Supplier<BlockState> stateSupplier;
 	
 	public StairBlock asStair()
 	{
@@ -87,5 +92,11 @@ public abstract class MixinStairBlock implements IVanillStairBlock
 	public FluidState getFluidStateImpl(BlockState blockState)
 	{
 		return asStair().getFluidState(blockState);
+	}
+	
+	@Override
+	public BlockState getModelStateImpl()
+	{
+		return stateSupplier.get();
 	}
 }

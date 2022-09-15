@@ -76,14 +76,14 @@ public abstract class MixinSlabBlock implements IVanillSlabBlock
 	}
 
 	//@Override
-	@Inject(method = "rotate", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "rotate", at = @At("HEAD"), cancellable = true) //TODO override parent method
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasVertical()) ci.setReturnValue(rotateImpl(blockState, rotation));
 	}
 
 	//@Override
-	@Inject(method = "mirror", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "mirror", at = @At("HEAD"), cancellable = true) //TODO override parent method
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasVertical()) ci.setReturnValue(mirrorImpl(blockState, mirror));

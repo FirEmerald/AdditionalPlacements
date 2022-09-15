@@ -18,7 +18,7 @@ import net.minecraftforge.registries.ObjectHolder;
 import net.minecraftforge.registries.RegistryObject;
 
 @ObjectHolder(DVSaSMod.MOD_ID)
-public class VSASBlocks
+public class DVSaSBlocks
 {
 	@ObjectHolder(RegistryNames.BEDROCK_SLAB)
 	public static final SlabBlock BEDROCK_SLAB = null;

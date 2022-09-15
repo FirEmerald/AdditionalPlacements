@@ -12,7 +12,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.ObjectHolder;
 
 @ObjectHolder(DVSaSMod.MOD_ID)
-public class VSASItems
+public class DVSaSItems
 {
 	@ObjectHolder(RegistryNames.BEDROCK_SLAB)
 	public static final BlockItem BEDROCK_SLAB = null;
@@ -24,8 +24,8 @@ public class VSASItems
 		DeferredRegister<Item> items = DeferredRegister.create(ForgeRegistries.ITEMS, DVSaSMod.MOD_ID);
 		if (DVSaSMod.TEST_MODE)
 		{
-			items.register(RegistryNames.BEDROCK_SLAB, () -> new BlockItem(VSASBlocks.BEDROCK_SLAB, new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
-			items.register(RegistryNames.BEDROCK_STAIRS, () -> new BlockItem(VSASBlocks.BEDROCK_STAIRS, new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+			items.register(RegistryNames.BEDROCK_SLAB, () -> new BlockItem(DVSaSBlocks.BEDROCK_SLAB, new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
+			items.register(RegistryNames.BEDROCK_STAIRS, () -> new BlockItem(DVSaSBlocks.BEDROCK_STAIRS, new Properties().tab(CreativeModeTab.TAB_BUILDING_BLOCKS)));
 		}
 		items.register(eventBus);
 	}
