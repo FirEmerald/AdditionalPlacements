@@ -183,7 +183,7 @@ jar {
         attributes([
                 "Specification-Title"     : "dvsas",
                 "Specification-Vendor"    : "FirEmerald",
-                "Specification-Version"   : "1.1", // We are version 1 of ourselves
+                "Specification-Version"   : project.version, // We are version 1 of ourselves
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "FirEmerald",
