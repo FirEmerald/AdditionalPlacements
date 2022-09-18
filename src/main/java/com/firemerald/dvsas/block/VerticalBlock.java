@@ -85,6 +85,28 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 		return getModelState(worldState).getBlock();
 	}
 
+	@Deprecated
+	public BlockState getVisualState()
+	{
+		return getVisualBlock().defaultBlockState();
+	}
+
+	public BlockState getVisualState(BlockState worldState)
+	{
+		return getVisualState();
+	}
+
+	@Deprecated
+	public Block getVisualBlock()
+	{
+		return parentBlock;
+	}
+
+	public Block getVisualBlock(BlockState worldState)
+	{
+		return getVisualBlock();
+	}
+
 	@Override
 	@Deprecated
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)

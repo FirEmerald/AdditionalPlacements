@@ -25,7 +25,7 @@ public class VerticalBlockModelUtils
 
 	public static BlockState getModeledState(BlockState state)
 	{
-		if (state.getBlock() instanceof VerticalBlock) return ((VerticalBlock<?>) state.getBlock()).getModelState(state);
+		if (state.getBlock() instanceof VerticalBlock) return ((VerticalBlock<?>) state.getBlock()).getVisualState(state);
 		else return null;
 	}
 
@@ -46,10 +46,7 @@ public class VerticalBlockModelUtils
 		List<BakedQuad> referredBakedQuads = new ArrayList<>(referredBakedModel.getQuads(referredState, side, rand, referredModelData));
 		for (BakedQuad referredBakedQuad : referredBakedModel.getQuads(referredState, null, rand, referredModelData))
 		{
-			if (referredBakedQuad.getDirection() == side)
-			{
-				referredBakedQuads.add(referredBakedQuad);
-			}
+			if (referredBakedQuad.getDirection() == side) referredBakedQuads.add(referredBakedQuad);
 		}
 		if (referredBakedQuads.size() == 0)
 		{
@@ -86,14 +83,21 @@ public class VerticalBlockModelUtils
 	{
 		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
 		{
-			float x = Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET]);
-			if (x != 0 && x != 0.5 && x != 1) return true;
-			float y = Float.intBitsToFloat(vertices[vertexIndex + Y_OFFSET]);
-			if (y != 0 && y != 0.5 && y != 1) return true;
-			float z = Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]);
-			if (z != 0 && z != 0.5 && z != 1) return true;
+			if (!isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET]))) return true;
+			if (!isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + Y_OFFSET]))) return true;
+			if (!isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]))) return true;
 		}
 		return false;
+	}
+	
+	public static boolean isValidCoordinate(float coord)
+	{
+		return isValid(coord) || isValid(coord - 0.5f) || isValid(coord - 1);
+	}
+	
+	public static boolean isValid(float value)
+	{
+		return Math.abs(value) < .00001f;
 	}
 
 	public static final int[] updateVertices(int[] vertices, int[] referredVertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite)
