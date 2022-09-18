@@ -8,15 +8,14 @@ version="${file.jarVersion}"
 displayName="Dynamic Vertical Slabs and Stairs"
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
-# A URL for the "homepage" for this mod, displayed in the mod UI
-#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
+displayURL="https://www.curseforge.com/minecraft/mc-mods/dynamic-vertical-sabs-and-stairs" #optional
 logoFile="dvsas.png"
 credits="FirEmerald"
 authors="FirEmerald"
 description='''
-Adds vertical slabs and stairs to all vanilla slabs and stairs.
-Extends the vanilla slabs and stairs instead of adding it's own items and crafting recipes for ease of use.
-Also acts as a framework for other mods to add their own slabs and stairs.
+Adds vertical slabs and stairs to most slabs and stairs.
+This includes mod-added slabs and stairs - any block that is an instance of SlabBlock or StairBlock but does not add any extra blockstate properties.
+Extends the slabs and stairs instead of adding it's own items and crafting recipes for ease of use.
 '''
 [[dependencies.dvsas]]
     modId="minecraft"
