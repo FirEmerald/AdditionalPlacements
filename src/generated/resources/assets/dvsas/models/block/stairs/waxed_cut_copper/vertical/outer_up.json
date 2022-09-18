@@ -1,6 +1,0 @@
-{
-  "parent": "dvsas:block/stairs/side_all/vertical/outer_up",
-  "textures": {
-    "all": "minecraft:block/cut_copper"
-  }
-}

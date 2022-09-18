@@ -29,7 +29,7 @@ public interface ISlabBlock extends IVerticalBlock, SimpleWaterloggedBlock
 	{
 		public void setSlab(VerticalSlabBlock slab);
 	}
-	
+
 	@Override
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
@@ -73,14 +73,14 @@ public interface ISlabBlock extends IVerticalBlock, SimpleWaterloggedBlock
         if (isThis(blockState)) return getDefaultHorizontalState(blockState, fluidState).setValue(SlabBlock.TYPE, SlabType.DOUBLE);
         else return forPlacing(getPlacingDirection(context), blockState, fluidState);
 	}
-	
+
 	public default BlockState forPlacing(Direction dir, BlockState blockState, FluidState fluidState)
 	{
     	if (dir == Direction.UP) return getDefaultHorizontalState(blockState, fluidState).setValue(SlabBlock.TYPE, SlabType.TOP);
     	else if (dir == Direction.DOWN) return getDefaultHorizontalState(blockState, fluidState).setValue(SlabBlock.TYPE, SlabType.BOTTOM);
     	else return getDefaultVerticalState(blockState, fluidState).setValue(VerticalSlabBlock.PLACING, dir);
 	}
-	
+
 	@Nullable
 	public default Direction getPlacing(BlockState blockState)
 	{

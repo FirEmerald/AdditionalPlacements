@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.firemerald.dvsas.block.VerticalStairBlock;
 import com.firemerald.dvsas.block.IStairBlock.IVanillStairBlock;
+import com.firemerald.dvsas.block.VerticalStairBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -28,7 +28,7 @@ public abstract class MixinStairBlock implements IVanillStairBlock
 	public VerticalStairBlock stairs;
 	@Shadow(remap = false)
 	private Supplier<BlockState> stateSupplier;
-	
+
 	public StairBlock asStair()
 	{
 		return (StairBlock) (Object) this;
@@ -87,13 +87,13 @@ public abstract class MixinStairBlock implements IVanillStairBlock
 	{
 		if (this.hasVertical()) ci.setReturnValue(updateShapeImpl(state, direction, otherState, level, pos, otherPos));
 	}
-	
+
 	@Override
 	public FluidState getFluidStateImpl(BlockState blockState)
 	{
 		return asStair().getFluidState(blockState);
 	}
-	
+
 	@Override
 	public BlockState getModelStateImpl()
 	{

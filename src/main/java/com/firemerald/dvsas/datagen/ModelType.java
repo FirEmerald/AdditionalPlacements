@@ -1,6 +1,6 @@
 package com.firemerald.dvsas.datagen;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import org.apache.http.util.Asserts;
@@ -26,7 +26,7 @@ public class ModelType
 	String folder = null;
 	String parentMod = null;
 	String parentFolder = null;
-	
+
 	public ModelType(boolean hasItem, String[] models, Function<BlockState, StateModelDefinition> getModelDefinition, Property<?>... ignoredStateProperties)
 	{
 		this.hasItem = hasItem;
@@ -34,7 +34,7 @@ public class ModelType
 		this.getModelDefinition = getModelDefinition;
 		this.ignoredStateProperties = ignoredStateProperties;
 	}
-	
+
 	public void set(Block block, String folder, String parentMod, String parentFolder)
 	{
 		has = true;
@@ -43,33 +43,34 @@ public class ModelType
 		this.parentMod = parentMod;
 		this.parentFolder = parentFolder;
 	}
-	
+
 	public void set(Block block, String folder)
 	{
 		set(block, folder, null, null);
 	}
-	
+
 	public void set(String folder)
 	{
 		set(null, folder, null, null);
 	}
-	
+
 	public void setParent(String parentMod, String parentFolder)
 	{
 		this.parentMod = parentMod;
 		this.parentFolder = parentFolder;
 	}
-	
-	public void build(BlockStateProvider stateProvider, Consumer<BlockModelBuilder> actions, boolean uvLock)
+
+	public void build(BlockStateProvider stateProvider, BiConsumer<BlockModelBuilder, String> actions, boolean uvLock)
 	{
 		if (has)
 		{
 			Asserts.notNull(folder, "folder");
-			Asserts.notNull(parentMod, "parent model");
-			Asserts.notNull(parentFolder, "parent model");
-			if (actions == null) actions = model -> {};
 			BlockModelProvider modelProvider = stateProvider.models();
-			for (String model : models) actions.accept(modelProvider.withExistingParent(folder + model, new ResourceLocation(parentMod, parentFolder + model)));
+			Function<String, BlockModelBuilder> startModel;
+			if (parentMod == null || parentFolder == null) startModel = model -> modelProvider.getBuilder(folder + model);
+			else startModel = model -> modelProvider.withExistingParent(folder + model, new ResourceLocation(parentMod, parentFolder + model));
+			if (actions == null) actions = (builder, model) -> {};
+			for (String model : models) actions.accept(startModel.apply(model), model);
 			if (block != null)
 			{
 				stateProvider.getVariantBuilder(block).forAllStatesExcept(state -> {
@@ -89,7 +90,7 @@ public class ModelType
 			}
 		}
 	}
-	
+
 	public void clear()
 	{
 		has = false;

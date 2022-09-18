@@ -1,8 +1,0 @@
-{
-  "parent": "dvsas:block/stairs/base/vertical/outer_up_cw",
-  "textures": {
-    "side": "minecraft:block/sandstone",
-    "top": "minecraft:block/sandstone_top",
-    "bottom": "minecraft:block/sandstone_bottom"
-  }
-}

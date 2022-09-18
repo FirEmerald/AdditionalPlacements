@@ -1,5 +1,6 @@
 package com.firemerald.dvsas.block;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -11,6 +12,7 @@ import com.google.common.collect.Streams;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -38,8 +40,8 @@ import net.minecraft.world.phys.HitResult;
 public abstract class VerticalBlock<T extends Block> extends Block implements IVerticalBlock
 {
 	protected final T parentBlock;
-	protected final BlockState model;
-	protected final Block modelBlock;
+	private final BlockState model;
+	private final Block modelBlock;
 
 	public VerticalBlock(T parentBlock, BlockState model)
 	{
@@ -48,11 +50,22 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 		this.model = model;
 		this.modelBlock = model.getBlock();
 	}
-	
+
 	public void onFinishedRegistering()
 	{
 		this.item = parentBlock.asItem();
 		this.descriptionId = parentBlock.getDescriptionId();
+	}
+
+	@Deprecated
+	public BlockState getModelState()
+	{
+		return model;
+	}
+
+	public BlockState getModelState(BlockState worldState)
+	{
+		return getModelState();
 	}
 
 	@Override
@@ -61,7 +74,7 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	{
 		return parentBlock.getDrops(this.getDefaultHorizontalState(state, getFluidState(state)), builder);
 	}
-	
+
 	@Override
 	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
 	{
@@ -184,8 +197,11 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	@SuppressWarnings("deprecation")
 	public void bindTags()
 	{
-		this.builtInRegistryHolder().bindTags(Streams.concat(parentBlock.builtInRegistryHolder().tags(), this.builtInRegistryHolder().tags()).collect(Collectors.toSet())); //add the model block's tags
+		this.builtInRegistryHolder().bindTags(Streams.concat(modifyTags(parentBlock.builtInRegistryHolder().tags().collect(Collectors.toSet())).stream(), this.builtInRegistryHolder().tags()).collect(Collectors.toSet())); //add the model block's tags
 	}
+
+	public abstract Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags);
+
 
 	@Override
 	public boolean hasVertical()

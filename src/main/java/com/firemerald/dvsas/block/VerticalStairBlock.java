@@ -1,9 +1,14 @@
 package com.firemerald.dvsas.block;
 
+import java.util.Collection;
+
+import com.firemerald.dvsas.common.DVSaSBlockTags;
 import com.firemerald.dvsas.util.VoxelShapes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -25,7 +30,7 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 	public static final EnumProperty<EnumPlacing> PLACING = EnumProperty.create("placing", EnumPlacing.class);
 	public static final EnumProperty<EnumShape> SHAPE = EnumProperty.create("shape", EnumShape.class);
 	public static final VoxelShape[][] SHAPE_CACHE = new VoxelShape[4][17];
-	
+
 	static
 	{
 		for (EnumPlacing placing : EnumPlacing.values())
@@ -42,7 +47,7 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 			shapes[EnumShape.OUTER_FLAT_DOWN_CCW.ordinal()] = shapes[EnumShape.OUTER_FLAT_DOWN_FROM_CCW.ordinal()] = VoxelShapes.getOuterFlatStairs(placing.counterClockWiseFront, placing.clockWiseFront, Direction.DOWN);
 		}
 	}
-	
+
 	public VerticalStairBlock(StairBlock stairs)
 	{
 		this(stairs, ((IVanillStairBlock) stairs).getModelStateImpl());
@@ -74,7 +79,7 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 	{
 		return SHAPE_CACHE[state.getValue(PLACING).ordinal()][state.getValue(SHAPE).ordinal()];
 	}
-	
+
 	@Override
 	@Deprecated
 	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
@@ -93,6 +98,14 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 	public BlockState getDefaultHorizontalState(BlockState currentState, FluidState fluidState)
 	{
 		return currentState.is(parentBlock) ? currentState : parentBlock.defaultBlockState().setValue(StairBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+	}
+	@Override
+	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	{
+		tags.remove(BlockTags.STAIRS);
+		tags.add(DVSaSBlockTags.VERTICAL_STAIRS);
+		if (tags.remove(BlockTags.WOODEN_STAIRS)) tags.add(DVSaSBlockTags.VERTICAL_WOODEN_STAIRS);
+		return tags;
 	}
 
     public static enum EnumPlacing implements StringRepresentable
@@ -130,30 +143,30 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
     public static enum EnumShape implements StringRepresentable
     {
         STRAIGHT("straight", false, false, false, false),
-        
-        
+
+
         INNER_UP("inner_up", true, false, false, false),
-        
+
         OUTER_UP("outer_up", true, false, false, false),
         OUTER_UP_FROM_CW("outer_up_from_clockwise", true, false, true, false),
         OUTER_UP_FROM_CCW("outer_up_from_counter_clockwise", true, false, false, true),
-        
+
         OUTER_FLAT_UP_CW("outer_flat_up_clockwise", true, false, false, false),
         OUTER_FLAT_UP_FROM_CW("outer_flat_up_from_clockwise", true, false, true, false),
-        
+
         OUTER_FLAT_UP_CCW("outer_flat_up_counter_clockwise", true, false, false, false),
         OUTER_FLAT_UP_FROM_CCW("outer_flat_up_from_counter_clockwise", true, false, false, true),
-        
-        
+
+
         INNER_DOWN("inner_down", false, true, false, false),
-        
+
         OUTER_DOWN("outer_down", false, true, false, false),
         OUTER_DOWN_FROM_CW("outer_down_from_clockwise", false, true, true, false),
         OUTER_DOWN_FROM_CCW("outer_down_from_counter_clockwise", false, true, false, true),
-        
+
         OUTER_FLAT_DOWN_CW("outer_flat_down_clockwise", false, true, false, false),
         OUTER_FLAT_DOWN_FROM_CW("outer_flat_down_from_clockwise", false, true, true, false),
-        
+
         OUTER_FLAT_DOWN_CCW("outer_flat_down_counter_clockwise", false, true, false, false),
         OUTER_FLAT_DOWN_FROM_CCW("outer_flat_down_from_counter_clockwise", false, true, false, true);
 

@@ -29,7 +29,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IVerticalBlock extends ItemLike
-{	
+{
 	public BlockState rotateImpl(BlockState blockState, Rotation rotation);
 
 	public BlockState mirrorImpl(BlockState blockState, Mirror mirror);
@@ -40,15 +40,15 @@ public interface IVerticalBlock extends ItemLike
 	{
 		tooltip.add(new TranslatableComponent("tooltip.dvsas.verticalplacement"));
 	}
-	
+
 	public boolean hasVertical();
-	
+
 	public BlockState getDefaultVerticalState(BlockState currentState, FluidState fluidState);
-	
+
 	public BlockState getDefaultHorizontalState(BlockState currentState, FluidState fluidState);
-	
+
 	public FluidState getFluidStateImpl(BlockState blockState);
-	
+
 	public boolean isThis(BlockState blockState);
 
 	public static Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {

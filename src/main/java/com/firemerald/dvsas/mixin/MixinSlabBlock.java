@@ -1,15 +1,17 @@
 package com.firemerald.dvsas.mixin;
 
+import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.firemerald.dvsas.block.VerticalSlabBlock;
 import com.firemerald.dvsas.block.ISlabBlock.IVanillSlabBlock;
+import com.firemerald.dvsas.block.VerticalSlabBlock;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SlabBlock;
@@ -18,10 +20,15 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 
 @Mixin(SlabBlock.class)
-public abstract class MixinSlabBlock implements IVanillSlabBlock
+public abstract class MixinSlabBlock extends Block implements IVanillSlabBlock
 {
+	private MixinSlabBlock(Properties properties)
+	{
+		super(properties);
+	}
+
 	public VerticalSlabBlock slab;
-	
+
 	public SlabBlock asSlab()
 	{
 		return (SlabBlock) (Object) this;
@@ -76,17 +83,37 @@ public abstract class MixinSlabBlock implements IVanillSlabBlock
 	}
 
 	//@Override
-	@Inject(method = "rotate", at = @At("HEAD"), cancellable = true) //TODO override parent method
-	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
+	@Inject(method = "rotate", at = @At("HEAD"), cancellable = true)
+	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
 	{
 		if (this.hasVertical()) ci.setReturnValue(rotateImpl(blockState, rotation));
 	}
 
 	//@Override
-	@Inject(method = "mirror", at = @At("HEAD"), cancellable = true) //TODO override parent method
-	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
+	@Override
+	@Intrinsic
+	@SuppressWarnings("deprecation")
+	public BlockState rotate(BlockState blockState, Rotation rotation) //this adds the method if it does not exist
+	{
+		if (this.hasVertical()) return rotateImpl(blockState, rotation);
+		else return super.rotate(blockState, rotation);
+	}
+
+	//@Override
+	@Inject(method = "mirror", at = @At("HEAD"), cancellable = true)
+	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
 	{
 		if (this.hasVertical()) ci.setReturnValue(mirrorImpl(blockState, mirror));
+	}
+
+	//@Override
+	@Override
+	@Intrinsic
+	@SuppressWarnings("deprecation")
+	public BlockState mirror(BlockState blockState, Mirror mirror) //this adds the method if it does not exist
+	{
+		if (this.hasVertical()) return mirrorImpl(blockState, mirror);
+		else return super.mirror(blockState, mirror);
 	}
 
 	//@Override
@@ -95,7 +122,7 @@ public abstract class MixinSlabBlock implements IVanillSlabBlock
 	{
 		if (this.hasVertical()) ci.setReturnValue(canBeReplacedImpl(state, context));
 	}
-	
+
 	@Override
 	public FluidState getFluidStateImpl(BlockState blockState)
 	{

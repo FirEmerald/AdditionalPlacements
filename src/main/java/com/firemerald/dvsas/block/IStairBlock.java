@@ -14,7 +14,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
@@ -28,22 +31,22 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 	public static abstract class PartialState
 	{
 		public abstract boolean isHorizontal();
-		
+
 		public abstract BlockState apply(BlockState state);
-		
+
 		public static class HorizontalState extends PartialState
 		{
 			public final Half half;
 			public final Direction facing;
 			public final StairsShape shape;
-			
+
 			public HorizontalState(Half half, Direction facing, StairsShape shape)
 			{
 				this.half = half;
 				this.facing = facing;
 				this.shape = shape;
 			}
-			
+
 			@Override
 			public boolean isHorizontal()
 			{
@@ -55,25 +58,25 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 			{
 				return state.setValue(StairBlock.HALF, half).setValue(StairBlock.FACING, facing).setValue(StairBlock.SHAPE, shape);
 			}
-			
+
 			@Override
 			public String toString()
 			{
 				return "HorizontalState[" + half + "," + facing + "," + shape + "]";
 			}
 		}
-		
+
 		public static class VerticalState extends PartialState
 		{
 			public final VerticalStairBlock.EnumPlacing placing;
 			public final VerticalStairBlock.EnumShape shape;
-			
+
 			public VerticalState(VerticalStairBlock.EnumPlacing placing, VerticalStairBlock.EnumShape shape)
 			{
 				this.placing = placing;
 				this.shape = shape;
 			}
-			
+
 			@Override
 			public boolean isHorizontal()
 			{
@@ -85,7 +88,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 			{
 				return state.setValue(VerticalStairBlock.PLACING, placing).setValue(VerticalStairBlock.SHAPE, shape);
 			}
-			
+
 			@Override
 			public String toString()
 			{
@@ -93,14 +96,14 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 			}
 		}
 	}
-	
+
 	public static final PartialState[][] FULL_TO_PARTIAL = new PartialState[12][9];
 	@SuppressWarnings("unchecked")
 	public static final Pair<EnumPlacing, EnumShape>[][][] HORIZONTAL_TO_FULL = new Pair[2][4][5];
 	@SuppressWarnings("unchecked")
 	public static final Pair<EnumPlacing, EnumShape>[][] VERTICAL_TO_FULL = new Pair[4][17];
 	public static final boolean INIT = internalBuildStateMaps();
-	
+
 	public static boolean internalBuildStateMaps()
 	{
 		internalBuildHorizontalStates(Direction.NORTH);
@@ -124,7 +127,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		*/
 		return true;
 	}
-	
+
 	public static void internalBuildHorizontalStates(Direction direction)
 	{
 		EnumPlacing placing = EnumPlacing.forFacing(direction.getOpposite(), Direction.UP);
@@ -140,7 +143,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		internalSetHorizontalStateMap(Half.TOP, direction, StairsShape.INNER_RIGHT, placing, EnumShape.INSIDE_LEFT);
 		internalSetHorizontalStateMap(Half.TOP, direction, StairsShape.OUTER_RIGHT, placing, EnumShape.OUTSIDE_HORIZONTAL_LEFT);
 	}
-	
+
 	public static void internalBuildHorizontalStates(Direction direction, Direction up, Half half)
 	{
 		EnumPlacing placing = EnumPlacing.forFacing(direction.getOpposite(), up);
@@ -150,7 +153,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		internalSetHorizontalStateMap(half, direction, StairsShape.INNER_RIGHT, placing, EnumShape.INSIDE_RIGHT);
 		internalSetHorizontalStateMap(half, direction, StairsShape.OUTER_RIGHT, placing, EnumShape.OUTSIDE_HORIZONTAL_RIGHT);
 	}
-	
+
 	public static void internalBuildVerticalStates(VerticalStairBlock.EnumPlacing direction)
 	{
 		EnumPlacing placing = EnumPlacing.forFacing(direction.counterClockWiseFront, direction.clockWiseFront);
@@ -176,39 +179,39 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_DOWN_FROM_CW, placing, EnumShape.OUTSIDE_RIGHT);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_FROM_CW, placing, EnumShape.OUTSIDE_VERTICAL_RIGHT);
 	}
-	
+
 	public static void internalSetPartialStateMap(EnumPlacing placing, EnumShape shape, PartialState state)
 	{
 		FULL_TO_PARTIAL[placing.ordinal()][shape.ordinal()] = state;
 	}
-	
+
 	public static void internalSetHorizontalStateMap(Half half, Direction facing, StairsShape shape, EnumPlacing fullPlacing, EnumShape fullShape)
 	{
 		internalSetPartialStateMap(fullPlacing, fullShape, new PartialState.HorizontalState(half, facing, shape));
 		HORIZONTAL_TO_FULL[half.ordinal()][facing.get2DDataValue()][shape.ordinal()] = Pair.of(fullPlacing, fullShape);
 	}
-	
+
 	public static void internalSetVerticalStateMap(VerticalStairBlock.EnumPlacing placing, VerticalStairBlock.EnumShape shape, EnumPlacing fullPlacing, EnumShape fullShape)
 	{
 		internalSetPartialStateMap(fullPlacing, fullShape, new PartialState.VerticalState(placing, shape));
 		VERTICAL_TO_FULL[placing.ordinal()][shape.ordinal()] = Pair.of(fullPlacing, fullShape);
 	}
-	
+
 	public static PartialState getPartialState(EnumPlacing placing, EnumShape shape)
 	{
 		return FULL_TO_PARTIAL[placing.ordinal()][shape.ordinal()];
 	}
-	
+
 	public static Pair<EnumPlacing, EnumShape> getFullState(Half half, Direction facing, StairsShape shape)
 	{
 		return HORIZONTAL_TO_FULL[half.ordinal()][facing.get2DDataValue()][shape.ordinal()];
 	}
-	
+
 	public static Pair<EnumPlacing, EnumShape> getFullState(VerticalStairBlock.EnumPlacing placing, VerticalStairBlock.EnumShape shape)
 	{
 		return VERTICAL_TO_FULL[placing.ordinal()][shape.ordinal()];
 	}
-	
+
 	public static EnumPlacing getPlacing(BlockState blockState)
 	{
 		if (blockState.getBlock() instanceof StairBlock)
@@ -252,7 +255,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 				else return EnumPlacing.NORTH_EAST;
 			}
 			case EAST_SOUTH:
-			{	
+			{
 				if (shape.isCounterClockwise)
 				{
 					if (shape.isUp) return EnumPlacing.UP_EAST;
@@ -304,14 +307,14 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		}
 		else return null;
 	}
-	
+
 	public static interface IVanillStairBlock extends IStairBlock
 	{
 		public void setStairs(VerticalStairBlock stairs);
 
 		public BlockState getModelStateImpl();
 	}
-	
+
 	public default Pair<EnumPlacing, EnumShape> getFullState(BlockState blockState)
 	{
 		//System.out.println(blockState);
@@ -320,15 +323,15 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		if (blockState.getBlock() instanceof StairBlock) return getFullState(blockState.getValue(StairBlock.HALF), blockState.getValue(StairBlock.FACING), blockState.getValue(StairBlock.SHAPE));
 		else return getFullState(blockState.getValue(VerticalStairBlock.PLACING), blockState.getValue(VerticalStairBlock.SHAPE));
 	}
-	
+
 	public default BlockState getBlockState(EnumPlacing placing, EnumShape shape, BlockState currentState, FluidState fluidState)
 	{
 		PartialState partial = getPartialState(placing, shape);
 		return partial.apply(partial.isHorizontal() ? getDefaultHorizontalState(currentState, fluidState) : getDefaultVerticalState(currentState, fluidState));
 	}
-	
+
 	@Override
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation) //TODO
+	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
 		Pair<EnumPlacing, EnumShape> state = getFullState(blockState);
 		EnumPlacing placing = state.getLeft();
@@ -378,7 +381,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 				break;
 			}
 		}
-		return getBlockState(newPlacing, !mirrorShape ? state.getRight() : 
+		return getBlockState(newPlacing, !mirrorShape ? state.getRight() :
 			switch (state.getRight())
 			{
 			case INSIDE_LEFT -> EnumShape.INSIDE_RIGHT;
@@ -393,7 +396,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 			}
 		, blockState, getFluidStateImpl(blockState));
 	}
-	
+
 	public default BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
 	{
         EnumPlacing placing = getPlacing(state);
@@ -409,7 +412,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
         EnumPlacing placing = getPlacing(context);
         return getBlockState(placing, getShape(placing, context.getLevel(), context.getClickedPos()), blockState, fluidState);
 	}
-	
+
 	public default EnumShape getShape(EnumPlacing placing, BlockGetter level, BlockPos pos)
 	{
 		//prioritize back, bottom, front and left, right
@@ -547,7 +550,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		vertexConsumer.vertex(poseMat, .25f, .25f, -.5f).color(0, 0, 0, 0.4f).normal(normMat, 0, 0, 1).endVertex();
 		vertexConsumer.vertex(poseMat, .25f, .5f, -.5f).color(0, 0, 0, 0.4f).normal(normMat, 0, 0, 1).endVertex();
 	}
-	
+
 	public default EnumPlacing getPlacing(BlockPlaceContext context)
 	{
 		double hitX = context.getClickLocation().x - context.getClickedPos().getX() - .5;
@@ -712,7 +715,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
     		this.right = Direction.fromNormal(rightV.getX(),rightV.getY(), rightV.getZ());
     		this.left = right.getOpposite();
         }
-        
+
         public static EnumPlacing forFacing(Direction dir1, Direction dir2)
         {
         	for (EnumPlacing placing : EnumPlacing.values()) if ((placing.front == dir1 && placing.top == dir2) || (placing.front == dir2 && placing.top == dir1)) return placing;

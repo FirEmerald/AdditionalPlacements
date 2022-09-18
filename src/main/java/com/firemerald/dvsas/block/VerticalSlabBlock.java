@@ -1,13 +1,19 @@
 package com.firemerald.dvsas.block;
 
+import java.util.Collection;
+
+import com.firemerald.dvsas.common.DVSaSBlockTags;
 import com.firemerald.dvsas.util.VoxelShapes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -22,7 +28,7 @@ public class VerticalSlabBlock extends VerticalBlock<SlabBlock> implements ISlab
 {
 	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final DirectionProperty PLACING = BlockStateProperties.HORIZONTAL_FACING;
-	
+
 	public VerticalSlabBlock(SlabBlock slab)
 	{
 		this(slab, slab.defaultBlockState());
@@ -92,5 +98,14 @@ public class VerticalSlabBlock extends VerticalBlock<SlabBlock> implements ISlab
 	public BlockState getDefaultVerticalState(BlockState currentState, FluidState fluidState)
 	{
 		return currentState.is(this) ? currentState : this.defaultBlockState().setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
+	}
+
+	@Override
+	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	{
+		tags.remove(BlockTags.SLABS);
+		tags.add(DVSaSBlockTags.VERTICAL_SLABS);
+		if (tags.remove(BlockTags.WOODEN_SLABS)) tags.add(DVSaSBlockTags.VERTICAL_WOODEN_SLABS);
+		return tags;
 	}
 }

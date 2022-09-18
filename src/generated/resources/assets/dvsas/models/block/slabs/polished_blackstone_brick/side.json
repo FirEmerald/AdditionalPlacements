@@ -1,6 +1,0 @@
-{
-  "parent": "dvsas:block/slabs/side_all/side",
-  "textures": {
-    "all": "minecraft:block/polished_blackstone_bricks"
-  }
-}

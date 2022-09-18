@@ -1,8 +1,0 @@
-{
-  "parent": "dvsas:block/stairs/base/bottom/outer_left",
-  "textures": {
-    "side": "#all",
-    "top": "#all",
-    "bottom": "#all"
-  }
-}
