@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.firemerald.dvsas.DVSaSMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
@@ -38,7 +39,8 @@ public interface IVerticalBlock extends ItemLike
 
 	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(new TranslatableComponent("tooltip.dvsas.verticalplacement"));
+		if (DVSaSMod.COMMON_CONFIG.showTooltip.get())
+			tooltip.add(new TranslatableComponent("tooltip.dvsas.verticalplacement"));
 	}
 
 	public boolean hasVertical();

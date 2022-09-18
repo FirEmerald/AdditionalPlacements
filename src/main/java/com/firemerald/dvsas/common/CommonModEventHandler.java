@@ -9,6 +9,7 @@ import com.firemerald.dvsas.block.VerticalSlabBlock;
 import com.firemerald.dvsas.block.VerticalStairBlock;
 import com.firemerald.dvsas.datagen.ModelGenerator;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
@@ -30,15 +31,17 @@ public class CommonModEventHandler
 			{
 				if (!((IVerticalBlock) block).hasVertical())
 				{
+					ResourceLocation name = block.getRegistryName();
+					if (DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString())) return;
 					if (block instanceof SlabBlock)
 					{
 						if (block.defaultBlockState().getProperties().size() == 2) //don't register if there are properties that won't get carried over
-							created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(DVSaSMod.MOD_ID, block.getRegistryName().getNamespace() + "." + block.getRegistryName().getPath()));
+							created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					}
 					else if (block instanceof StairBlock)
 					{
 						if (block.defaultBlockState().getProperties().size() == 4) //don't register if there are properties that won't get carried over
-							created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(DVSaSMod.MOD_ID, block.getRegistryName().getNamespace() + "." + block.getRegistryName().getPath()));
+							created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					}
 				}
 			}
