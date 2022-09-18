@@ -12,7 +12,8 @@ import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -38,7 +39,7 @@ public interface IVerticalBlock extends ItemLike
 
 	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(new TranslatableComponent("tooltip.dvsas.verticalplacement"));
+		tooltip.add(MutableComponent.create(new TranslatableContents("tooltip.dvsas.verticalplacement")));
 	}
 
 	public boolean hasVertical();

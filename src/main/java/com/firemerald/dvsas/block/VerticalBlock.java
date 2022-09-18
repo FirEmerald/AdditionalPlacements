@@ -2,7 +2,6 @@ package com.firemerald.dvsas.block;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -14,6 +13,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -99,7 +99,7 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	}
 
 	@Override
-	public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().animateTick(modelState, level, pos, random);
@@ -187,7 +187,7 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 
 	@Override
 	@Deprecated
-	public void randomTick(BlockState state, ServerLevel p_56952_, BlockPos p_56953_, Random p_56954_)
+	public void randomTick(BlockState state, ServerLevel p_56952_, BlockPos p_56953_, RandomSource p_56954_)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().randomTick(modelState, p_56952_, p_56953_, p_56954_);
@@ -195,7 +195,7 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 
 	@Override
 	@Deprecated
-	public void tick(BlockState state, ServerLevel p_56887_, BlockPos p_56888_, Random p_56889_)
+	public void tick(BlockState state, ServerLevel p_56887_, BlockPos p_56888_, RandomSource p_56889_)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().tick(modelState, p_56887_, p_56888_, p_56889_);

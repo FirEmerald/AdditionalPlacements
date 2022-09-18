@@ -9,7 +9,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.DrawSelectionEvent.HighlightBlock;
+import net.minecraftforge.client.event.RenderHighlightEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -17,7 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ClientEventHandler
 {
 	@SubscribeEvent
-	public static void onHighlightBlock(HighlightBlock event)
+	public static void onHighlightBlock(RenderHighlightEvent.Block event)
 	{
 		@SuppressWarnings("resource")
 		Player player = Minecraft.getInstance().player;
@@ -29,7 +29,7 @@ public class ClientEventHandler
 			if (block instanceof IVerticalBlock)
 			{
 				IVerticalBlock verticalBlock = ((IVerticalBlock) block);
-				if (verticalBlock.hasVertical()) verticalBlock.renderHighlight(event.getPoseStack(), event.getMultiBufferSource().getBuffer(RenderType.LINES), player, event.getTarget(), event.getCamera(), event.getPartialTicks());
+				if (verticalBlock.hasVertical()) verticalBlock.renderHighlight(event.getPoseStack(), event.getMultiBufferSource().getBuffer(RenderType.LINES), player, event.getTarget(), event.getCamera(), event.getPartialTick());
 			}
 		}
 	}

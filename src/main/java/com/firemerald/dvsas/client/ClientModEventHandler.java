@@ -10,14 +10,13 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.firemerald.dvsas.DVSaSMod;
-import com.firemerald.dvsas.block.VerticalBlock;
 import com.firemerald.dvsas.block.VerticalSlabBlock;
 import com.firemerald.dvsas.block.VerticalStairBlock;
 import com.firemerald.dvsas.client.models.VerticalBlockModelLoader;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -28,15 +27,11 @@ import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
+import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -65,17 +60,17 @@ public class ClientModEventHandler
 					{
 						String blockName = resource.getPath().substring(12, resource.getPath().length() - 5);
 						Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(DVSaSMod.MOD_ID, blockName));
-						if (block instanceof VerticalSlabBlock) return Minecraft.getInstance().getResourceManager().getResource(SLAB_BLOCKSTATES).getInputStream();
-						else if (block instanceof VerticalStairBlock) return Minecraft.getInstance().getResourceManager().getResource(STAIR_BLOCKSTATES).getInputStream();
+						if (block instanceof VerticalSlabBlock) return Minecraft.getInstance().getResourceManager().getResource(SLAB_BLOCKSTATES).get().open();
+						else if (block instanceof VerticalStairBlock) return Minecraft.getInstance().getResourceManager().getResource(STAIR_BLOCKSTATES).get().open();
 						else throw new FileNotFoundException("Cannot provide " + resource + ": invalid block dvsas:" + blockName);
 					}
 					else throw new FileNotFoundException("Cannot provide " + resource + ": invalid file " + resource.getPath());
 				}
 
 				@Override
-				public Collection<ResourceLocation> getResources(PackType packType, String p_10285_, String p_10286_, int p_10287_, Predicate<String> p_10288_)
+				public Collection<ResourceLocation> getResources(PackType packType, String p_215340_, String p_215341_, Predicate<ResourceLocation> filter)
 				{
-					return Collections.emptyList();
+					return Collections.emptySet();
 				}
 
 				@Override
@@ -116,8 +111,8 @@ public class ClientModEventHandler
 				@Override
 				public void close() {}
 			},
-			new TextComponent("title"),
-			new TextComponent("description"),
+			MutableComponent.create(new LiteralContents("title")),
+			MutableComponent.create(new LiteralContents("description")),
 			PackCompatibility.COMPATIBLE,
 			Pack.Position.BOTTOM,
 			true,
@@ -141,21 +136,8 @@ public class ClientModEventHandler
 	}
 
 	@SubscribeEvent
-	public static void onModelRegistryEvent(ModelRegistryEvent event)
+	public static void onModelRegistryEvent(RegisterGeometryLoaders event)
 	{
-		ModelLoaderRegistry.registerLoader(VerticalBlockModelLoader.ID, new VerticalBlockModelLoader());
+		event.register(VerticalBlockModelLoader.ID.getPath(), new VerticalBlockModelLoader());
 	}
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void init(FMLClientSetupEvent event)
-    {
-    	ForgeRegistries.BLOCKS.forEach(block -> {
-    		if (block instanceof VerticalBlock)
-    		{
-    			@SuppressWarnings("deprecation")
-				BlockState modelState = ((VerticalBlock<?>) block).getModelState();
-    			ItemBlockRenderTypes.setRenderLayer(block, (layer) -> ItemBlockRenderTypes.canRenderInLayer(modelState, layer));
-    		}
-    	});
-    }
 }

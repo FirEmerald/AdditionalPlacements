@@ -8,12 +8,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.MissingMappingsEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonEventHandler
@@ -27,7 +27,7 @@ public class CommonEventHandler
 			if (block instanceof IVerticalBlock)
 			{
 				IVerticalBlock verticalBlock = ((IVerticalBlock) block);
-				if (verticalBlock.hasVertical()) verticalBlock.appendHoverTextImpl(event.getItemStack(), event.getPlayer() == null ? null : event.getPlayer().getLevel(), event.getToolTip(), event.getFlags());
+				if (verticalBlock.hasVertical()) verticalBlock.appendHoverTextImpl(event.getItemStack(), event.getEntity() == null ? null : event.getEntity().getLevel(), event.getToolTip(), event.getFlags());
 			}
 		}
 	}
@@ -41,10 +41,10 @@ public class CommonEventHandler
 	}
 
 	@SubscribeEvent
-	public static void onMissingBlockMappings(RegistryEvent.MissingMappings<Block> event)
+	public static void onMissingBlockMappings(MissingMappingsEvent event)
 	{
-		event.getMappings(DVSaSMod.MOD_ID).forEach(mapping -> {
-			String oldPath = mapping.key.getPath();
+		event.getMappings(ForgeRegistries.BLOCKS.getRegistryKey(), DVSaSMod.MOD_ID).forEach(mapping -> {
+			String oldPath = mapping.getKey().getPath();
 			if (oldPath.indexOf('.') < 0)
 			{
 				String newPath = "minecraft." + oldPath;

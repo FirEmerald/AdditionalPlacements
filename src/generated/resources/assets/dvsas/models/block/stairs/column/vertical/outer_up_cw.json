@@ -1,7 +1,7 @@
 {
   "parent": "dvsas:block/stairs/base/vertical/outer_up_cw",
   "textures": {
-    "top": "#end",
-    "bottom": "#end"
+    "bottom": "#end",
+    "top": "#end"
   }
 }

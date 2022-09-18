@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[40,)"
+loaderVersion="[43,)"
 license="MIT License"
 issueTrackerURL="https://github.com/FirEmerald/DynamicVerticalSlabsAndStairs/issues"
 [[mods]]
@@ -20,6 +20,6 @@ Extends the slabs and stairs instead of adding it's own items and crafting recip
 [[dependencies.dvsas]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="[1.19,1.20)"
     ordering="NONE"
     side="BOTH"
