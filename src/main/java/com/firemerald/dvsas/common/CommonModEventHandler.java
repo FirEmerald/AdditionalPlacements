@@ -41,13 +41,11 @@ public class CommonModEventHandler
 						if (DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString())) return;
 						if (block instanceof SlabBlock)
 						{
-							if (block.defaultBlockState().getProperties().size() == 2) //don't register if there are properties that won't get carried over
-								created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalSlabBlock((SlabBlock) block));
+							created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalSlabBlock((SlabBlock) block));
 						}
 						else if (block instanceof StairBlock)
 						{
-							if (block.defaultBlockState().getProperties().size() == 4) //don't register if there are properties that won't get carried over
-								created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalStairBlock((StairBlock) block));
+							created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalStairBlock((StairBlock) block));
 						}
 					}
 				}
