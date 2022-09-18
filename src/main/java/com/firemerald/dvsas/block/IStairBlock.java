@@ -16,17 +16,15 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
+public interface IStairBlock extends IVerticalBlock
 {
 	public static abstract class PartialState
 	{
@@ -314,10 +312,10 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		else return getFullState(blockState.getValue(VerticalStairBlock.PLACING), blockState.getValue(VerticalStairBlock.SHAPE));
 	}
 
-	public default BlockState getBlockState(EnumPlacing placing, EnumShape shape, BlockState currentState, FluidState fluidState)
+	public default BlockState getBlockState(EnumPlacing placing, EnumShape shape, BlockState currentState)
 	{
 		PartialState partial = getPartialState(placing, shape);
-		return partial.apply(partial.isHorizontal() ? getDefaultHorizontalState(currentState, fluidState) : getDefaultVerticalState(currentState, fluidState));
+		return partial.apply(partial.isHorizontal() ? getDefaultHorizontalState(currentState) : getDefaultVerticalState(currentState));
 	}
 
 	@Override
@@ -329,7 +327,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		Direction newTop = rotation.rotate(placing.top);
 		for (EnumPlacing newPlacing : EnumPlacing.values())
 		{
-			if (newPlacing.front == newFront && newPlacing.top == newTop) return getBlockState(newPlacing, state.getRight(), blockState, getFluidStateImpl(blockState));
+			if (newPlacing.front == newFront && newPlacing.top == newTop) return getBlockState(newPlacing, state.getRight(), blockState);
 			else if (newPlacing.front == newTop && newPlacing.top == newFront)  return getBlockState(newPlacing,
 					switch (state.getRight())
 					{
@@ -343,7 +341,7 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 					case OUTSIDE_VERTICAL_RIGHT -> EnumShape.OUTSIDE_VERTICAL_LEFT;
 					default -> state.getRight();
 					}
-			, blockState, getFluidStateImpl(blockState));
+			, blockState);
 		}
 		return blockState;
 	}
@@ -384,23 +382,20 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 			case OUTSIDE_VERTICAL_RIGHT -> EnumShape.OUTSIDE_VERTICAL_LEFT;
 			default -> state.getRight();
 			}
-		, blockState, getFluidStateImpl(blockState));
+		, blockState);
 	}
 
 	public default BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
 	{
         EnumPlacing placing = getPlacing(state);
-        return placing == null ? state : getBlockState(placing, getShape(placing, level, pos), state, level.getFluidState(pos));
+        return placing == null ? state : getBlockState(placing, getShape(placing, level, pos), state);
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockPlaceContext context)
+	public default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState blockState)
 	{
-		BlockPos blockPos = context.getClickedPos();
-		BlockState blockState = context.getLevel().getBlockState(blockPos);
-        FluidState fluidState = context.getLevel().getFluidState(blockPos);
         EnumPlacing placing = getPlacing(context);
-        return getBlockState(placing, getShape(placing, context.getLevel(), context.getClickedPos()), blockState, fluidState);
+        return getBlockState(placing, getShape(placing, context.getLevel(), context.getClickedPos()), blockState);
 	}
 
 	public default EnumShape getShape(EnumPlacing placing, BlockGetter level, BlockPos pos)

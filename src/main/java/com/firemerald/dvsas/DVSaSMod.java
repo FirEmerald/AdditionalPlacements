@@ -9,7 +9,9 @@ import com.firemerald.dvsas.common.ConfigCommon;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ConfigTracker;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 @Mod(DVSaSMod.MOD_ID)
 public class DVSaSMod
@@ -28,5 +30,6 @@ public class DVSaSMod
     public DVSaSMod()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, commonSpec);
+        ConfigTracker.INSTANCE.loadConfigs(ModConfig.Type.COMMON, FMLPaths.CONFIGDIR.get()); //hacky method to ensure config is loaded
     }
 }

@@ -19,8 +19,6 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 
 @Mixin(StairBlock.class)
 public abstract class MixinStairBlock implements IVanillStairBlock
@@ -53,21 +51,22 @@ public abstract class MixinStairBlock implements IVanillStairBlock
 	}
 
 	@Override
-	public BlockState getDefaultHorizontalState(BlockState currentState, FluidState fluidState)
+	public BlockState getDefaultHorizontalState(BlockState currentState)
 	{
-		return currentState.is(asStair()) ? currentState : asStair().defaultBlockState().setValue(StairBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		return currentState.is(asStair()) ? currentState : stairs.copyProperties(currentState, asStair().defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultVerticalState(BlockState currentState, FluidState fluidState)
+	public BlockState getDefaultVerticalState(BlockState currentState)
 	{
-		return currentState.is(stairs) ? currentState : stairs.defaultBlockState().setValue(VerticalStairBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		return currentState.is(stairs) ? currentState : stairs.copyProperties(currentState, stairs.defaultBlockState());
 	}
 
-	@Inject(method = "getStateForPlacement", at = @At("HEAD"), cancellable = true)
+	//@Override
+	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
-		if (this.hasVertical()) ci.setReturnValue(getStateForPlacementImpl(context));
+		if (this.hasVertical()) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
 	@Inject(method = "rotate", at = @At("HEAD"), cancellable = true)
@@ -86,12 +85,6 @@ public abstract class MixinStairBlock implements IVanillStairBlock
 	private void updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasVertical()) ci.setReturnValue(updateShapeImpl(state, direction, otherState, level, pos, otherPos));
-	}
-
-	@Override
-	public FluidState getFluidStateImpl(BlockState blockState)
-	{
-		return asStair().getFluidState(blockState);
 	}
 
 	@Override
