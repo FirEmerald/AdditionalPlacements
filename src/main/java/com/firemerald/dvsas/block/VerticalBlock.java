@@ -54,13 +54,13 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	@Override
 	public Item asItem()
 	{
-		return getModelBlock().asItem();
+		return parentBlock.asItem();
 	}
 
 	@Override
 	public String getDescriptionId()
 	{
-		return getModelBlock().getDescriptionId();
+		return parentBlock.getDescriptionId();
 	}
 
 	@Deprecated
