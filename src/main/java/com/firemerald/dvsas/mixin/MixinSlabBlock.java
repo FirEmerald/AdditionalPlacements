@@ -9,15 +9,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.firemerald.dvsas.block.ISlabBlock.IVanillSlabBlock;
 import com.firemerald.dvsas.block.VerticalSlabBlock;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 
 @Mixin(SlabBlock.class)
 public abstract class MixinSlabBlock extends Block implements IVanillSlabBlock
@@ -64,22 +64,22 @@ public abstract class MixinSlabBlock extends Block implements IVanillSlabBlock
 	}
 
 	@Override
-	public BlockState getDefaultHorizontalState(BlockState currentState, FluidState fluidState)
+	public BlockState getDefaultHorizontalState(BlockState currentState)
 	{
-		return currentState.is(asSlab()) ? currentState : asSlab().defaultBlockState().setValue(SlabBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		return currentState.is(asSlab()) ? currentState : slab.copyProperties(currentState, asSlab().defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultVerticalState(BlockState currentState, FluidState fluidState)
+	public BlockState getDefaultVerticalState(BlockState currentState)
 	{
-		return currentState.is(slab) ? currentState : slab.defaultBlockState().setValue(VerticalSlabBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		return currentState.is(slab) ? currentState : slab.copyProperties(currentState, slab.defaultBlockState());
 	}
 
 	//@Override
-	@Inject(method = "getStateForPlacement", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
-		if (this.hasVertical()) ci.setReturnValue(getStateForPlacementImpl(context));
+		if (this.hasVertical()) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
 	//@Override
@@ -123,9 +123,10 @@ public abstract class MixinSlabBlock extends Block implements IVanillSlabBlock
 		if (this.hasVertical()) ci.setReturnValue(canBeReplacedImpl(state, context));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public FluidState getFluidStateImpl(BlockState blockState)
+	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
 	{
-		return asSlab().getFluidState(blockState);
+		return super.updateShape(state, direction, otherState, level, pos, otherPos);
 	}
 }

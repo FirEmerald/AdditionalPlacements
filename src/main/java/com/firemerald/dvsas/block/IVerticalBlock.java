@@ -12,6 +12,7 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.client.Camera;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
@@ -20,22 +21,26 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.BucketPickup;
+import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public interface IVerticalBlock extends ItemLike
+public interface IVerticalBlock extends ItemLike, BucketPickup, LiquidBlockContainer
 {
 	public BlockState rotateImpl(BlockState blockState, Rotation rotation);
 
 	public BlockState mirrorImpl(BlockState blockState, Mirror mirror);
 
-	public BlockState getStateForPlacementImpl(BlockPlaceContext context);
+	public BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState);
+
+	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos);
 
 	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
@@ -45,11 +50,9 @@ public interface IVerticalBlock extends ItemLike
 
 	public boolean hasVertical();
 
-	public BlockState getDefaultVerticalState(BlockState currentState, FluidState fluidState);
+	public BlockState getDefaultVerticalState(BlockState currentState);
 
-	public BlockState getDefaultHorizontalState(BlockState currentState, FluidState fluidState);
-
-	public FluidState getFluidStateImpl(BlockState blockState);
+	public BlockState getDefaultHorizontalState(BlockState currentState);
 
 	public boolean isThis(BlockState blockState);
 

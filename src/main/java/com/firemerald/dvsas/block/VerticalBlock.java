@@ -1,9 +1,6 @@
 package com.firemerald.dvsas.block;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -11,8 +8,10 @@ import javax.annotation.Nullable;
 import com.google.common.collect.Streams;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -27,28 +26,74 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public abstract class VerticalBlock<T extends Block> extends Block implements IVerticalBlock
+public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends Block implements IVerticalBlock
 {
+	private static Set<Property<?>> copyPropsStatic;
 	protected final T parentBlock;
-	public final Supplier<BlockState> model;
+	private final Property<?>[] copyProps;
 
-	public VerticalBlock(T parentBlock, Supplier<BlockState> model)
+	public VerticalBlock(T parentBlock)
 	{
-		super(BlockBehaviour.Properties.copy(parentBlock));
+		super(theHack(parentBlock));
+		this.copyProps = copyPropsStatic.toArray(Property[]::new);
+		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
-		this.model = model;
+	}
+	
+	public static Properties theHack(Block parentBlock)
+	{
+		Set<Property<?>> props = new HashSet<>(parentBlock.defaultBlockState().getProperties());
+		if (parentBlock instanceof SlabBlock) props.remove(SlabBlock.TYPE);
+		else if (parentBlock instanceof StairBlock)
+		{
+			props.remove(StairBlock.FACING);
+			props.remove(StairBlock.SHAPE);
+			props.remove(StairBlock.HALF);
+		}
+		copyPropsStatic = props;
+		return BlockBehaviour.Properties.copy(parentBlock);
+	}
+	
+	public Property<?>[] getCopyProps()
+	{
+		return copyProps;
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public BlockState copyProperties(BlockState from, BlockState to)
+	{
+		for (Property prop : copyProps) to = to.setValue(prop, from.getValue(prop));
+		return to;
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+	{
+		super.createBlockStateDefinition(builder);
+		Set<Property<?>> invalid = new HashSet<>();
+		copyPropsStatic.forEach(prop -> {
+			try
+			{
+				builder.add(prop);
+			}
+			catch (IllegalArgumentException e)
+			{
+				invalid.add(prop);
+			}
+		});
+		copyPropsStatic.removeAll(invalid);
 	}
 
 	@Override
@@ -66,52 +111,24 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	@Deprecated
 	public BlockState getModelState()
 	{
-		return model.get();
+		return getModelBlock().defaultBlockState();
 	}
 
 	public BlockState getModelState(BlockState worldState)
 	{
-		return getModelState();
+		return copyProperties(worldState, getModelState());
 	}
 
-	@Deprecated
-	public Block getModelBlock()
-	{
-		return getModelState().getBlock();
-	}
-
-	public Block getModelBlock(BlockState worldState)
-	{
-		return getModelState(worldState).getBlock();
-	}
-
-	@Deprecated
-	public BlockState getVisualState()
-	{
-		return getVisualBlock().defaultBlockState();
-	}
-
-	public BlockState getVisualState(BlockState worldState)
-	{
-		return getVisualState();
-	}
-
-	@Deprecated
-	public Block getVisualBlock()
+	public T getModelBlock()
 	{
 		return parentBlock;
-	}
-
-	public Block getVisualBlock(BlockState worldState)
-	{
-		return getVisualBlock();
 	}
 
 	@Override
 	@Deprecated
 	public List<ItemStack> getDrops(BlockState state, LootContext.Builder builder)
 	{
-		return parentBlock.getDrops(this.getDefaultHorizontalState(state, getFluidState(state)), builder);
+		return parentBlock.getDrops(this.getDefaultHorizontalState(state), builder);
 	}
 
 	@Override
@@ -204,7 +221,7 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	@Override
 	public boolean isRandomlyTicking(BlockState state)
 	{
-		return getModelBlock(state).isRandomlyTicking(state);
+		return getModelBlock().isRandomlyTicking(getModelState(state));
 	}
 
 	@Override
@@ -265,7 +282,7 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
-		return getStateForPlacementImpl(context);
+		return getStateForPlacementImpl(context, this.defaultBlockState());
 	}
 
 	@Override
@@ -286,10 +303,54 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 		appendHoverTextImpl(stack, level, tooltip, flag);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public FluidState getFluidStateImpl(BlockState blockState)
+	@Deprecated
+	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
 	{
-		return this.getFluidState(blockState);
+		FluidState fluid = level.getFluidState(pos);
+		if (!fluid.isEmpty()) level.scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(level));
+		return updateShapeImpl(state, direction, otherState, level, pos, otherPos);
+	}
+
+	@Override
+	public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState blockState)
+	{
+		ItemStack ret = this.getModelBlock().pickupBlock(level, pos, this.getModelState(blockState));
+		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
+		return ret;
+	}
+
+	@Override
+    public Optional<SoundEvent> getPickupSound(BlockState blockState)
+    {
+		return this.getModelBlock().getPickupSound(this.getModelState(blockState));
+    }
+
+	@Override
+	@Deprecated
+	public Optional<SoundEvent> getPickupSound()
+	{
+		return this.getModelBlock().getPickupSound();
+	}
+
+	@Override
+	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState blockState, Fluid fluid)
+	{
+		return this.getModelBlock().canPlaceLiquid(level, pos, getModelState(blockState), fluid);
+	}
+
+	@Override
+	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState)
+	{
+		boolean flag = this.getModelBlock().placeLiquid(level, pos, getModelState(blockState), fluidState);
+		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
+		return flag;
+	}
+
+	@Override
+	@Deprecated
+	public FluidState getFluidState(BlockState state)
+	{
+		return this.getModelState(state).getFluidState();
 	}
 }

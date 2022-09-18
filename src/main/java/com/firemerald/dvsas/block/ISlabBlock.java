@@ -14,16 +14,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public interface ISlabBlock extends IVerticalBlock, SimpleWaterloggedBlock
+public interface ISlabBlock extends IVerticalBlock
 {
 	public static interface IVanillSlabBlock extends ISlabBlock
 	{
@@ -34,14 +32,14 @@ public interface ISlabBlock extends IVerticalBlock, SimpleWaterloggedBlock
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
 		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(rotation.rotate(placing), blockState, getFluidStateImpl(blockState));
+		return placing == null ? blockState : forPlacing(rotation.rotate(placing), blockState);
 	}
 
 	@Override
 	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
 	{
 		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(mirror.mirror(placing), blockState, getFluidStateImpl(blockState));
+		return placing == null ? blockState : forPlacing(mirror.mirror(placing), blockState);
 	}
 
 	public default boolean canBeReplacedImpl(BlockState state, BlockPlaceContext context)
@@ -65,20 +63,19 @@ public interface ISlabBlock extends IVerticalBlock, SimpleWaterloggedBlock
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockPlaceContext context)
+	public default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
 	{
 		BlockPos blockPos = context.getClickedPos();
 		BlockState blockState = context.getLevel().getBlockState(blockPos);
-        FluidState fluidState = context.getLevel().getFluidState(blockPos);
-        if (isThis(blockState)) return getDefaultHorizontalState(blockState, fluidState).setValue(SlabBlock.TYPE, SlabType.DOUBLE);
-        else return forPlacing(getPlacingDirection(context), blockState, fluidState);
+        if (isThis(blockState)) return getDefaultHorizontalState(blockState).setValue(SlabBlock.TYPE, SlabType.DOUBLE);
+        else return forPlacing(getPlacingDirection(context), currentState);
 	}
 
-	public default BlockState forPlacing(Direction dir, BlockState blockState, FluidState fluidState)
+	public default BlockState forPlacing(Direction dir, BlockState blockState)
 	{
-    	if (dir == Direction.UP) return getDefaultHorizontalState(blockState, fluidState).setValue(SlabBlock.TYPE, SlabType.TOP);
-    	else if (dir == Direction.DOWN) return getDefaultHorizontalState(blockState, fluidState).setValue(SlabBlock.TYPE, SlabType.BOTTOM);
-    	else return getDefaultVerticalState(blockState, fluidState).setValue(VerticalSlabBlock.PLACING, dir);
+    	if (dir == Direction.UP) return getDefaultHorizontalState(blockState).setValue(SlabBlock.TYPE, SlabType.TOP);
+    	else if (dir == Direction.DOWN) return getDefaultHorizontalState(blockState).setValue(SlabBlock.TYPE, SlabType.BOTTOM);
+    	else return getDefaultVerticalState(blockState).setValue(VerticalSlabBlock.PLACING, dir);
 	}
 
 	@Nullable

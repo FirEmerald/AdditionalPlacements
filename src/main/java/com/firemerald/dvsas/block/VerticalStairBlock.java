@@ -1,7 +1,6 @@
 package com.firemerald.dvsas.block;
 
 import java.util.Collection;
-import java.util.function.Supplier;
 
 import com.firemerald.dvsas.common.DVSaSBlockTags;
 import com.firemerald.dvsas.util.VoxelShapes;
@@ -12,22 +11,16 @@ import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class VerticalStairBlock extends VerticalBlock<StairBlock> implements IStairBlock
 {
-	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final EnumProperty<EnumPlacing> PLACING = EnumProperty.create("placing", EnumPlacing.class);
 	public static final EnumProperty<EnumShape> SHAPE = EnumProperty.create("shape", EnumShape.class);
 	public static final VoxelShape[][] SHAPE_CACHE = new VoxelShape[4][17];
@@ -49,29 +42,19 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public VerticalStairBlock(StairBlock stairs)
 	{
-		this(stairs, () -> ((IVanillStairBlock) stairs).getModelStateImpl());
-	}
-
-	public VerticalStairBlock(StairBlock stairs, Supplier<BlockState> modelState)
-	{
-		super(stairs, modelState);
-		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(PLACING, EnumPlacing.NORTH_EAST).setValue(SHAPE, EnumShape.STRAIGHT));
+		super(stairs);
+		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, EnumPlacing.NORTH_EAST).setValue(SHAPE, EnumShape.STRAIGHT));
 		((IVanillStairBlock) stairs).setStairs(this);
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
-		builder.add(WATERLOGGED, PLACING, SHAPE);
-	}
-
-	@Override
-	@Deprecated
-	public FluidState getFluidState(BlockState blockState)
-	{
-		return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
+		builder.add(PLACING, SHAPE);
+		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
@@ -82,24 +65,17 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 	}
 
 	@Override
-	@Deprecated
-	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
+	public BlockState getDefaultHorizontalState(BlockState currentState)
 	{
-		if (state.getValue(WATERLOGGED)) level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-		return updateShapeImpl(state, direction, otherState, level, pos, otherPos);
+		return currentState.is(parentBlock) ? currentState : copyProperties(currentState, parentBlock.defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultVerticalState(BlockState currentState, FluidState fluidState)
+	public BlockState getDefaultVerticalState(BlockState currentState)
 	{
-		return currentState.is(this) ? currentState : this.defaultBlockState().setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
-
-	@Override
-	public BlockState getDefaultHorizontalState(BlockState currentState, FluidState fluidState)
-	{
-		return currentState.is(parentBlock) ? currentState : parentBlock.defaultBlockState().setValue(StairBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
-	}
+	
 	@Override
 	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
 	{

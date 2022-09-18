@@ -25,7 +25,7 @@ public class VerticalBlockModelUtils
 
 	public static BlockState getModeledState(BlockState state)
 	{
-		if (state.getBlock() instanceof VerticalBlock) return ((VerticalBlock<?>) state.getBlock()).getVisualState(state);
+		if (state.getBlock() instanceof VerticalBlock) return ((VerticalBlock<?>) state.getBlock()).getModelState(state);
 		else return null;
 	}
 

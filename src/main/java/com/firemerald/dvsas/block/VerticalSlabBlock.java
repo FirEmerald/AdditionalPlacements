@@ -1,7 +1,6 @@
 package com.firemerald.dvsas.block;
 
 import java.util.Collection;
-import java.util.function.Supplier;
 
 import com.firemerald.dvsas.common.DVSaSBlockTags;
 import com.firemerald.dvsas.util.VoxelShapes;
@@ -18,49 +17,27 @@ import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class VerticalSlabBlock extends VerticalBlock<SlabBlock> implements ISlabBlock
 {
-	public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 	public static final DirectionProperty PLACING = BlockStateProperties.HORIZONTAL_FACING;
 
+	@SuppressWarnings("deprecation")
 	public VerticalSlabBlock(SlabBlock slab)
 	{
-		this(slab, slab::defaultBlockState);
-	}
-
-	public VerticalSlabBlock(SlabBlock slab, Supplier<BlockState> modelState)
-	{
-		super(slab, modelState);
-		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(PLACING, Direction.NORTH));
+		super(slab);
+		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
 		((IVanillSlabBlock) slab).setSlab(this);
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
-		builder.add(WATERLOGGED, PLACING);
-	}
-
-	@Override
-	@Deprecated
-	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
-	{
-		if (state.getValue(WATERLOGGED)) level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-		return super.updateShape(state, direction, otherState, level, pos, otherPos);
-	}
-
-	@Override
-	@Deprecated
-	public FluidState getFluidState(BlockState blockState)
-	{
-		return blockState.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(blockState);
+		builder.add(PLACING);
+		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
@@ -90,15 +67,15 @@ public class VerticalSlabBlock extends VerticalBlock<SlabBlock> implements ISlab
 	}
 
 	@Override
-	public BlockState getDefaultHorizontalState(BlockState currentState, FluidState fluidState)
+	public BlockState getDefaultHorizontalState(BlockState currentState)
 	{
-		return currentState.is(parentBlock) ? currentState : parentBlock.defaultBlockState().setValue(SlabBlock.WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		return currentState.is(parentBlock) ? currentState : copyProperties(currentState, parentBlock.defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultVerticalState(BlockState currentState, FluidState fluidState)
+	public BlockState getDefaultVerticalState(BlockState currentState)
 	{
-		return currentState.is(this) ? currentState : this.defaultBlockState().setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER);
+		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
 
 	@Override
@@ -108,5 +85,11 @@ public class VerticalSlabBlock extends VerticalBlock<SlabBlock> implements ISlab
 		tags.add(DVSaSBlockTags.VERTICAL_SLABS);
 		if (tags.remove(BlockTags.WOODEN_SLABS)) tags.add(DVSaSBlockTags.VERTICAL_WOODEN_SLABS);
 		return tags;
+	}
+
+	@Override
+	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
+	{
+		return state;
 	}
 }

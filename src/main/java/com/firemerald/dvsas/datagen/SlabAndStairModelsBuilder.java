@@ -8,7 +8,6 @@ import com.firemerald.dvsas.block.VerticalStairBlock;
 
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 
@@ -79,8 +78,8 @@ public class SlabAndStairModelsBuilder
 	}
 
 	private final BlockStateProvider stateProvider;
-	private final ModelType slabDef = new ModelType(false, SLAB_MODELS, state -> SLAB_MODEL_DEFINITIONS[state.getValue(VerticalSlabBlock.PLACING).get2DDataValue()], VerticalSlabBlock.WATERLOGGED);
-	private final ModelType stairDef = new ModelType(false, STAIR_MODELS, state -> STAIR_MODEL_DEFINITIONS[state.getValue(VerticalStairBlock.PLACING).ordinal()][state.getValue(VerticalStairBlock.SHAPE).ordinal()], VerticalStairBlock.WATERLOGGED);
+	private final ModelType<VerticalSlabBlock> slabDef = new ModelType<>(false, SLAB_MODELS, state -> SLAB_MODEL_DEFINITIONS[state.getValue(VerticalSlabBlock.PLACING).get2DDataValue()], VerticalSlabBlock::getCopyProps);
+	private final ModelType<VerticalStairBlock> stairDef = new ModelType<>(false, STAIR_MODELS, state -> STAIR_MODEL_DEFINITIONS[state.getValue(VerticalStairBlock.PLACING).ordinal()][state.getValue(VerticalStairBlock.SHAPE).ordinal()], VerticalStairBlock::getCopyProps);
 	private BiConsumer<BlockModelBuilder, String> actions = null;
 	private boolean uvLock = false;
 
@@ -144,13 +143,13 @@ public class SlabAndStairModelsBuilder
 		.texture("all", all));
 	}
 
-	public SlabAndStairModelsBuilder setSlab(Block block, String folder, String parentMod, String parentFolder)
+	public SlabAndStairModelsBuilder setSlab(VerticalSlabBlock block, String folder, String parentMod, String parentFolder)
 	{
 		slabDef.set(block, folder, parentMod, parentFolder);
 		return this;
 	}
 
-	public SlabAndStairModelsBuilder setSlab(Block block, String folder)
+	public SlabAndStairModelsBuilder setSlab(VerticalSlabBlock block, String folder)
 	{
 		return setSlab(block, folder, null, null);
 	}
@@ -171,13 +170,13 @@ public class SlabAndStairModelsBuilder
 		return this;
 	}
 
-	public SlabAndStairModelsBuilder setStairs(Block block, String folder, String parentMod, String parentFolder)
+	public SlabAndStairModelsBuilder setStairs(VerticalStairBlock block, String folder, String parentMod, String parentFolder)
 	{
 		stairDef.set(block, folder, parentMod, parentFolder);
 		return this;
 	}
 
-	public SlabAndStairModelsBuilder setStairs(Block block, String folder)
+	public SlabAndStairModelsBuilder setStairs(VerticalStairBlock block, String folder)
 	{
 		return setStairs(block, folder, null, null);
 	}

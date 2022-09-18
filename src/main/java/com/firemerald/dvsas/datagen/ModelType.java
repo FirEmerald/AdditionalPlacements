@@ -15,19 +15,19 @@ import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 
-public class ModelType
+public class ModelType<T extends Block>
 {
 	final boolean hasItem;
 	final String[] models;
 	final Function<BlockState, StateModelDefinition> getModelDefinition;
-	final Property<?>[] ignoredStateProperties;
+	final Function<T, Property<?>[]> ignoredStateProperties;
 	boolean has = false;
-	Block block = null;
+	T block = null;
 	String folder = null;
 	String parentMod = null;
 	String parentFolder = null;
 
-	public ModelType(boolean hasItem, String[] models, Function<BlockState, StateModelDefinition> getModelDefinition, Property<?>... ignoredStateProperties)
+	public ModelType(boolean hasItem, String[] models, Function<BlockState, StateModelDefinition> getModelDefinition, Function<T, Property<?>[]> ignoredStateProperties)
 	{
 		this.hasItem = hasItem;
 		this.models = models;
@@ -35,7 +35,7 @@ public class ModelType
 		this.ignoredStateProperties = ignoredStateProperties;
 	}
 
-	public void set(Block block, String folder, String parentMod, String parentFolder)
+	public void set(T block, String folder, String parentMod, String parentFolder)
 	{
 		has = true;
 		this.block = block;
@@ -44,7 +44,7 @@ public class ModelType
 		this.parentFolder = parentFolder;
 	}
 
-	public void set(Block block, String folder)
+	public void set(T block, String folder)
 	{
 		set(block, folder, null, null);
 	}
@@ -81,7 +81,7 @@ public class ModelType
 					.rotationY(modelDef.yRotation())
 					.uvLock(uvLock)
 					.build();
-				}, ignoredStateProperties);
+				}, ignoredStateProperties.apply(block));
 				if (hasItem)
 				{
 					Item item = block.asItem();
