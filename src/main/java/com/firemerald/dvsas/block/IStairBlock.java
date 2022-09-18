@@ -144,25 +144,15 @@ public interface IStairBlock extends IVerticalBlock, SimpleWaterloggedBlock
 		internalSetHorizontalStateMap(Half.TOP, direction, StairsShape.OUTER_RIGHT, placing, EnumShape.OUTSIDE_HORIZONTAL_LEFT);
 	}
 
-	public static void internalBuildHorizontalStates(Direction direction, Direction up, Half half)
-	{
-		EnumPlacing placing = EnumPlacing.forFacing(direction.getOpposite(), up);
-		internalSetHorizontalStateMap(half, direction, StairsShape.STRAIGHT, placing, EnumShape.STRAIGHT);
-		internalSetHorizontalStateMap(half, direction, StairsShape.INNER_LEFT, placing, EnumShape.INSIDE_LEFT);
-		internalSetHorizontalStateMap(half, direction, StairsShape.OUTER_LEFT, placing, EnumShape.OUTSIDE_HORIZONTAL_LEFT);
-		internalSetHorizontalStateMap(half, direction, StairsShape.INNER_RIGHT, placing, EnumShape.INSIDE_RIGHT);
-		internalSetHorizontalStateMap(half, direction, StairsShape.OUTER_RIGHT, placing, EnumShape.OUTSIDE_HORIZONTAL_RIGHT);
-	}
-
 	public static void internalBuildVerticalStates(VerticalStairBlock.EnumPlacing direction)
 	{
 		EnumPlacing placing = EnumPlacing.forFacing(direction.counterClockWiseFront, direction.clockWiseFront);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.STRAIGHT, placing, EnumShape.STRAIGHT);
-		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.INNER_UP, placing, EnumShape.INSIDE_LEFT);
+		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.INNER_UP, placing, EnumShape.INSIDE_RIGHT);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_UP, placing, EnumShape.OUTSIDE_RIGHT);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_UP_CCW, placing, EnumShape.OUTSIDE_HORIZONTAL_RIGHT);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_UP_CW, placing, EnumShape.OUTSIDE_VERTICAL_RIGHT);
-		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.INNER_DOWN, placing, EnumShape.INSIDE_RIGHT);
+		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.INNER_DOWN, placing, EnumShape.INSIDE_LEFT);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_DOWN, placing, EnumShape.OUTSIDE_LEFT);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_CCW, placing, EnumShape.OUTSIDE_HORIZONTAL_LEFT);
 		internalSetVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_CW, placing, EnumShape.OUTSIDE_VERTICAL_LEFT);
