@@ -38,6 +38,7 @@ public class CommonModEventHandler
 				{
 					if (!((IVerticalBlock) block).hasVertical())
 					{
+						if (DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString())) return;
 						if (block instanceof SlabBlock)
 						{
 							if (block.defaultBlockState().getProperties().size() == 2) //don't register if there are properties that won't get carried over
