@@ -39,7 +39,7 @@ public class VerticalBlockModelUtils
 		return blockState.hasBlockEntity() ? ((EntityBlock) blockState.getBlock()).newBlockEntity(new BlockPos(0, 0, 0), blockState).getModelData() : defaultData;
 	}
 
-	public static final List<BakedQuad> getReferredBakedQuads(BlockState referredState, Direction side, Random rand, IModelData modelData)
+	public static final List<BakedQuad> getBakedQuads(BlockState referredState, Direction side, Random rand, IModelData modelData)
 	{
 		BakedModel referredBakedModel = getBakedModel(referredState);
 		IModelData referredModelData = getModelData(referredState, modelData);
@@ -65,8 +65,7 @@ public class VerticalBlockModelUtils
 						jsonBakedQuad.getVertices(),
 						referredBakedQuad.getVertices(),
 						jsonBakedQuad.getSprite(),
-						referredBakedQuad.getSprite(),
-						orientation == Direction.UP
+						referredBakedQuad.getSprite()
 						),
 				referredBakedQuad.getTintIndex(),
 				orientation,
@@ -83,27 +82,25 @@ public class VerticalBlockModelUtils
 	public static final int VERTEX_COUNT = DefaultVertexFormat.BLOCK.getVertexSize();
 	public static final int VERTEX_SIZE = DefaultVertexFormat.BLOCK.getIntegerSize();
 
-	public static final boolean isInternalFace(int[] vertices, boolean isTranslucent)
+	public static final boolean isInternalFace(int[] vertices)
 	{
-		boolean flag = true;
-		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT && flag; vertexIndex += VERTEX_SIZE)
+		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
 		{
 			float x = Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET]);
+			if (x != 0 && x != 0.5 && x != 1) return true;
 			float y = Float.intBitsToFloat(vertices[vertexIndex + Y_OFFSET]);
+			if (y != 0 && y != 0.5 && y != 1) return true;
 			float z = Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]);
-			flag = x > 0 && x < 1 && x != 0.5 && y > 0 && y < (isTranslucent ? 1 : 0.5) && y != 0.5 && z > 0 && z < 1 && z != 0.5;
+			if (z != 0 && z != 0.5 && z != 1) return true;
 		}
-		return flag;
+		return false;
 	}
 
-	public static final int[] updateVertices(int[] vertices, int[] referredVertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, boolean faceUp)
+	public static final int[] updateVertices(int[] vertices, int[] referredVertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite)
 	{
 		int[] updatedVertices = vertices.clone();
 		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
 		{
-			float y = Float.intBitsToFloat(referredVertices[vertexIndex + Y_OFFSET]);
-			// Lower only top face since RenderType CutoutMipped will remove extra transparent texture bits that go out of the shape.
-			if (faceUp && y > 0 && y < 1 && y != 0.5) updatedVertices[vertexIndex + Y_OFFSET] = Float.floatToRawIntBits(y < 0.5 ? y + 0.5F : y);
 			updatedVertices[vertexIndex + U_OFFSET] = changeUVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + U_OFFSET]);
 			updatedVertices[vertexIndex + V_OFFSET] = changeVVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + V_OFFSET]);
 	    }

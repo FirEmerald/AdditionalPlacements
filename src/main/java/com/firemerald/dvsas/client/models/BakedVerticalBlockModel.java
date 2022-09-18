@@ -94,13 +94,12 @@ public class BakedVerticalBlockModel implements IDynamicBakedModel
 	    	{
 	    		IModelData modelData = VerticalBlockModelUtils.getModelData(modelState, extraData);
     			List<BakedQuad> bakedQuads = new ArrayList<>();
-    			boolean isTranslucent = false;//VerticalBlockUtils.isTranslucent(modelState); TODO is this needed
     			for (BakedQuad jsonBakedQuad : model.getQuads(state, side, rand, modelData))
     			{
     				Direction orientation = jsonBakedQuad.getDirection();
-    				for (BakedQuad referredBakedQuad : VerticalBlockModelUtils.getReferredBakedQuads(modelState, orientation, rand, modelData))
+    				for (BakedQuad referredBakedQuad : VerticalBlockModelUtils.getBakedQuads(modelState, orientation, rand, modelData))
     				{
-    					if (!VerticalBlockModelUtils.isInternalFace(referredBakedQuad.getVertices(), isTranslucent))
+    					if (!VerticalBlockModelUtils.isInternalFace(referredBakedQuad.getVertices()))
     					{
     						bakedQuads.add(VerticalBlockModelUtils.getNewBakedQuad(jsonBakedQuad, referredBakedQuad, orientation));
     						break;
