@@ -1,6 +1,7 @@
 package com.firemerald.dvsas.block;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import com.firemerald.dvsas.common.DVSaSBlockTags;
 import com.firemerald.dvsas.util.VoxelShapes;
@@ -50,10 +51,10 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 
 	public VerticalStairBlock(StairBlock stairs)
 	{
-		this(stairs, ((IVanillStairBlock) stairs).getModelStateImpl());
+		this(stairs, () -> ((IVanillStairBlock) stairs).getModelStateImpl());
 	}
 
-	public VerticalStairBlock(StairBlock stairs, BlockState modelState)
+	public VerticalStairBlock(StairBlock stairs, Supplier<BlockState> modelState)
 	{
 		super(stairs, modelState);
 		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(PLACING, EnumPlacing.NORTH_EAST).setValue(SHAPE, EnumShape.STRAIGHT));

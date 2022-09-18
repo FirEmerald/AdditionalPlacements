@@ -5,12 +5,10 @@ import java.util.List;
 
 import com.firemerald.dvsas.DVSaSMod;
 import com.firemerald.dvsas.block.IVerticalBlock;
-import com.firemerald.dvsas.block.VerticalBlock;
 import com.firemerald.dvsas.block.VerticalSlabBlock;
 import com.firemerald.dvsas.block.VerticalStairBlock;
 import com.firemerald.dvsas.datagen.ModelGenerator;
 
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
@@ -19,7 +17,6 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
-import net.minecraftforge.registries.ForgeRegistries;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonModEventHandler
@@ -56,13 +53,5 @@ public class CommonModEventHandler
 		{
 			event.getGenerator().addProvider(new ModelGenerator(event.getGenerator(), DVSaSMod.MOD_ID, event.getExistingFileHelper()));
 		}
-	}
-
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onItemsRegistered(RegistryEvent.Register<Item> event)
-	{
-		ForgeRegistries.BLOCKS.forEach(block -> {
-			if (block instanceof VerticalBlock) ((VerticalBlock<?>) block).onFinishedRegistering();
-		});
 	}
 }

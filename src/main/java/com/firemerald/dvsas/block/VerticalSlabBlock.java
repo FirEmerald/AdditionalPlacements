@@ -1,6 +1,7 @@
 package com.firemerald.dvsas.block;
 
 import java.util.Collection;
+import java.util.function.Supplier;
 
 import com.firemerald.dvsas.common.DVSaSBlockTags;
 import com.firemerald.dvsas.util.VoxelShapes;
@@ -31,10 +32,10 @@ public class VerticalSlabBlock extends VerticalBlock<SlabBlock> implements ISlab
 
 	public VerticalSlabBlock(SlabBlock slab)
 	{
-		this(slab, slab.defaultBlockState());
+		this(slab, slab::defaultBlockState);
 	}
 
-	public VerticalSlabBlock(SlabBlock slab, BlockState modelState)
+	public VerticalSlabBlock(SlabBlock slab, Supplier<BlockState> modelState)
 	{
 		super(slab, modelState);
 		this.registerDefaultState(this.stateDefinition.any().setValue(WATERLOGGED, false).setValue(PLACING, Direction.NORTH));

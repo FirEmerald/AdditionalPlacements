@@ -3,6 +3,7 @@ package com.firemerald.dvsas.block;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
@@ -17,6 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -40,32 +42,47 @@ import net.minecraft.world.phys.HitResult;
 public abstract class VerticalBlock<T extends Block> extends Block implements IVerticalBlock
 {
 	protected final T parentBlock;
-	private final BlockState model;
-	private final Block modelBlock;
+	public final Supplier<BlockState> model;
 
-	public VerticalBlock(T parentBlock, BlockState model)
+	public VerticalBlock(T parentBlock, Supplier<BlockState> model)
 	{
-		super(BlockBehaviour.Properties.copy(model.getBlock()));
+		super(BlockBehaviour.Properties.copy(parentBlock));
 		this.parentBlock = parentBlock;
 		this.model = model;
-		this.modelBlock = model.getBlock();
 	}
 
-	public void onFinishedRegistering()
+	@Override
+	public Item asItem()
 	{
-		this.item = parentBlock.asItem();
-		this.descriptionId = parentBlock.getDescriptionId();
+		return getModelBlock().asItem();
+	}
+
+	@Override
+	public String getDescriptionId()
+	{
+		return getModelBlock().getDescriptionId();
 	}
 
 	@Deprecated
 	public BlockState getModelState()
 	{
-		return model;
+		return model.get();
 	}
 
 	public BlockState getModelState(BlockState worldState)
 	{
 		return getModelState();
+	}
+
+	@Deprecated
+	public Block getModelBlock()
+	{
+		return getModelState().getBlock();
+	}
+
+	public Block getModelBlock(BlockState worldState)
+	{
+		return getModelState(worldState).getBlock();
 	}
 
 	@Override
@@ -84,31 +101,35 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	@Override
 	public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
 	{
-		modelBlock.animateTick(model, level, pos, random);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().animateTick(modelState, level, pos, random);
 	}
 
 	@Override
 	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float damage)
 	{
-		modelBlock.fallOn(level, model, pos, entity, damage);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().fallOn(level, modelState, pos, entity, damage);
 	}
 
 	@Override
 	public void updateEntityAfterFallOn(BlockGetter level, Entity entity)
 	{
-		modelBlock.updateEntityAfterFallOn(level, entity);
+		getModelBlock().updateEntityAfterFallOn(level, entity);
 	}
 
 	@Override
 	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity)
 	{
-		modelBlock.stepOn(level, pos, state, entity);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().stepOn(level, pos, modelState, entity);
 	}
 
 	@Override
 	public void handlePrecipitation(BlockState state, Level level, BlockPos pos, Biome.Precipitation precipitation)
 	{
-		modelBlock.handlePrecipitation(model, level, pos, precipitation);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().handlePrecipitation(modelState, level, pos, precipitation);
 	}
 
 	@Override
@@ -118,74 +139,78 @@ public abstract class VerticalBlock<T extends Block> extends Block implements IV
 	}
 
 	@Override
-	public void attack(BlockState p_56896_, Level p_56897_, BlockPos p_56898_, Player p_56899_)
+	public void attack(BlockState state, Level p_56897_, BlockPos p_56898_, Player p_56899_)
 	{
-		this.model.attack(p_56897_, p_56898_, p_56899_);
+		getModelState(state).attack(p_56897_, p_56898_, p_56899_);
 	}
 
 	@Override
-	public void destroy(LevelAccessor p_56882_, BlockPos p_56883_, BlockState p_56884_)
+	public void destroy(LevelAccessor p_56882_, BlockPos p_56883_, BlockState state)
 	{
-		this.modelBlock.destroy(p_56882_, p_56883_, p_56884_);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().destroy(p_56882_, p_56883_, modelState);
 	}
 
 	@Override
 	@Deprecated
 	public float getExplosionResistance()
 	{
-		return this.modelBlock.getExplosionResistance();
+		return getModelBlock().getExplosionResistance();
 	}
 
 	@Override
 	@Deprecated
-	public void onPlace(BlockState p_56961_, Level p_56962_, BlockPos p_56963_, BlockState p_56964_, boolean p_56965_)
+	public void onPlace(BlockState state, Level p_56962_, BlockPos p_56963_, BlockState p_56964_, boolean p_56965_)
 	{
-		if (!p_56961_.is(p_56961_.getBlock()))
+		if (!state.is(p_56964_.getBlock()))
 		{
-			this.model.neighborChanged(p_56962_, p_56963_, Blocks.AIR, p_56963_, false);
-			this.modelBlock.onPlace(this.model, p_56962_, p_56963_, p_56964_, false);
+			BlockState modelState = getModelState(state);
+			modelState.neighborChanged(p_56962_, p_56963_, Blocks.AIR, p_56963_, false);
+			modelState.getBlock().onPlace(modelState, p_56962_, p_56963_, p_56964_, false);
 		}
 	}
 
 	@Override
-	public void onRemove(BlockState p_56908_, Level p_56909_, BlockPos p_56910_, BlockState p_56911_, boolean p_56912_)
+	public void onRemove(BlockState state, Level p_56909_, BlockPos p_56910_, BlockState p_56911_, boolean p_56912_)
 	{
-		if (!p_56908_.is(p_56911_.getBlock()))
+		if (!state.is(p_56911_.getBlock()))
 		{
-			this.model.onRemove(p_56909_, p_56910_, p_56911_, p_56912_);
+			getModelState(state).onRemove(p_56909_, p_56910_, p_56911_, p_56912_);
 		}
 	}
 
 	@Override
-	public boolean isRandomlyTicking(BlockState p_56947_)
+	public boolean isRandomlyTicking(BlockState state)
 	{
-		return this.modelBlock.isRandomlyTicking(p_56947_);
+		return getModelBlock(state).isRandomlyTicking(state);
 	}
 
 	@Override
 	@Deprecated
-	public void randomTick(BlockState p_56951_, ServerLevel p_56952_, BlockPos p_56953_, Random p_56954_)
+	public void randomTick(BlockState state, ServerLevel p_56952_, BlockPos p_56953_, Random p_56954_)
 	{
-		this.modelBlock.randomTick(p_56951_, p_56952_, p_56953_, p_56954_);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().randomTick(modelState, p_56952_, p_56953_, p_56954_);
 	}
 
 	@Override
 	@Deprecated
-	public void tick(BlockState p_56886_, ServerLevel p_56887_, BlockPos p_56888_, Random p_56889_)
+	public void tick(BlockState state, ServerLevel p_56887_, BlockPos p_56888_, Random p_56889_)
 	{
-		this.modelBlock.tick(p_56886_, p_56887_, p_56888_, p_56889_);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().tick(modelState, p_56887_, p_56888_, p_56889_);
 	}
 
 	@Override
-	public InteractionResult use(BlockState p_56901_, Level p_56902_, BlockPos p_56903_, Player p_56904_, InteractionHand p_56905_, BlockHitResult p_56906_)
+	public InteractionResult use(BlockState state, Level p_56902_, BlockPos p_56903_, Player p_56904_, InteractionHand p_56905_, BlockHitResult p_56906_)
 	{
-		return this.model.use(p_56902_, p_56904_, p_56905_, p_56906_);
+		return getModelState(state).use(p_56902_, p_56904_, p_56905_, p_56906_);
 	}
 
 	@Override
 	public void wasExploded(Level p_56878_, BlockPos p_56879_, Explosion p_56880_)
 	{
-		this.modelBlock.wasExploded(p_56878_, p_56879_, p_56880_);
+		getModelBlock().wasExploded(p_56878_, p_56879_, p_56880_);
 	}
 
 	@Override
