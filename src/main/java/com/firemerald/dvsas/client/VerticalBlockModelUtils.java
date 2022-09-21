@@ -84,18 +84,16 @@ public class VerticalBlockModelUtils
 	{
 		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
 		{
-			if (!isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET]))) return true;
-			if (!isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + Y_OFFSET]))) return true;
-			if (!isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]))) return true;
+			if (!isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET])) || !isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + Y_OFFSET])) || !isValidCoordinate(Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]))) return true;
 		}
 		return false;
 	}
-	
+
 	public static boolean isValidCoordinate(float coord)
 	{
 		return isValid(coord) || isValid(coord - 0.5f) || isValid(coord - 1);
 	}
-	
+
 	public static boolean isValid(float value)
 	{
 		return Math.abs(value) < .00001f;

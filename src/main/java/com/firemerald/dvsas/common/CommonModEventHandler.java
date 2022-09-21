@@ -31,6 +31,8 @@ public class CommonModEventHandler
 		{
 			IForgeRegistry<Block> registry = event.getForgeRegistry();
 			final Map<ResourceLocation, Block> created = new LinkedHashMap<>();
+			boolean generateSlabs = DVSaSMod.COMMON_CONFIG.generateSlabs.get();
+			boolean generateStairs = DVSaSMod.COMMON_CONFIG.generateStairs.get();
 			registry.getEntries().forEach(entry -> {
 				ResourceLocation name = entry.getKey().location();
 				Block block = entry.getValue();
@@ -41,11 +43,11 @@ public class CommonModEventHandler
 						if (DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString())) return;
 						if (block instanceof SlabBlock)
 						{
-							created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalSlabBlock((SlabBlock) block));
+							if (generateSlabs) created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalSlabBlock((SlabBlock) block));
 						}
 						else if (block instanceof StairBlock)
 						{
-							created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalStairBlock((StairBlock) block));
+							if (generateStairs) created.put(new ResourceLocation(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalStairBlock((StairBlock) block));
 						}
 					}
 				}
