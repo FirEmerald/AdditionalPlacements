@@ -75,7 +75,7 @@ public class VerticalStairBlock extends VerticalBlock<StairBlock> implements ISt
 	{
 		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
-	
+
 	@Override
 	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
 	{

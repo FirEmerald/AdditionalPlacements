@@ -44,7 +44,7 @@ public interface IVerticalBlock extends ItemLike, BucketPickup, LiquidBlockConta
 
 	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		if (DVSaSMod.COMMON_CONFIG.showTooltip.get())
+		if (DVSaSMod.COMMON_CONFIG.showTooltip.get() && !disablePlacement())
 			tooltip.add(new TranslatableComponent("tooltip.dvsas.verticalplacement"));
 	}
 
@@ -68,6 +68,7 @@ public interface IVerticalBlock extends ItemLike, BucketPickup, LiquidBlockConta
 	@OnlyIn(Dist.CLIENT)
 	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
+		if (disablePlacement()) return;
 		pose.pushPose();
 		BlockPos hit = result.getBlockPos();
 		double hitX = hit.getX();
@@ -104,4 +105,6 @@ public interface IVerticalBlock extends ItemLike, BucketPickup, LiquidBlockConta
 
 	@OnlyIn(Dist.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
+
+	public abstract boolean disablePlacement();
 }

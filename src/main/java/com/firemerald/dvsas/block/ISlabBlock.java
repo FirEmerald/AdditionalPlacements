@@ -2,6 +2,7 @@ package com.firemerald.dvsas.block;
 
 import javax.annotation.Nullable;
 
+import com.firemerald.dvsas.DVSaSMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
@@ -203,5 +204,11 @@ public interface ISlabBlock extends IVerticalBlock
 		vertexConsumer.vertex(poseMat, .25f, .25f, -.5f).color(0, 0, 0, 0.4f).normal(normMat, 0, 0, 1).endVertex();
 		vertexConsumer.vertex(poseMat, -.5f, .5f, -.5f).color(0, 0, 0, 0.4f).normal(normMat, 0, 0, 1).endVertex();
 		vertexConsumer.vertex(poseMat, -.25f, .25f, -.5f).color(0, 0, 0, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+	}
+
+    @Override
+	public default boolean disablePlacement()
+	{
+		return this instanceof SlabBlock && DVSaSMod.COMMON_CONFIG.disableAutomaticSlabPlacement.get();
 	}
 }

@@ -51,7 +51,7 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
 	}
-	
+
 	public static Properties theHack(Block parentBlock)
 	{
 		Set<Property<?>> props = new HashSet<>(parentBlock.defaultBlockState().getProperties());
@@ -65,12 +65,12 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 		copyPropsStatic = props;
 		return BlockBehaviour.Properties.copy(parentBlock);
 	}
-	
+
 	public Property<?>[] getCopyProps()
 	{
 		return copyProps;
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public BlockState copyProperties(BlockState from, BlockState to)
 	{

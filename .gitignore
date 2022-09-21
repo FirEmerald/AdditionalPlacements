@@ -26,7 +26,6 @@ forge*changelog.txt
 CREDITS.txt
 LICENSE.txt
 README.txt
-gradle.properties
 gradle/*
 gradlew
 gradlew.bat

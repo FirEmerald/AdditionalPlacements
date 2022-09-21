@@ -18,7 +18,7 @@ public class DVSaSMod
 {
 	public static final String MOD_ID = "dvsas";
     public static final Logger LOGGER = LoggerFactory.getLogger("DVSaS");
-    
+
     static final ForgeConfigSpec commonSpec;
     public static final ConfigCommon COMMON_CONFIG;
     static {
@@ -26,7 +26,7 @@ public class DVSaSMod
         commonSpec = clientSpecPair.getRight();
         COMMON_CONFIG = clientSpecPair.getLeft();
     }
-    
+
     public DVSaSMod()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, commonSpec);

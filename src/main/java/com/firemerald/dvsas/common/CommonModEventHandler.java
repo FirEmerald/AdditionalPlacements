@@ -26,6 +26,8 @@ public class CommonModEventHandler
 	public static void onBlockRegistry(RegistryEvent.Register<Block> event)
 	{
 		final List<Block> created = new LinkedList<>();
+		boolean generateSlabs = DVSaSMod.COMMON_CONFIG.generateSlabs.get();
+		boolean generateStairs = DVSaSMod.COMMON_CONFIG.generateStairs.get();
 		event.getRegistry().forEach(block -> {
 			if (block instanceof IVerticalBlock)
 			{
@@ -35,11 +37,11 @@ public class CommonModEventHandler
 					if (DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString())) return;
 					if (block instanceof SlabBlock)
 					{
-						created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+						if (generateSlabs) created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					}
 					else if (block instanceof StairBlock)
 					{
-						created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+						if (generateStairs) created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					}
 				}
 			}
