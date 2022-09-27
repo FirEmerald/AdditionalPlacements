@@ -5,7 +5,8 @@
 	"refmap": "mixins.dvsas.refmap.json",
 	"mixins": [
 		"MixinSlabBlock",
-		"MixinStairBlock"
+		"MixinStairBlock",
+		"MixinBlockCallbacks"
 	],
 	"minVersion": "0.8"
 }

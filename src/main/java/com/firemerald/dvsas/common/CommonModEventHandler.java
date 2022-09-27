@@ -14,41 +14,39 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.forge.event.lifecycle.GatherDataEvent;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonModEventHandler
 {
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent
 	public static void onBlockRegistry(RegistryEvent.Register<Block> event)
 	{
+		IForgeRegistry<Block> registry = event.getRegistry();
 		final List<Block> created = new LinkedList<>();
 		boolean generateSlabs = DVSaSMod.COMMON_CONFIG.generateSlabs.get();
 		boolean generateStairs = DVSaSMod.COMMON_CONFIG.generateStairs.get();
-		event.getRegistry().forEach(block -> {
-			if (block instanceof IVerticalBlock)
+		registry.getEntries().forEach(entry -> {
+			ResourceLocation name = entry.getKey().location();
+			Block block = entry.getValue();
+			if (block instanceof SlabBlock)
 			{
-				if (!((IVerticalBlock) block).hasVertical())
-				{
-					ResourceLocation name = block.getRegistryName();
-					if (DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString())) return;
-					if (block instanceof SlabBlock)
-					{
-						if (generateSlabs) created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
-					}
-					else if (block instanceof StairBlock)
-					{
-						if (generateStairs) created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
-					}
-				}
+				if (generateSlabs && !((IVerticalBlock) block).hasVertical() && !DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString()))
+					created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+			}
+			else if (block instanceof StairBlock)
+			{
+				if (generateStairs && !((IVerticalBlock) block).hasVertical() && !DVSaSMod.COMMON_CONFIG.blacklist.get().contains(name.toString()))
+					created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(DVSaSMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 			}
 		});
-		created.forEach(event.getRegistry()::register);
+		created.forEach(registry::register);
+		DVSaSMod.dynamicRegistration = true;
 	}
-
+	
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event)
 	{

@@ -26,10 +26,13 @@ public class DVSaSMod
         commonSpec = clientSpecPair.getRight();
         COMMON_CONFIG = clientSpecPair.getLeft();
     }
+    
+    public static boolean dynamicRegistration = false;
 
     public DVSaSMod()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, commonSpec);
         ConfigTracker.INSTANCE.loadConfigs(ModConfig.Type.COMMON, FMLPaths.CONFIGDIR.get()); //hacky method to ensure config is loaded
+        LOGGER.warn("During block registration you may recieve several reports of \"Potentially Dangerous alternative prefix `dvsas`\". Ignore these, they are intended.");
     }
 }
