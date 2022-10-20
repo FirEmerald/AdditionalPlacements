@@ -22,10 +22,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -40,7 +37,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends Block implements IVerticalBlock
-{
+{	
 	private static Set<Property<?>> copyPropsStatic;
 	protected final T parentBlock;
 	private final Property<?>[] copyProps;
@@ -65,6 +62,11 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 		}
 		copyPropsStatic = props;
 		return BlockBehaviour.Properties.copy(parentBlock);
+	}
+	
+	public boolean hasCustomColors()
+	{
+		return false;
 	}
 
 	public Property<?>[] getCopyProps()
@@ -353,5 +355,30 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 	public FluidState getFluidState(BlockState state)
 	{
 		return this.getModelState(state).getFluidState();
+	}
+	
+	@Override
+	@Deprecated
+	public boolean skipRendering(BlockState thisState, BlockState adjacentState, Direction dir)
+	{
+		return this.getModelState(thisState).skipRendering(adjacentState, dir);
+	}
+	
+	@Override
+	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+	{
+		return this.getModelState(state).propagatesSkylightDown(level, pos);
+	}
+	
+	@Override
+	public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+	{
+		return this.getModelState(state).getShadeBrightness(level, pos);
+	}
+	
+	@Override
+	public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos1, BlockPos pos2)
+	{
+		return this.getModelState(state).getBeaconColorMultiplier(level, pos1, pos2);
 	}
 }

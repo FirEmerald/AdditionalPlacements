@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.firemerald.dvsas.DVSaSMod;
+import com.firemerald.dvsas.block.VerticalBlock;
 import com.firemerald.dvsas.block.VerticalSlabBlock;
 import com.firemerald.dvsas.block.VerticalStairBlock;
 import com.firemerald.dvsas.client.models.VerticalBlockModelLoader;
@@ -28,6 +29,7 @@ import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -139,5 +141,11 @@ public class ClientModEventHandler
 	public static void onModelRegistryEvent(RegisterGeometryLoaders event)
 	{
 		event.register(VerticalBlockModelLoader.ID.getPath(), new VerticalBlockModelLoader());
+	}
+	
+	@SubscribeEvent
+	public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block event)
+	{
+		event.register(new VerticalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof VerticalBlock && !((VerticalBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
 	}
 }

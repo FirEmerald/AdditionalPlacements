@@ -99,7 +99,7 @@ public class BakedVerticalBlockModel implements IDynamicBakedModel
 	    	{
 	    		ModelData modelData = VerticalBlockModelUtils.getModelData(modelState, extraData);
     			List<BakedQuad> bakedQuads = new ArrayList<>();
-    			for (BakedQuad jsonBakedQuad : model.getQuads(state, side, rand, modelData, renderType))
+    			for (BakedQuad jsonBakedQuad : model.getQuads(state, side, rand, modelData, null))
     			{
     				Direction orientation = jsonBakedQuad.getDirection();
     				for (BakedQuad referredBakedQuad : VerticalBlockModelUtils.getBakedQuads(modelState, orientation, rand, modelData, renderType))
@@ -121,7 +121,7 @@ public class BakedVerticalBlockModel implements IDynamicBakedModel
 	@Override
 	public ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData extraData)
 	{
-	    BlockState modelState = extraData.get(VerticalBlockModelUtils.MODEL_STATE);
+	    BlockState modelState = VerticalBlockModelUtils.getModeledState(state);
 	    if (modelState != null)
 	    {
     		BakedModel referredBakedModel = VerticalBlockModelUtils.getBakedModel(modelState);

@@ -17,6 +17,7 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
+apply plugin: 'eclipse'
 
 
 version = project.dvsas_version
@@ -138,6 +139,12 @@ repositories {
     // flatDir {
     //     dir 'libs'
     // }
+    maven {
+        url "https://cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
 }
 
 dependencies {
@@ -160,6 +167,16 @@ dependencies {
     // For more info...
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    
+	implementation fg.deobf("curse.maven:mekanism-268560:4020942")
+	implementation fg.deobf("curse.maven:mekanism-additions-345425:4020946")
+}
+
+eclipse.classpath.file {
+	whenMerged {
+		def lib = entries.find { it.path.contains 'mekanism-additions-345425-4020946_mapped_official_' + project.minecraft_version + '.jar' }
+		lib.sourcePath = fileReference(file('../sources/Mekanism-1.19.x/additions.zip'))
+	}
 }
 
 mixin {
