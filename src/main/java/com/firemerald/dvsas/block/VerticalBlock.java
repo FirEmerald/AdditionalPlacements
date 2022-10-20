@@ -358,13 +358,6 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 	}
 	
 	@Override
-	@Deprecated
-	public boolean skipRendering(BlockState thisState, BlockState adjacentState, Direction dir)
-	{
-		return this.getModelState(thisState).skipRendering(adjacentState, dir);
-	}
-	
-	@Override
 	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return this.getModelState(state).propagatesSkylightDown(level, pos);
