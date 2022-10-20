@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Streams;
 
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -22,10 +21,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -38,7 +34,6 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends Block implements IVerticalBlock
 {
@@ -52,7 +47,6 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 		this.copyProps = copyPropsStatic.toArray(Property[]::new);
 		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
-        if (FMLEnvironment.dist.isClient()) ItemBlockRenderTypes.setRenderLayer(parentBlock, (layer) -> ItemBlockRenderTypes.canRenderInLayer(this.getModelState(), layer));
 	}
 
 	public static Properties theHack(Block parentBlock)
@@ -67,6 +61,11 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 		}
 		copyPropsStatic = props;
 		return BlockBehaviour.Properties.copy(parentBlock);
+	}
+	
+	public boolean hasCustomColors()
+	{
+		return false;
 	}
 
 	public Property<?>[] getCopyProps()
@@ -355,5 +354,23 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 	public FluidState getFluidState(BlockState state)
 	{
 		return this.getModelState(state).getFluidState();
+	}
+	
+	@Override
+	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+	{
+		return this.getModelState(state).propagatesSkylightDown(level, pos);
+	}
+	
+	@Override
+	public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+	{
+		return this.getModelState(state).getShadeBrightness(level, pos);
+	}
+	
+	@Override
+	public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos1, BlockPos pos2)
+	{
+		return this.getModelState(state).getBeaconColorMultiplier(level, pos1, pos2);
 	}
 }

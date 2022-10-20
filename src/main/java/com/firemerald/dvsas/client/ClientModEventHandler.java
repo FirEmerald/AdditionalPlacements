@@ -157,5 +157,6 @@ public class ClientModEventHandler
     			ItemBlockRenderTypes.setRenderLayer(block, (layer) -> ItemBlockRenderTypes.canRenderInLayer(modelState, layer));
     		}
     	});
+    	Minecraft.getInstance().getBlockColors().register(new VerticalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof VerticalBlock && !((VerticalBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
     }
 }
