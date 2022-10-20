@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Streams;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends Block implements IVerticalBlock
 {
@@ -50,6 +52,7 @@ public abstract class VerticalBlock<T extends Block & BucketPickup & LiquidBlock
 		this.copyProps = copyPropsStatic.toArray(Property[]::new);
 		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
+        if (FMLEnvironment.dist.isClient()) ItemBlockRenderTypes.setRenderLayer(parentBlock, (layer) -> ItemBlockRenderTypes.canRenderInLayer(this.getModelState(), layer));
 	}
 
 	public static Properties theHack(Block parentBlock)
