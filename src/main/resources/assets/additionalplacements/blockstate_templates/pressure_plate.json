@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "facing=up,powered=false": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/unpressed",
+	  "x": 180,
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,powered=false": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/unpressed",
+	  "x": 270,
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=south,powered=false": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/unpressed",
+	  "x": 270,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,powered=false": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/unpressed",
+	  "x": 270,
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,powered=false": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/unpressed",
+	  "x": 270,
+      "y": 90,
+      "uvlock": true
+    },
+    "facing=up,powered=true": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/pressed",
+	  "x": 180,
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north,powered=true": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/pressed",
+	  "x": 270,
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=south,powered=true": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/pressed",
+	  "x": 270,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west,powered=true": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/pressed",
+	  "x": 270,
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east,powered=true": {
+      "model": "additionalplacements:block/pressure_plates/dynamic/pressed",
+	  "x": 270,
+      "y": 90,
+      "uvlock": true
+    }
+  }
+}

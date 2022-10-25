@@ -1,0 +1,8 @@
+{
+  "parent": "additionalplacements:block/pressure_plates/base/unpressed",
+  "textures": {
+    "bottom": "#all",
+    "side": "#all",
+    "top": "#all"
+  }
+}

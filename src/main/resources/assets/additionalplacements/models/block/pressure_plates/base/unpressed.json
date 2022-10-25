@@ -1,0 +1,19 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "additionalplacements:block/base",
+	"elements": [
+		{
+			"from": [1, 0, 1],
+			"to": [15, 1, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 16, 0]},
+			"faces": {
+				"north": {"uv": [1, 15, 15, 16], "texture": "#side"},
+				"east": {"uv": [1, 15, 15, 16], "texture": "#side"},
+				"south": {"uv": [1, 15, 15, 16], "texture": "#side"},
+				"west": {"uv": [1, 15, 15, 16], "texture": "#side"},
+				"up": {"uv": [1, 1, 15, 15], "texture": "#top"},
+				"down": {"uv": [1, 1, 15, 15], "texture": "#bottom", "cullface": "down"}
+			}
+		}
+	]
+}

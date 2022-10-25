@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=up": {
+      "model": "additionalplacements:block/carpets/dynamic/carpet",
+	  "x": 180,
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=north": {
+      "model": "additionalplacements:block/carpets/dynamic/carpet",
+	  "x": 270,
+      "y": 0,
+      "uvlock": true
+    },
+    "facing=south": {
+      "model": "additionalplacements:block/carpets/dynamic/carpet",
+	  "x": 270,
+      "y": 180,
+      "uvlock": true
+    },
+    "facing=west": {
+      "model": "additionalplacements:block/carpets/dynamic/carpet",
+	  "x": 270,
+      "y": 270,
+      "uvlock": true
+    },
+    "facing=east": {
+      "model": "additionalplacements:block/carpets/dynamic/carpet",
+	  "x": 270,
+      "y": 90,
+      "uvlock": true
+    }
+  }
+}

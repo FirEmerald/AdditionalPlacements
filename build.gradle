@@ -4,9 +4,11 @@ buildscript {
         maven { url = 'https://maven.minecraftforge.net' }
         mavenCentral()
 		maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.parchmentmc.org' }
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
+        classpath 'org.parchmentmc:librarian:1.+'
         classpath 'org.spongepowered:mixingradle:0.7.+'
     }
 }
@@ -16,13 +18,14 @@ plugins {
     id 'maven-publish'
 }
 apply plugin: 'net.minecraftforge.gradle'
+apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'eclipse'
 
 
-version = project.dvsas_version
-group = 'com.firemerald.dvsas' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = 'DVSaS-' + project.minecraft_version
+version = project.additionalplacements_version
+group = 'com.firemerald.additionalplacements' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = 'Additional Placements-' + project.minecraft_version
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
@@ -42,9 +45,9 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'parchment', version: '2022.10.16-1.19.2'
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+   	accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -65,10 +68,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'dvsas'
+            property 'forge.enabledGameTestNamespaces', 'additionalplacements'
 
             mods {
-                dvsas {
+                additionalplacements {
                     source sourceSets.main
                 }
             }
@@ -81,10 +84,11 @@ minecraft {
 
             property 'forge.logging.console.level', 'debug'
 
-            property 'forge.enabledGameTestNamespaces', 'dvsas'
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'additionalplacements'
 
             mods {
-                dvsas {
+                additionalplacements {
                     source sourceSets.main
                 }
             }
@@ -96,14 +100,23 @@ minecraft {
         gameTestServer {
             workingDirectory project.file('run')
 
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
             property 'forge.logging.markers', 'REGISTRIES'
 
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             property 'forge.logging.console.level', 'debug'
 
-            property 'forge.enabledGameTestNamespaces', 'dvsas'
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            property 'forge.enabledGameTestNamespaces', 'additionalplacements'
 
             mods {
-                dvsas {
+                additionalplacements {
                     source sourceSets.main
                 }
             }
@@ -117,10 +130,10 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'dvsas', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
+            args '--mod', 'additionalplacements', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                dvsas {
+                additionalplacements {
                     source sourceSets.main
                 }
             }
@@ -174,21 +187,21 @@ dependencies {
 
 eclipse.classpath.file {
 	whenMerged {
-		def lib = entries.find { it.path.contains 'mekanism-additions-345425-4020946_mapped_official_' + project.minecraft_version + '.jar' }
-		lib.sourcePath = fileReference(file('../sources/Mekanism-1.19.x/additions.zip'))
+		//def lib = entries.find { it.path.contains 'mekanism-additions-345425-4020946_mapped_official_' + project.minecraft_version + '.jar' }
+		//lib.sourcePath = fileReference(file('../sources/Mekanism-1.19.x/additions.zip'))
 	}
 }
 
 mixin {
-    add sourceSets.main, 'mixins.dvsas.refmap.json'
-    config 'mixins.dvsas.json'
+    add sourceSets.main, 'mixins.additionalplacements.refmap.json'
+    config 'mixins.additionalplacements.json'
 }
 
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "dvsas",
+                "Specification-Title"     : "additionalplacements",
                 "Specification-Vendor"    : "FirEmerald",
                 "Specification-Version"   : project.version,
                 "Implementation-Title"    : project.name,

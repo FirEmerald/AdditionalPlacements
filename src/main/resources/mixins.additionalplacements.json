@@ -1,0 +1,16 @@
+{
+	"required": true,
+	"package": "com.firemerald.additionalplacements.mixin",
+	"compatibilityLevel": "JAVA_17",
+	"refmap": "mixins.additionalplacements.refmap.json",
+	"mixins": [
+		"MixinBasePressurePlateBlock",
+		"MixinBlockCallbacks",
+		"MixinCarpetBlock",
+		"MixinPressurePlateBlock",
+		"MixinSlabBlock",
+		"MixinStairBlock",
+		"MixinWeightedPressurePlateBlock"
+	],
+	"minVersion": "0.8"
+}

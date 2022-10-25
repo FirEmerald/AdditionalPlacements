@@ -1,0 +1,7 @@
+{
+  "parent": "additionalplacements:block/carpets/base/carpet",
+  "textures": {
+    "bottom": "#end",
+    "top": "#end"
+  }
+}
