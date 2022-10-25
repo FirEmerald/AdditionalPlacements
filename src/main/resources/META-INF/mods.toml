@@ -1,7 +1,7 @@
 modLoader="javafml"
 loaderVersion="[40,)"
 license="MIT License"
-issueTrackerURL="https://github.com/FirEmerald/DynamicVerticalSlabsAndStairs/issues"
+issueTrackerURL="https://github.com/FirEmerald/AdditionalPlacements/issues"
 [[mods]]
 modId="additionalplacements"
 version="${file.jarVersion}"
@@ -17,6 +17,7 @@ Adds additional placements for blocks:
 Slabs can be placed vertically.
 Stairs can be placed vertically.
 Carpets can be placed on walls and ceilings.
+Pressure plates can be placed on walls and ceilings.
 '''
 [[dependencies.additionalplacements]]
     modId="minecraft"
