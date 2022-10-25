@@ -1,0 +1,7 @@
+{
+  "parent": "additionalplacements:block/slabs/base/side",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}

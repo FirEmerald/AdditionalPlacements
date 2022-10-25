@@ -3,21 +3,22 @@ loaderVersion="[40,)"
 license="MIT License"
 issueTrackerURL="https://github.com/FirEmerald/DynamicVerticalSlabsAndStairs/issues"
 [[mods]]
-modId="dvsas"
+modId="additionalplacements"
 version="${file.jarVersion}"
-displayName="Dynamic Vertical Slabs and Stairs"
+displayName="Additional Placements"
 # A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
-displayURL="https://www.curseforge.com/minecraft/mc-mods/dynamic-vertical-sabs-and-stairs" #optional
-logoFile="dvsas.png"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/additional-placements" #optional
+logoFile="additionalplacements.png"
 credits="FirEmerald"
 authors="FirEmerald"
 description='''
-Adds vertical slabs and stairs to most slabs and stairs.
-This includes mod-added slabs and stairs - any block that is an instance of SlabBlock or StairBlock but does not add any extra blockstate properties.
-Extends the slabs and stairs instead of adding it's own items and crafting recipes for ease of use.
+Adds additional placements for blocks:
+Slabs can be placed vertically.
+Stairs can be placed vertically.
+Carpets can be placed on walls and ceilings.
 '''
-[[dependencies.dvsas]]
+[[dependencies.additionalplacements]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.18.2,1.19)"

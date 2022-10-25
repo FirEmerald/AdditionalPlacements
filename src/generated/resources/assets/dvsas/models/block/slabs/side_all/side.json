@@ -1,8 +1,0 @@
-{
-  "parent": "dvsas:block/slabs/base/side",
-  "textures": {
-    "side": "#all",
-    "top": "#all",
-    "bottom": "#all"
-  }
-}
