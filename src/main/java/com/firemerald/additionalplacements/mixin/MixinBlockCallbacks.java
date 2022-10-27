@@ -27,29 +27,35 @@ public class MixinBlockCallbacks
 		{
 			if (block instanceof SlabBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get() && !((IPlacementBlock) block).hasAdditionalStates())
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
 				{
 					ResourceLocation name = key.location();
 					if (!AdditionalPlacementsMod.COMMON_CONFIG.blacklist.get().contains(name.toString()))
 					{
-						owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalSlabBlock((SlabBlock) block));
+						if (block instanceof WeatheringCopper)
+							owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalWeatheringSlabBlock<>((SlabBlock & WeatheringCopper) block));
+						else
+							owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalSlabBlock((SlabBlock) block));
 					}
 				}
 			}
 			else if (block instanceof StairBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get() && !((IPlacementBlock) block).hasAdditionalStates())
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
 				{
 					ResourceLocation name = key.location();
 					if (!AdditionalPlacementsMod.COMMON_CONFIG.blacklist.get().contains(name.toString()))
 					{
-						owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalStairBlock((StairBlock) block));
+						if (block instanceof WeatheringCopper)
+							owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalWeatheringStairBlock<>((StairBlock & WeatheringCopper) block));
+						else
+							owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalStairBlock((StairBlock) block));
 					}
 				}
 			}
 			else if (block instanceof CarpetBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get() && !((IPlacementBlock) block).hasAdditionalStates())
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
 				{
 					ResourceLocation name = key.location();
 					if (!AdditionalPlacementsMod.COMMON_CONFIG.blacklist.get().contains(name.toString()))
@@ -60,7 +66,7 @@ public class MixinBlockCallbacks
 			}
 			else if (block instanceof PressurePlateBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get() && !((IPlacementBlock) block).hasAdditionalStates())
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
 				{
 					ResourceLocation name = key.location();
 					if (!AdditionalPlacementsMod.COMMON_CONFIG.blacklist.get().contains(name.toString()))
@@ -71,7 +77,7 @@ public class MixinBlockCallbacks
 			}
 			else if (block instanceof WeightedPressurePlateBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get() && !((IPlacementBlock) block).hasAdditionalStates())
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
 				{
 					ResourceLocation name = key.location();
 					if (!AdditionalPlacementsMod.COMMON_CONFIG.blacklist.get().contains(name.toString()))

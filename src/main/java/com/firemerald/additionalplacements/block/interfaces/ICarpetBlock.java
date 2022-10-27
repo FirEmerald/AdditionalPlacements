@@ -6,15 +6,13 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
 
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface ICarpetBlock extends IFloorBlock
+public interface ICarpetBlock<T extends Block> extends IFloorBlock<T>
 {
-	public static interface IVanillaCarpetBlock extends ICarpetBlock
-	{
-		public void setCarpet(AdditionalCarpetBlock carpet);
-	}
+	public static interface IVanillaCarpetBlock extends ICarpetBlock<AdditionalCarpetBlock>, IVanillaBlock<AdditionalCarpetBlock> {}
 
 	public default BlockState forPlacing(Direction dir, BlockState blockState)
 	{

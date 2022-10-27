@@ -35,7 +35,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock
+public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock<T>
 {
 	private static Set<Property<?>> copyPropsStatic;
 	protected final T parentBlock;
@@ -47,6 +47,11 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		this.copyProps = copyPropsStatic.toArray(Property[]::new);
 		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
+	}
+	
+	public T getOtherBlock()
+	{
+		return parentBlock;
 	}
 
 	public static Properties theHack(Block parentBlock)
@@ -113,17 +118,12 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Deprecated
 	public BlockState getModelState()
 	{
-		return getModelBlock().defaultBlockState();
+		return getOtherBlock().defaultBlockState();
 	}
 
 	public BlockState getModelState(BlockState worldState)
 	{
 		return copyProperties(worldState, getModelState());
-	}
-
-	public T getModelBlock()
-	{
-		return parentBlock;
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Override
 	public void updateEntityAfterFallOn(BlockGetter level, Entity entity)
 	{
-		getModelBlock().updateEntityAfterFallOn(level, entity);
+		getOtherBlock().updateEntityAfterFallOn(level, entity);
 	}
 
 	@Override
@@ -196,7 +196,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Deprecated
 	public float getExplosionResistance()
 	{
-		return getModelBlock().getExplosionResistance();
+		return getOtherBlock().getExplosionResistance();
 	}
 
 	@Override
@@ -223,7 +223,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Override
 	public boolean isRandomlyTicking(BlockState state)
 	{
-		return getModelBlock().isRandomlyTicking(getModelState(state));
+		return getOtherBlock().isRandomlyTicking(getModelState(state));
 	}
 
 	@Override
@@ -251,7 +251,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Override
 	public void wasExploded(Level p_56878_, BlockPos p_56879_, Explosion p_56880_)
 	{
-		getModelBlock().wasExploded(p_56878_, p_56879_, p_56880_);
+		getOtherBlock().wasExploded(p_56878_, p_56879_, p_56880_);
 	}
 
 	@Override

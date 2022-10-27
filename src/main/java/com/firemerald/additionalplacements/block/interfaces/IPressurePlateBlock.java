@@ -6,16 +6,13 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
 
 import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.BasePressurePlateBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface IPressurePlateBlock<T extends BasePressurePlateBlock> extends IFloorBlock
+public interface IPressurePlateBlock<T extends Block> extends IFloorBlock<T>
 {
-	public static interface IVanillaPressurePlateBlock<T extends BasePressurePlateBlock> extends IPressurePlateBlock<T>
-	{
-		public void setPressurePlate(AdditionalBasePressurePlateBlock<T> plate);
-	}
+	public static interface IVanillaPressurePlateBlock extends IPressurePlateBlock<AdditionalBasePressurePlateBlock<?>>, IVanillaBlock<AdditionalBasePressurePlateBlock<?>> {}
 
 	public default BlockState forPlacing(Direction dir, BlockState blockState)
 	{

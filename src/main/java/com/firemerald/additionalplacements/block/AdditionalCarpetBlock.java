@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock> implements ICarpetBlock
+public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock> implements ICarpetBlock<CarpetBlock>
 {
 	public static final DirectionProperty PLACING = AdditionalBlockStateProperties.HORIZONTAL_OR_UP_FACING;
 	public static final VoxelShape[] SHAPES = {
@@ -37,7 +37,7 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 	{
 		super(carpet);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
-		((IVanillaCarpetBlock) carpet).setCarpet(this);
+		((IVanillaCarpetBlock) carpet).setOtherBlock(this);
 	}
 
 	@Override

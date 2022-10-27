@@ -26,7 +26,7 @@ public class CommonEventHandler
 			Block block = ((BlockItem) event.getItemStack().getItem()).getBlock();
 			if (block instanceof IPlacementBlock)
 			{
-				IPlacementBlock verticalBlock = ((IPlacementBlock) block);
+				IPlacementBlock<?> verticalBlock = ((IPlacementBlock<?>) block);
 				if (verticalBlock.hasAdditionalStates()) verticalBlock.appendHoverTextImpl(event.getItemStack(), event.getEntity() == null ? null : event.getEntity().getLevel(), event.getToolTip(), event.getFlags());
 			}
 		}

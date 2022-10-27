@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBlock> implements IStairBlock
+public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBlock> implements IStairBlock<StairBlock>
 {
 	public static final EnumProperty<EnumPlacing> PLACING = EnumProperty.create("placing", EnumPlacing.class);
 	public static final EnumProperty<EnumShape> SHAPE = EnumProperty.create("shape", EnumShape.class);
@@ -48,7 +48,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 	{
 		super(stairs);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, EnumPlacing.NORTH_EAST).setValue(SHAPE, EnumShape.STRAIGHT));
-		((IVanillaStairBlock) stairs).setStairs(this);
+		((IVanillaStairBlock) stairs).setOtherBlock(this);
 	}
 
 	@Override

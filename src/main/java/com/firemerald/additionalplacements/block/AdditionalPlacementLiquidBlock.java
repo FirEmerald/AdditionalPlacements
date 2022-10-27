@@ -22,7 +22,7 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	@Override
 	public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState blockState)
 	{
-		ItemStack ret = this.getModelBlock().pickupBlock(level, pos, this.getModelState(blockState));
+		ItemStack ret = this.getOtherBlock().pickupBlock(level, pos, this.getModelState(blockState));
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return ret;
 	}
@@ -30,26 +30,26 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	@Override
     public Optional<SoundEvent> getPickupSound(BlockState blockState)
     {
-		return this.getModelBlock().getPickupSound(this.getModelState(blockState));
+		return this.getOtherBlock().getPickupSound(this.getModelState(blockState));
     }
 
 	@Override
 	@Deprecated
 	public Optional<SoundEvent> getPickupSound()
 	{
-		return this.getModelBlock().getPickupSound();
+		return this.getOtherBlock().getPickupSound();
 	}
 
 	@Override
 	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState blockState, Fluid fluid)
 	{
-		return this.getModelBlock().canPlaceLiquid(level, pos, getModelState(blockState), fluid);
+		return this.getOtherBlock().canPlaceLiquid(level, pos, getModelState(blockState), fluid);
 	}
 
 	@Override
 	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState)
 	{
-		boolean flag = this.getModelBlock().placeLiquid(level, pos, getModelState(blockState), fluidState);
+		boolean flag = this.getOtherBlock().placeLiquid(level, pos, getModelState(blockState), fluidState);
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return flag;
 	}

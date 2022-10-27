@@ -33,9 +33,15 @@ public abstract class MixinStairBlock implements IVanillaStairBlock
 	}
 
 	@Override
-	public void setStairs(VerticalStairBlock stairs)
+	public void setOtherBlock(VerticalStairBlock stairs)
 	{
 		this.stairs = stairs;
+	}
+
+	@Override
+	public VerticalStairBlock getOtherBlock()
+	{
+		return stairs;
 	}
 
 	@Override
