@@ -59,12 +59,12 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	
 	public final IBasePressurePlateBlock plateMethods;
 
-	@SuppressWarnings({ "deprecation", "unchecked" })
+	@SuppressWarnings("deprecation")
 	public AdditionalBasePressurePlateBlock(T plate)
 	{
 		super(plate);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
-		((IVanillaPressurePlateBlock<T>) plate).setPressurePlate(this);
+		((IVanillaPressurePlateBlock) plate).setOtherBlock(this);
 		plateMethods = (IBasePressurePlateBlock) plate;
 	}
 

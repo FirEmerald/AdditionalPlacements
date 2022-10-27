@@ -35,9 +35,15 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	}
 
 	@Override
-	public void setSlab(VerticalSlabBlock slab)
+	public void setOtherBlock(VerticalSlabBlock slab)
 	{
 		this.slab = slab;
+	}
+
+	@Override
+	public VerticalSlabBlock getOtherBlock()
+	{
+		return slab;
 	}
 
 	@Override

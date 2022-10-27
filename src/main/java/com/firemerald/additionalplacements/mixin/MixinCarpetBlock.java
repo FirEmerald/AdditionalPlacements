@@ -32,9 +32,15 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 	}
 
 	@Override
-	public void setCarpet(AdditionalCarpetBlock carpet)
+	public void setOtherBlock(AdditionalCarpetBlock carpet)
 	{
 		this.carpet = carpet;
+	}
+
+	@Override
+	public AdditionalCarpetBlock getOtherBlock()
+	{
+		return carpet;
 	}
 
 	@Override

@@ -28,7 +28,7 @@ public class ClientEventHandler
 			Block block = ((BlockItem) stack.getItem()).getBlock();
 			if (block instanceof IPlacementBlock)
 			{
-				IPlacementBlock verticalBlock = ((IPlacementBlock) block);
+				IPlacementBlock<?> verticalBlock = ((IPlacementBlock<?>) block);
 				if (verticalBlock.hasAdditionalStates()) verticalBlock.renderHighlight(event.getPoseStack(), event.getMultiBufferSource().getBuffer(RenderType.LINES), player, event.getTarget(), event.getCamera(), event.getPartialTicks());
 			}
 		}

@@ -13,21 +13,18 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.WeightedPressurePlateBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(WeightedPressurePlateBlock.class)
-public abstract class MixinWeightedPressurePlateBlock extends Block implements IVanillaPressurePlateBlock<WeightedPressurePlateBlock>
+public abstract class MixinWeightedPressurePlateBlock extends Block implements IVanillaPressurePlateBlock
 {
 	private MixinWeightedPressurePlateBlock(Properties properties)
 	{
 		super(properties);
 	}
 
-	public AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock> plate;
+	public AdditionalBasePressurePlateBlock<?> plate;
 
 	public WeightedPressurePlateBlock asPlate()
 	{
@@ -35,9 +32,15 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 	}
 
 	@Override
-	public void setPressurePlate(AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock> plate)
+	public void setOtherBlock(AdditionalBasePressurePlateBlock<?> plate)
 	{
 		this.plate = plate;
+	}
+
+	@Override
+	public AdditionalBasePressurePlateBlock<?> getOtherBlock()
+	{
+		return plate;
 	}
 
 	@Override

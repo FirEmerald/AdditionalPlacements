@@ -27,6 +27,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.StairBlock;
@@ -35,12 +36,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public interface IStairBlock extends IPlacementBlock
+public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 {
-	public static interface IVanillaStairBlock extends IStairBlock
+	public static interface IVanillaStairBlock extends IStairBlock<VerticalStairBlock>, IVanillaBlock<VerticalStairBlock>
 	{
-		public void setStairs(VerticalStairBlock stairs);
-
 		public BlockState getModelStateImpl();
 	}
 

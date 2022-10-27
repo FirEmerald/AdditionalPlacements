@@ -22,7 +22,7 @@ import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock> implements ISlabBlock
+public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock> implements ISlabBlock<SlabBlock>
 {
 	public static final DirectionProperty PLACING = BlockStateProperties.HORIZONTAL_FACING;
 
@@ -31,7 +31,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 	{
 		super(slab);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
-		((IVanillaSlabBlock) slab).setSlab(this);
+		((IVanillaSlabBlock) slab).setOtherBlock(this);
 	}
 
 	@Override

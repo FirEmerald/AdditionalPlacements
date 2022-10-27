@@ -23,6 +23,7 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,8 +33,10 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 
-public interface IPlacementBlock extends ItemLike
+public interface IPlacementBlock<T extends Block> extends ItemLike
 {
+	public T getOtherBlock();
+	
 	public BlockState rotateImpl(BlockState blockState, Rotation rotation);
 
 	public BlockState mirrorImpl(BlockState blockState, Mirror mirror);

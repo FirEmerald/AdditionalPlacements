@@ -17,14 +17,14 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(PressurePlateBlock.class)
-public abstract class MixinPressurePlateBlock extends Block implements IVanillaPressurePlateBlock<PressurePlateBlock>
+public abstract class MixinPressurePlateBlock extends Block implements IVanillaPressurePlateBlock
 {
 	private MixinPressurePlateBlock(Properties properties)
 	{
 		super(properties);
 	}
 
-	public AdditionalBasePressurePlateBlock<PressurePlateBlock> plate;
+	public AdditionalBasePressurePlateBlock<?> plate;
 
 	public PressurePlateBlock asPlate()
 	{
@@ -32,9 +32,15 @@ public abstract class MixinPressurePlateBlock extends Block implements IVanillaP
 	}
 
 	@Override
-	public void setPressurePlate(AdditionalBasePressurePlateBlock<PressurePlateBlock> plate)
+	public void setOtherBlock(AdditionalBasePressurePlateBlock<?> plate)
 	{
 		this.plate = plate;
+	}
+
+	@Override
+	public AdditionalBasePressurePlateBlock<?> getOtherBlock()
+	{
+		return plate;
 	}
 
 	@Override

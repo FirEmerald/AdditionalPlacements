@@ -98,7 +98,7 @@ public class BakedPlacementBlockModel implements IDynamicBakedModel
 	    	if (!bakedQuadsCache.containsKey(modelKey))
 	    	{
 	    		Function<Direction, Direction> transformSide;
-	    		if (side != null && state.getBlock() instanceof IPlacementBlock) transformSide = ((IPlacementBlock) state.getBlock()).getModelDirectionFunction(state, rand, extraData);
+	    		if (side != null && state.getBlock() instanceof IPlacementBlock) transformSide = ((IPlacementBlock<?>) state.getBlock()).getModelDirectionFunction(state, rand, extraData);
 	    		else transformSide = Function.identity();
 	    		IModelData modelData = BlockModelUtils.getModelData(modelState, extraData);
     			List<BakedQuad> bakedQuads = new ArrayList<>();

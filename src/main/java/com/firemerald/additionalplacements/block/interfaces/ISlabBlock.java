@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SlabBlock;
@@ -29,12 +30,9 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public interface ISlabBlock extends IPlacementBlock
+public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 {
-	public static interface IVanillaSlabBlock extends ISlabBlock
-	{
-		public void setSlab(VerticalSlabBlock slab);
-	}
+	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock> {}
 
 	@Override
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
