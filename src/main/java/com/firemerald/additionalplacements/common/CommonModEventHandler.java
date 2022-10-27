@@ -33,13 +33,12 @@ public class CommonModEventHandler
 		boolean generateCarpets = AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get();
 		boolean generatePressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get();
 		boolean generateWeightedPressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get();
-		List<String> blacklist = AdditionalPlacementsMod.COMMON_CONFIG.blacklist.get();
 		registry.getEntries().forEach(entry -> {
 			ResourceLocation name = entry.getKey().location();
 			Block block = entry.getValue();
 			if (block instanceof SlabBlock)
 			{
-				if (generateSlabs && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+				if (generateSlabs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					if (block instanceof WeatheringCopper)
 						created.add(new VerticalWeatheringSlabBlock<>((SlabBlock & WeatheringCopper) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					else
@@ -47,7 +46,7 @@ public class CommonModEventHandler
 			}
 			else if (block instanceof StairBlock)
 			{
-				if (generateStairs && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+				if (generateStairs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					if (block instanceof WeatheringCopper)
 						created.add(new VerticalWeatheringStairBlock<>((StairBlock & WeatheringCopper) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					else
@@ -55,17 +54,17 @@ public class CommonModEventHandler
 			}
 			else if (block instanceof CarpetBlock)
 			{
-				if (generateCarpets && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+				if (generateCarpets && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					created.add(new AdditionalCarpetBlock((CarpetBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 			}
 			else if (block instanceof PressurePlateBlock)
 			{
-				if (generatePressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+				if (generatePressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					created.add(new AdditionalPressurePlateBlock((PressurePlateBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 			}
 			else if (block instanceof WeightedPressurePlateBlock)
 			{
-				if (generateWeightedPressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+				if (generateWeightedPressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					created.add(new AdditionalWeightedPressurePlateBlock((WeightedPressurePlateBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 			}
 		});

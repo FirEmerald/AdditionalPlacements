@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.common;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
@@ -20,7 +21,9 @@ public class ConfigCommon
 	public final BooleanValue disableAutomaticPressurePlatePlacement;
 	public final BooleanValue disableAutomaticWeightedPressurePlatePlacement;
 	public final BooleanValue showTooltip;
-	public final ConfigValue<List<String>> blacklist;
+	public final ConfigValue<List<String>> blockBlacklist;
+	public final ConfigValue<List<String>> modBlacklist;
+	public final ConfigValue<List<String>> blockWhitelist;
 
 	@SuppressWarnings("unchecked")
 	public ConfigCommon(ForgeConfigSpec.Builder builder)
@@ -59,10 +62,25 @@ public class ConfigCommon
         showTooltip = builder
         		.comment("Show tooltip when a block has additional placements")
         		.define("tooltip", true);
-        blacklist = (ConfigValue<List<String>>) (Object) builder
+        blockBlacklist = (ConfigValue<List<String>>) (Object) builder
         		.comment("Blacklist for blocks to not have generated placement variants")
         		.defineList("blacklist", Collections.emptyList(), o -> {
         			return o instanceof String;
         		});
+        modBlacklist = (ConfigValue<List<String>>) (Object) builder
+        		.comment("Blacklist for mods to not have generated placement variants")
+        		.defineList("mod_blacklist", Collections.emptyList(), o -> {
+        			return o instanceof String;
+        		});
+        blockWhitelist = (ConfigValue<List<String>>) (Object) builder
+        		.comment("Whitelist for blocks from blacklisted mods to still have generated placement variants")
+        		.defineList("mod_block_whitelist", Collections.emptyList(), o -> {
+        			return o instanceof String;
+        		});
+	}
+	
+	public boolean isValidForGeneration(ResourceLocation blockName)
+	{
+		return !blockBlacklist.get().contains(blockName.toString()) && (!modBlacklist.get().contains(blockName.getNamespace()) || blockWhitelist.get().contains(blockName.toString()));
 	}
 }
