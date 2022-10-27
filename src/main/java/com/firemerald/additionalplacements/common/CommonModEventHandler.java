@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.common;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
@@ -37,13 +36,12 @@ public class CommonModEventHandler
 			boolean generateCarpets = AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get();
 			boolean generatePressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get();
 			boolean generateWeightedPressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get();
-			List<String> blacklist = AdditionalPlacementsMod.COMMON_CONFIG.blacklist.get();
 			registry.getEntries().forEach(entry -> {
 				ResourceLocation name = entry.getKey().location();
 				Block block = entry.getValue();
 				if (block instanceof SlabBlock)
 				{
-					if (generateSlabs && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+					if (generateSlabs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 						if (block instanceof WeatheringCopper)
 							created.put(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalWeatheringSlabBlock<>((SlabBlock & WeatheringCopper) block));
 						else
@@ -51,7 +49,7 @@ public class CommonModEventHandler
 				}
 				else if (block instanceof StairBlock)
 				{
-					if (generateStairs && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+					if (generateStairs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 						if (block instanceof WeatheringCopper)
 							created.put(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalWeatheringStairBlock<>((StairBlock & WeatheringCopper) block));
 						else
@@ -59,17 +57,17 @@ public class CommonModEventHandler
 				}
 				else if (block instanceof CarpetBlock)
 				{
-					if (generateCarpets && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+					if (generateCarpets && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 						created.put(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new AdditionalCarpetBlock((CarpetBlock) block));
 				}
 				else if (block instanceof PressurePlateBlock)
 				{
-					if (generatePressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+					if (generatePressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 						created.put(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new AdditionalPressurePlateBlock((PressurePlateBlock) block));
 				}
 				else if (block instanceof WeightedPressurePlateBlock)
 				{
-					if (generateWeightedPressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && !blacklist.contains(name.toString()))
+					if (generateWeightedPressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 						created.put(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new AdditionalWeightedPressurePlateBlock((WeightedPressurePlateBlock) block));
 				}
 			});
