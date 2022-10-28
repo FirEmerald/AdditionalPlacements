@@ -3,6 +3,8 @@ package com.firemerald.additionalplacements.common;
 import java.lang.reflect.Field;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
@@ -12,6 +14,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -84,17 +87,7 @@ public class CommonModEventHandler
 			initialized.setAccessible(true);
 			Field value = clazz.getDeclaredField("value");
 			value.setAccessible(true);
-			@SuppressWarnings("unchecked")
-			com.google.common.base.Supplier<BiMap<Block, Block>> supplier = (com.google.common.base.Supplier<BiMap<Block, Block>>) delegate.get(WeatheringCopper.NEXT_BY_BLOCK);
-			if (supplier == null)
-			{
-				@SuppressWarnings("unchecked")
-				BiMap<Block, Block> map = (BiMap<Block, Block>) value.get(WeatheringCopper.NEXT_BY_BLOCK);
-				supplier = () -> map;
-			}
-			final com.google.common.base.Supplier<BiMap<Block, Block>> oldSupplier = supplier;
-			com.google.common.base.Supplier<BiMap<Block, Block>> newSupplier = (com.google.common.base.Supplier<BiMap<Block, Block>>) (() -> {
-				BiMap<Block, Block> oldMap = oldSupplier.get();
+			Function<BiMap<Block, Block>, BiMap<Block, Block>> withAdditionalStates = oldMap -> {
 				BiMap<Block, Block> newMap = HashBiMap.create(oldMap);
 				oldMap.forEach((b1, b2) -> {
 					if (b1 instanceof IPlacementBlock && b2 instanceof IPlacementBlock)
@@ -105,18 +98,47 @@ public class CommonModEventHandler
 					}
 				});
 				return newMap;
-			});
-			delegate.set(WeatheringCopper.NEXT_BY_BLOCK, newSupplier);
-			initialized.setBoolean(WeatheringCopper.NEXT_BY_BLOCK, false);
-			value.set(WeatheringCopper.NEXT_BY_BLOCK, null);
-			delegate.set(WeatheringCopper.PREVIOUS_BY_BLOCK, (com.google.common.base.Supplier<BiMap<Block, Block>>) (() -> WeatheringCopper.NEXT_BY_BLOCK.get().inverse()));
-			initialized.setBoolean(WeatheringCopper.PREVIOUS_BY_BLOCK, false);
-			value.set(WeatheringCopper.PREVIOUS_BY_BLOCK, null);
+			};
+			try
+			{
+				modifyMap(WeatheringCopper.NEXT_BY_BLOCK, WeatheringCopper.PREVIOUS_BY_BLOCK, withAdditionalStates, delegate, initialized, value);
+			}
+			catch (IllegalArgumentException | IllegalAccessException e)
+			{
+				AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper maps, copper slabs and stairs will weather into vanilla states. Sorry.", e);
+			}
+			try
+			{
+				modifyMap(HoneycombItem.WAXABLES, HoneycombItem.WAX_OFF_BY_BLOCK, withAdditionalStates, delegate, initialized, value);
+			}
+			catch (IllegalArgumentException | IllegalAccessException e)
+			{
+				AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper maps, copper slabs and stairs will weather into vanilla states. Sorry.", e);
+			}
 		}
-		catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException | ClassNotFoundException e)
+		catch (ClassNotFoundException | NoSuchFieldException | SecurityException e)
 		{
-			AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper maps, copper slabs and stairs will weather into vanilla states. Sorry.", e);
+			AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper and HoneycombItem maps, copper slabs and stairs will weather into vanilla states and cannot be waxed. Sorry.", e);
 		}
+	}
+	
+	public static <T, U> void modifyMap(Supplier<BiMap<T, U>> forwardMemoized, Supplier<BiMap<U, T>> backwardMemoized, Function<BiMap<T, U>, BiMap<T, U>> modify, Field delegate, Field initialized, Field value) throws IllegalArgumentException, IllegalAccessException
+	{
+		@SuppressWarnings("unchecked")
+		com.google.common.base.Supplier<BiMap<T, U>> supplier = (com.google.common.base.Supplier<BiMap<T, U>>) delegate.get(forwardMemoized);
+		if (supplier == null)
+		{
+			@SuppressWarnings("unchecked")
+			BiMap<T, U> map = (BiMap<T, U>) value.get(forwardMemoized);
+			supplier = () -> map;
+		}
+		final com.google.common.base.Supplier<BiMap<T, U>> oldSupplier = supplier;
+		delegate.set(forwardMemoized, (com.google.common.base.Supplier<BiMap<T, U>>) () -> modify.apply(oldSupplier.get()));
+		initialized.setBoolean(forwardMemoized, false);
+		value.set(forwardMemoized, null);
+		delegate.set(backwardMemoized, (com.google.common.base.Supplier<BiMap<U, T>>) () -> forwardMemoized.get().inverse());
+		initialized.setBoolean(backwardMemoized, false);
+		value.set(backwardMemoized, null);
 	}
 	
 	@SubscribeEvent
