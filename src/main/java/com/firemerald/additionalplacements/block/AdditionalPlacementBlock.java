@@ -227,24 +227,56 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	public void randomTick(BlockState state, ServerLevel p_56952_, BlockPos p_56953_, Random p_56954_)
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random p_56954_)
 	{
 		BlockState modelState = getModelState(state);
-		modelState.getBlock().randomTick(modelState, p_56952_, p_56953_, p_56954_);
+		modelState.getBlock().randomTick(modelState, level, pos, p_56954_);
+		applyChanges(state, modelState, level, pos);
 	}
 
 	@Override
 	@Deprecated
-	public void tick(BlockState state, ServerLevel p_56887_, BlockPos p_56888_, Random p_56889_)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random p_56889_)
 	{
 		BlockState modelState = getModelState(state);
-		modelState.getBlock().tick(modelState, p_56887_, p_56888_, p_56889_);
+		modelState.getBlock().tick(modelState, level, pos, p_56889_);
+		applyChanges(state, modelState, level, pos);
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level p_56902_, BlockPos p_56903_, Player p_56904_, InteractionHand p_56905_, BlockHitResult p_56906_)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player p_56904_, InteractionHand p_56905_, BlockHitResult p_56906_)
 	{
-		return getModelState(state).use(p_56902_, p_56904_, p_56905_, p_56906_);
+		BlockState modelState = getModelState(state);
+		InteractionResult res = getModelState(state).use(level, p_56904_, p_56905_, p_56906_);
+		applyChanges(state, modelState, level, pos);
+		return res;
+	}
+	
+	public void applyChanges(BlockState oldState, BlockState modelState, Level level, BlockPos pos)
+	{
+		BlockState newState = level.getBlockState(pos);
+		if (newState.getBlock() != this) //block has changed
+		{
+			if (newState.getBlock() instanceof IPlacementBlock)
+			{
+				IPlacementBlock<?> placement = (IPlacementBlock<?>) newState.getBlock();
+				if (placement.hasAdditionalStates())
+				{
+					BlockState changedState = placement.getOtherBlock().defaultBlockState();
+					for (Property<?> property : changedState.getProperties())
+					{
+						if (newState.hasProperty(property)) changedState = copy(property, newState, changedState);
+						else if (oldState.hasProperty(property)) changedState = copy(property, oldState, changedState);
+					}
+					level.setBlock(pos, changedState, 3);
+				}
+			}
+		}
+	}
+	
+	public static <V extends Comparable<V>> BlockState copy(Property<V> property, BlockState from, BlockState to)
+	{
+		return to.setValue(property, from.getValue(property));
 	}
 
 	@Override

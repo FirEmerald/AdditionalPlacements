@@ -42,18 +42,12 @@ public class CommonModEventHandler
 			if (block instanceof SlabBlock)
 			{
 				if (generateSlabs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					if (block instanceof WeatheringCopper)
-						created.add(new VerticalWeatheringSlabBlock<>((SlabBlock & WeatheringCopper) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
-					else
-						created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+					created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 			}
 			else if (block instanceof StairBlock)
 			{
 				if (generateStairs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					if (block instanceof WeatheringCopper)
-						created.add(new VerticalWeatheringStairBlock<>((StairBlock & WeatheringCopper) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
-					else
-						created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+					created.add(new VerticalStairBlock((StairBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 			}
 			else if (block instanceof CarpetBlock)
 			{

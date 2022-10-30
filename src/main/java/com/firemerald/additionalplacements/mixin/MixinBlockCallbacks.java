@@ -31,10 +31,7 @@ public class MixinBlockCallbacks
 					ResourceLocation name = block.getRegistryName();
 					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					{
-						if (block instanceof WeatheringCopper)
-							owner.register(new VerticalWeatheringSlabBlock<>((SlabBlock & WeatheringCopper) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
-						else
-							owner.register(new VerticalSlabBlock((SlabBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+						owner.register(new VerticalSlabBlock((SlabBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					}
 				}
 			}
@@ -45,10 +42,7 @@ public class MixinBlockCallbacks
 					ResourceLocation name = block.getRegistryName();
 					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					{
-						if (block instanceof WeatheringCopper)
-							owner.register(new VerticalWeatheringStairBlock<>((StairBlock & WeatheringCopper) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
-						else
-							owner.register(new VerticalStairBlock((StairBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+						owner.register(new VerticalStairBlock((StairBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					}
 				}
 			}
