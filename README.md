@@ -1,8 +1,12 @@
-[![Discord](https://img.shields.io/discord/176190900945289237?style=flat-square&logo=discord&logoColor=ffffff&label=Discord)](https://discord.gg/ykHRhmC)
-# Vertical Slabs and Stairs
-Framework and implementation for vertical slabs and stairs
+[![Discord](https://img.shields.io/discord/176190900945289237?style=flat-square&logo=discord&logoColor=ffffff&label=Discord)](https://discord.gg/ykHRhmC)  
+[![Curseforge](https://cf.way2muchnoise.eu/short_674852_downloads.svg?badge_style=flat)](https://www.curseforge.com/minecraft/mc-mods/additional-placements)  
 
-Features:
- - no added items - vertical slabs and stairs are extensions of the existing slab and stair block placement logic
- - simple datagen helpers to generate blockstates, block models, and item models for modded slabs and stairs
- - does not interfere with the operation of slabs and stairs that lack a vertical variant
+# Additional Placements
+Framework and implementation for additional placement states for certain blocks
+
+Features:  
+ - no added items - additional placements are extensions of the existing slab and stair block placement logic  
+ - supports slabs and stairs (vertical) and carpet and pressure plates (on walls and ceiling)
+ - vertical stairs actually connnect to other stairs (and vice-versa)
+ - supports most modded blocks
+ - simple datagen helpers to generate blockstates, block models, and item models for modded blocks, in case extra compatibility is needed  
