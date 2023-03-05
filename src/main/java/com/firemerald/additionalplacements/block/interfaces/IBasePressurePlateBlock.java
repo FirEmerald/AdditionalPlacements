@@ -6,13 +6,13 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public interface IBasePressurePlateBlock
 {
-	public abstract void playOnSoundPublic(LevelAccessor pLevel, BlockPos pPos);
+	public abstract void playOnSoundPublic(LevelAccessor level, BlockPos pos);
 	
-	public abstract void playOffSoundPublic(LevelAccessor pLevel, BlockPos pPos);
+	public abstract void playOffSoundPublic(LevelAccessor level, BlockPos pos);
 	
-	public abstract int getSignalForStatePublic(BlockState pState);
+	public abstract int getSignalForStatePublic(BlockState state);
 
-	public abstract BlockState setSignalForStatePublic(BlockState pState, int pStrength);
+	public abstract BlockState setSignalForStatePublic(BlockState state, int strength);
 	
 	public abstract int getPressedTimePublic();
 }
