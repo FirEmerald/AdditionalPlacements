@@ -174,22 +174,22 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public boolean useShapeForLightOcclusion(BlockState p_56967_)
+	public boolean useShapeForLightOcclusion(BlockState state)
 	{
 		return true;
 	}
 
 	@Override
-	public void attack(BlockState state, Level p_56897_, BlockPos p_56898_, Player p_56899_)
+	public void attack(BlockState state, Level level, BlockPos pos, Player player)
 	{
-		getModelState(state).attack(p_56897_, p_56898_, p_56899_);
+		getModelState(state).attack(level, pos, player);
 	}
 
 	@Override
-	public void destroy(LevelAccessor p_56882_, BlockPos p_56883_, BlockState state)
+	public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
 	{
 		BlockState modelState = getModelState(state);
-		modelState.getBlock().destroy(p_56882_, p_56883_, modelState);
+		modelState.getBlock().destroy(level, pos, modelState);
 	}
 
 	@Override
@@ -201,22 +201,22 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	public void onPlace(BlockState state, Level p_56962_, BlockPos p_56963_, BlockState p_56964_, boolean p_56965_)
+	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		if (!state.is(p_56964_.getBlock()))
+		if (!state.is(oldState.getBlock()))
 		{
 			BlockState modelState = getModelState(state);
-			modelState.neighborChanged(p_56962_, p_56963_, Blocks.AIR, p_56963_, false);
-			modelState.getBlock().onPlace(modelState, p_56962_, p_56963_, p_56964_, false);
+			modelState.neighborChanged(level, pos, Blocks.AIR, pos, isMoving);
+			modelState.getBlock().onPlace(modelState, level, pos, oldState, isMoving);
 		}
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level p_56909_, BlockPos p_56910_, BlockState p_56911_, boolean p_56912_)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		if (!state.is(p_56911_.getBlock()))
+		if (!state.is(oldState.getBlock()))
 		{
-			getModelState(state).onRemove(p_56909_, p_56910_, p_56911_, p_56912_);
+			getModelState(state).onRemove(level, pos, oldState, isMoving);
 		}
 	}
 
@@ -228,27 +228,27 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource p_56954_)
+	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		BlockState modelState = getModelState(state);
-		modelState.getBlock().randomTick(modelState, level, pos, p_56954_);
+		modelState.getBlock().randomTick(modelState, level, pos, rand);
 		applyChanges(state, modelState, level, pos);
 	}
 
 	@Override
 	@Deprecated
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource p_56889_)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
 		BlockState modelState = getModelState(state);
-		modelState.getBlock().tick(modelState, level, pos, p_56889_);
+		modelState.getBlock().tick(modelState, level, pos, rand);
 		applyChanges(state, modelState, level, pos);
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player p_56904_, InteractionHand p_56905_, BlockHitResult p_56906_)
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
 	{
 		BlockState modelState = getModelState(state);
-		InteractionResult res = getModelState(state).use(level, p_56904_, p_56905_, p_56906_);
+		InteractionResult res = getModelState(state).use(level, player, hand, hitResult);
 		applyChanges(state, modelState, level, pos);
 		return res;
 	}
@@ -281,13 +281,13 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void wasExploded(Level p_56878_, BlockPos p_56879_, Explosion p_56880_)
+	public void wasExploded(Level level, BlockPos pos, Explosion explosion)
 	{
-		getOtherBlock().wasExploded(p_56878_, p_56879_, p_56880_);
+		getOtherBlock().wasExploded(level, pos, explosion);
 	}
 
 	@Override
-	public boolean isPathfindable(BlockState p_56891_, BlockGetter p_56892_, BlockPos p_56893_, PathComputationType p_56894_)
+	public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType pathType)
 	{
 		return false;
 	}

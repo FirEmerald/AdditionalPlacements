@@ -77,7 +77,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 
 	@Override
 	@Deprecated
-	public VoxelShape getShape(BlockState state, BlockGetter p_49342_, BlockPos p_49343_, CollisionContext p_49344_)
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext collisionContext)
 	{
 		return plateMethods.getSignalForStatePublic(state) > 0 ? PRESSED_AABBS[state.getValue(PLACING).ordinal() - 1] : AABBS[state.getValue(PLACING).ordinal() - 1];
 	}
@@ -127,9 +127,9 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 		return canSupportRigidBlock(level, blockpos, dir.getOpposite()) || canSupportCenter(level, blockpos, dir.getOpposite());
 	}
 	
-	public static boolean canSupportRigidBlock(BlockGetter pLevel, BlockPos pPos, Direction dir)
+	public static boolean canSupportRigidBlock(BlockGetter level, BlockPos pos, Direction dir)
 	{
-		return pLevel.getBlockState(pPos).isFaceSturdy(pLevel, pPos, dir, SupportType.RIGID);
+		return level.getBlockState(pos).isFaceSturdy(level, pos, dir, SupportType.RIGID);
 	}
 
 	protected abstract int getSignalStrength(Level level, BlockPos pos);
@@ -141,86 +141,86 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void tick(BlockState p_49304_, ServerLevel p_49305_, BlockPos p_49306_, RandomSource p_49307_)
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource rand)
 	{
-		int i = plateMethods.getSignalForStatePublic(p_49304_);
-		if (i > 0) this.checkPressed((Entity)null, p_49305_, p_49306_, p_49304_, i);
+		int strength = plateMethods.getSignalForStatePublic(state);
+		if (strength > 0) this.checkPressed(null, level, pos, state, strength);
 	}
 
 	@Override
-	public void entityInside(BlockState p_49314_, Level p_49315_, BlockPos p_49316_, Entity p_49317_)
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
 	{
-		if (!p_49315_.isClientSide)
+		if (!level.isClientSide)
 		{
-			int i = plateMethods.getSignalForStatePublic(p_49314_);
-			if (i == 0) this.checkPressed(p_49317_, p_49315_, p_49316_, p_49314_, i);
+			int strength = plateMethods.getSignalForStatePublic(state);
+			if (strength == 0) this.checkPressed(entity, level, pos, state, strength);
 		}
 	}
 
-	protected void checkPressed(@Nullable Entity p_152144_, Level p_152145_, BlockPos p_152146_, BlockState p_152147_, int p_152148_)
+	protected void checkPressed(@Nullable Entity entity, Level level, BlockPos pos, BlockState state, int oldStrength)
 	{
-		int i = this.getSignalStrength(p_152145_, p_152146_);
-		boolean flag = p_152148_ > 0;
-		boolean flag1 = i > 0;
-		if (p_152148_ != i)
+		int strength = this.getSignalStrength(level, pos);
+		boolean prevPowered = oldStrength > 0;
+		boolean powered = strength > 0;
+		if (oldStrength != strength)
 		{
-			BlockState blockstate = plateMethods.setSignalForStatePublic(p_152147_, i);
-			p_152145_.setBlock(p_152146_, blockstate, 2);
-			this.updateNeighbours(p_152145_, p_152146_);
-			p_152145_.setBlocksDirty(p_152146_, p_152147_, blockstate);
+			BlockState blockstate = plateMethods.setSignalForStatePublic(state, strength);
+			level.setBlock(pos, blockstate, 2);
+			this.updateNeighbours(level, pos, state);
+			level.setBlocksDirty(pos, state, blockstate);
 		}
-		if (!flag1 && flag)
+		if (!powered && prevPowered)
 		{
-			plateMethods.playOffSoundPublic(p_152145_, p_152146_);
-			p_152145_.gameEvent(p_152144_, GameEvent.BLOCK_DEACTIVATE, p_152146_);
+			plateMethods.playOffSoundPublic(level, pos);
+			level.gameEvent(entity, GameEvent.BLOCK_DEACTIVATE, pos);
 		}
-		else if (flag1 && !flag)
+		else if (powered && !prevPowered)
 		{
-			plateMethods.playOnSoundPublic(p_152145_, p_152146_);
-			p_152145_.gameEvent(p_152144_, GameEvent.BLOCK_ACTIVATE, p_152146_);
+			plateMethods.playOnSoundPublic(level, pos);
+			level.gameEvent(entity, GameEvent.BLOCK_ACTIVATE, pos);
 		}
-		if (flag1) p_152145_.scheduleTick(new BlockPos(p_152146_), this, plateMethods.getPressedTimePublic());
+		if (powered) level.scheduleTick(new BlockPos(pos), this, plateMethods.getPressedTimePublic());
 	}
 
 	@Override
-	public void onRemove(BlockState p_49319_, Level p_49320_, BlockPos p_49321_, BlockState p_49322_, boolean p_49323_)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if (!p_49323_ && !p_49319_.is(p_49322_.getBlock()))
+		if (!isMoving && !state.is(newState.getBlock()))
 		{
-			if (plateMethods.getSignalForStatePublic(p_49319_) > 0) this.updateNeighbours(p_49320_, p_49321_);
-			super.onRemove(p_49319_, p_49320_, p_49321_, p_49322_, p_49323_);
+			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, newState);
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 	
-	protected void updateNeighbours(Level p_49292_, BlockPos p_49293_)
+	protected void updateNeighbours(Level level, BlockPos pos, BlockState state)
 	{
-		p_49292_.updateNeighborsAt(p_49293_, this);
-		p_49292_.updateNeighborsAt(p_49293_.relative(p_49292_.getBlockState(p_49293_).getValue(PLACING)), this);
+		level.updateNeighborsAt(pos, this);
+		level.updateNeighborsAt(pos.relative(state.getValue(PLACING)), this);
 	}
 	
 	@Override
-	public int getSignal(BlockState p_49309_, BlockGetter p_49310_, BlockPos p_49311_, Direction p_49312_)
+	public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
 	{
-		return this.plateMethods.getSignalForStatePublic(p_49309_);
+		return this.plateMethods.getSignalForStatePublic(state);
 	}
 
 	@Override
-	public int getDirectSignal(BlockState p_49346_, BlockGetter p_49347_, BlockPos p_49348_, Direction p_49349_)
+	public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
 	{
-		return p_49349_ == p_49346_.getValue(PLACING).getOpposite() ? plateMethods.getSignalForStatePublic(p_49346_) : 0;
+		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.getSignalForStatePublic(state) : 0;
 	}
 
 	@Override
 	@Deprecated
-	public boolean isSignalSource(BlockState p_49351_)
+	public boolean isSignalSource(BlockState state)
 	{
-		return parentBlock.isSignalSource(p_49351_);
+		return parentBlock.isSignalSource(state);
 	}
 
 	@Override
 	@Deprecated
-	public PushReaction getPistonPushReaction(BlockState p_49353_)
+	public PushReaction getPistonPushReaction(BlockState state)
 	{
-		return parentBlock.getPistonPushReaction(p_49353_);
+		return parentBlock.getPistonPushReaction(state);
 	}
 }
