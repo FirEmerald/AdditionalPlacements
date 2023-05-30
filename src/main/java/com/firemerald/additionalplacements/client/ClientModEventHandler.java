@@ -14,6 +14,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.resources.IPackNameDecorator;
 import net.minecraft.resources.PackCompatibility;
@@ -41,16 +42,17 @@ public class ClientModEventHandler
 	{
 		ModelLoaderRegistry.registerLoader(PlacementBlockModelLoader.ID, new PlacementBlockModelLoader());
 	}
+	
+	@SubscribeEvent
+	public static void onConstructModEvent(FMLConstructModEvent event)
+	{
+    	Minecraft.getInstance().getResourcePackRepository().addPackFinder((addPack, buildPack) -> addPack.accept(GENERATED_RESOURCES_PACK));
+	}
 
     @SuppressWarnings("deprecation")
 	@SubscribeEvent(priority = EventPriority.LOWEST)
     public static void init(FMLClientSetupEvent event)
     {
-    	Minecraft.getInstance().getResourcePackRepository().addPackFinder((addPack, buildPack) -> {
-    		addPack.accept(GENERATED_RESOURCES_PACK);
-    		Thread.dumpStack();
-    	});
-    	Minecraft.getInstance().reloadResourcePacks(); //TODO find a better place for this
     	ForgeRegistries.BLOCKS.forEach(block -> {
     		if (block instanceof AdditionalPlacementBlock)
     		{
