@@ -1,7 +1,5 @@
 package com.firemerald.additionalplacements.client;
 
-import java.util.function.Consumer;
-
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.client.models.PlacementBlockModelLoader;
 
@@ -10,10 +8,8 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.contents.LiteralContents;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
-import net.minecraft.server.packs.repository.Pack.PackConstructor;
 import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
@@ -44,16 +40,7 @@ public class ClientModEventHandler
 	@SubscribeEvent
 	public static void onAddPackFinders(AddPackFindersEvent event)
 	{
-		if (event.getPackType() == PackType.CLIENT_RESOURCES)
-		{
-			event.addRepositorySource(new RepositorySource() {
-				@Override
-				public void loadPacks(Consumer<Pack> addPack, PackConstructor buildPack)
-				{
-					addPack.accept(GENERATED_RESOURCES_PACK);
-				}
-			});
-		}
+		if (event.getPackType() == PackType.CLIENT_RESOURCES) event.addRepositorySource((addPack, buildPack) -> addPack.accept(GENERATED_RESOURCES_PACK));
 	}
 
 	@SubscribeEvent

@@ -1,15 +1,10 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.Collection;
-
 import com.firemerald.additionalplacements.block.interfaces.IStairBlock;
-import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 import com.firemerald.additionalplacements.util.VoxelShapes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
@@ -78,12 +73,15 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 	}
 
 	@Override
-	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	public String getTagTypeName()
 	{
-		tags.remove(BlockTags.STAIRS);
-		tags.add(AdditionalPlacementsBlockTags.VERTICAL_STAIRS);
-		if (tags.remove(BlockTags.WOODEN_STAIRS)) tags.add(AdditionalPlacementsBlockTags.VERTICAL_WOODEN_STAIRS);
-		return tags;
+		return "stair";
+	}
+
+	@Override
+	public String getTagTypeNamePlural()
+	{
+		return "stairs";
 	}
 
     public static enum EnumPlacing implements StringRepresentable
