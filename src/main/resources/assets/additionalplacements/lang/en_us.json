@@ -1,4 +1,11 @@
 {
 	"tooltip.additionalplacements.vertical_placement": "Can be placed vertically",
-	"tooltip.additionalplacements.ceiling_placement": "Can be placed on ceilings"
+	"tooltip.additionalplacements.ceiling_placement": "Can be placed on ceilings",
+	"msg.additionalplacements.mismatchedtags.0": "[Additional Placements] Found missing and/or extra tags on generated blocks. Use \"",
+	"msg.additionalplacements.mismatchedtags.1": "\" to generate the tags, then \"",
+	"msg.additionalplacements.mismatchedtags.2": "\" to re-load them. Check the game output log for more details, or edit the config file to disable this message.",
+	"msg.additionalplacements.generate.failure.definition": "Error generating datapack: failed to copy pack definition",
+	"msg.additionalplacements.generate.failure.tag": "Error generating datapack: failed to save tag %s",
+	"msg.additionalplacements.generate.failure.initialization": "Error generating datapack: failed to initialize datapack",
+	"msg.additionalplacements.generate.success": "Finished exporting tags"
 }

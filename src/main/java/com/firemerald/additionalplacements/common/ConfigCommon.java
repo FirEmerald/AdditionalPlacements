@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class ConfigCommon
 {
@@ -21,6 +22,8 @@ public class ConfigCommon
 	public final BooleanValue disableAutomaticPressurePlatePlacement;
 	public final BooleanValue disableAutomaticWeightedPressurePlatePlacement;
 	public final BooleanValue showTooltip;
+	public final BooleanValue checkTags;
+	public final IntValue checkerPriority;
 	public final ConfigValue<List<String>> blockBlacklist;
 	public final ConfigValue<List<String>> modBlacklist;
 	public final ConfigValue<List<String>> blockWhitelist;
@@ -62,6 +65,12 @@ public class ConfigCommon
         showTooltip = builder
         		.comment("Show tooltip when a block has additional placements")
         		.define("tooltip", true);
+        checkTags = builder
+        		.comment("Check for and notify of mismatching tags. Only works when the same option in the server/world config is true.")
+        		.define("check_tags", true);
+        checkerPriority = builder
+        		.comment("The thread priority of the mismatched tag checker. " + Thread.MIN_PRIORITY + " is lowest, " + Thread.MAX_PRIORITY + " is highest, " + Thread.NORM_PRIORITY + " is normal.")
+        		.defineInRange("checker_priority", Thread.MIN_PRIORITY, Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);
         blockBlacklist = (ConfigValue<List<String>>) (Object) builder
         		.comment("Blacklist for blocks to not have generated placement variants")
         		.defineList("blacklist", Collections.emptyList(), o -> {

@@ -2,11 +2,14 @@ package com.firemerald.additionalplacements.block;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Triple;
+
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.google.common.collect.Streams;
+import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -292,13 +295,33 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@SuppressWarnings("deprecation")
-	public void bindTags()
+	@Nullable
+	public Triple<Block, Collection<TagKey<Block>>, Collection<TagKey<Block>>> checkTagMismatch()
 	{
-		this.builtInRegistryHolder().bindTags(Streams.concat(modifyTags(parentBlock.builtInRegistryHolder().tags().collect(Collectors.toSet())).stream(), this.builtInRegistryHolder().tags()).collect(Collectors.toSet())); //add the model block's tags
+		Set<TagKey<Block>> desiredTags = getDesiredTags();
+		Set<TagKey<Block>> hasTags = this.builtInRegistryHolder().tags().collect(Collectors.toSet());
+		List<TagKey<Block>> hasTagsList = new ArrayList<>(hasTags);
+		List<TagKey<Block>> desiredTagsList = new ArrayList<>(desiredTags);
+		hasTagsList.removeAll(desiredTags);
+		desiredTagsList.removeAll(hasTags);
+		if (!hasTagsList.isEmpty() || !desiredTagsList.isEmpty()) return Triple.of(this, desiredTagsList, hasTagsList);
+		else return null;
 	}
+	
+	@SuppressWarnings("deprecation")
+	public Set<TagKey<Block>> getDesiredTags()
+	{
+		return modifyTags(parentBlock.builtInRegistryHolder().getTagKeys());
+	}
+	
+	public abstract String getTagTypeName();
+	
+	public abstract String getTagTypeNamePlural();
 
-	public abstract Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags);
-
+	public Set<TagKey<Block>> modifyTags(Stream<TagKey<Block>> tags)
+	{
+		return AdditionalPlacementsBlockTags.remap(tags, getTagTypeName(), getTagTypeNamePlural());
+	}
 
 	@Override
 	public boolean hasAdditionalStates()

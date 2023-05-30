@@ -1,5 +1,10 @@
 package com.firemerald.additionalplacements.common;
 
+import java.util.*;
+import java.util.function.IntPredicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 
 import net.minecraft.resources.ResourceLocation;
@@ -9,17 +14,33 @@ import net.minecraft.world.level.block.Block;
 
 public class AdditionalPlacementsBlockTags
 {
-	public static final TagKey<Block> VERTICAL_SLABS = create("vertical_slabs");
-	public static final TagKey<Block> VERTICAL_WOODEN_SLABS = create("vertical_wooden_slabs");
-	public static final TagKey<Block> VERTICAL_STAIRS = create("vertical_stairs");
-	public static final TagKey<Block> VERTICAL_WOODEN_STAIRS = create("vertical_wooden_stairs");
-	public static final TagKey<Block> ADDITIONAL_CARPETS = create("additional_carpets");
-	public static final TagKey<Block> ADDITIONAL_PRESSURE_PLATES = create("additional_pressure_plates");
-	public static final TagKey<Block> ADDITIONAL_WOODEN_PRESSURE_PLATES = create("additional_wooden_pressure_plates");
-	public static final TagKey<Block> ADDITIONAL_STONE_PRESSURE_PLATES = create("additional_stone_pressure_plates");
-
-	private static TagKey<Block> create(String name)
+	private static final IntPredicate SEPERATOR = c -> { return c == '_' || c == ' ' || c == '/' || c == '.'; };
+	private static Map<String, Map<TagKey<Block>, TagKey<Block>>> remappedTags = new HashMap<>();
+	
+	public static Set<TagKey<Block>> remap(Stream<TagKey<Block>> tags, String typeName, String typeNamePlural)
 	{
-		return BlockTags.create(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name));
+		Map<TagKey<Block>, TagKey<Block>> mapped = remappedTags.computeIfAbsent(typeName, key -> new HashMap<>());
+		return tags.map(tag -> mapped.computeIfAbsent(tag, name -> {
+			ResourceLocation loc = tag.location();
+			int beginPlural = loc.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeNamePlural.toLowerCase(Locale.ENGLISH));
+			if (beginPlural < 0)
+			{
+				int begin = loc.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeName.toLowerCase(Locale.ENGLISH));
+				if (begin < 0) return tag;
+				else return remap(begin, tag, typeName);
+			}
+			else return remap(beginPlural, tag, typeNamePlural);
+		})).collect(Collectors.toSet());
+	}
+	
+	private static TagKey<Block> remap(int begin, TagKey<Block> tag, String typeName)
+	{
+		ResourceLocation loc = tag.location();
+		String path = loc.getPath();
+		if (begin > 0 //check char before
+				&& !SEPERATOR.test(path.charAt(begin - 1))) return tag;
+		if (begin + typeName.length() < path.length() //check char after
+				&& !SEPERATOR.test(path.charAt(begin + typeName.length()))) return tag;
+		return BlockTags.create(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, loc.getNamespace() + "/" + path.substring(0, begin) + "vertical_" + path.substring(begin)));
 	}
 }

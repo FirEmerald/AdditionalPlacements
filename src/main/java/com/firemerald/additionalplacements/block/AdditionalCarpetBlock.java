@@ -1,14 +1,9 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.Collection;
-
 import com.firemerald.additionalplacements.block.interfaces.ICarpetBlock;
-import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -73,11 +68,15 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 	}
 
 	@Override
-	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	public String getTagTypeName()
 	{
-		tags.remove(BlockTags.CARPETS);
-		tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_CARPETS);
-		return tags;
+		return "carpet";
+	}
+
+	@Override
+	public String getTagTypeNamePlural()
+	{
+		return "carpets";
 	}
 
 	@Override

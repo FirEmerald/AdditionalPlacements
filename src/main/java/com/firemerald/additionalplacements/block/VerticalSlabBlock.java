@@ -1,15 +1,10 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.Collection;
-
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock;
-import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 import com.firemerald.additionalplacements.util.VoxelShapes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -80,12 +75,15 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 	}
 
 	@Override
-	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	public String getTagTypeName()
 	{
-		tags.remove(BlockTags.SLABS);
-		tags.add(AdditionalPlacementsBlockTags.VERTICAL_SLABS);
-		if (tags.remove(BlockTags.WOODEN_SLABS)) tags.add(AdditionalPlacementsBlockTags.VERTICAL_WOODEN_SLABS);
-		return tags;
+		return "slab";
+	}
+
+	@Override
+	public String getTagTypeNamePlural()
+	{
+		return "slabs";
 	}
 
 	@Override

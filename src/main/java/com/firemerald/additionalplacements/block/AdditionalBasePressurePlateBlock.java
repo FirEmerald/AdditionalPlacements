@@ -1,19 +1,15 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.Collection;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
-import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -101,13 +97,15 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	public String getTagTypeName()
 	{
-		tags.remove(BlockTags.PRESSURE_PLATES);
-		tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_PRESSURE_PLATES);
-		if (tags.remove(BlockTags.WOODEN_PRESSURE_PLATES)) tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_WOODEN_PRESSURE_PLATES);
-		if (tags.remove(BlockTags.STONE_PRESSURE_PLATES)) tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_STONE_PRESSURE_PLATES);
-		return tags;
+		return "pressure_plate";
+	}
+
+	@Override
+	public String getTagTypeNamePlural()
+	{
+		return "pressure_plates";
 	}
 
 	@Override
