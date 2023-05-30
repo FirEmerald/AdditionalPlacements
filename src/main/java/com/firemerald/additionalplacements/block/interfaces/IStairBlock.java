@@ -12,27 +12,27 @@ import com.firemerald.additionalplacements.block.VerticalStairBlock;
 import com.firemerald.additionalplacements.block.StairStateHelper.EnumPlacing;
 import com.firemerald.additionalplacements.block.StairStateHelper.EnumShape;
 import com.firemerald.additionalplacements.block.StairStateHelper.PartialState;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -48,6 +48,22 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		PartialState partial = StairStateHelper.getPartialState(placing, shape);
 		return partial.apply(partial.isHorizontal() ? getDefaultVanillaState(currentState) : getDefaultAdditionalState(currentState));
 	}
+	
+	public default EnumShape getOpposite(EnumShape shape)
+	{
+		switch (shape)
+		{
+		case INSIDE_LEFT: return EnumShape.INSIDE_RIGHT;
+		case INSIDE_RIGHT: return EnumShape.INSIDE_LEFT;
+		case OUTSIDE_LEFT: return EnumShape.OUTSIDE_RIGHT;
+		case OUTSIDE_RIGHT: return EnumShape.OUTSIDE_LEFT;
+		case OUTSIDE_HORIZONTAL_LEFT: return EnumShape.OUTSIDE_HORIZONTAL_RIGHT;
+		case OUTSIDE_HORIZONTAL_RIGHT: return EnumShape.OUTSIDE_HORIZONTAL_LEFT;
+		case OUTSIDE_VERTICAL_LEFT: return EnumShape.OUTSIDE_VERTICAL_RIGHT;
+		case OUTSIDE_VERTICAL_RIGHT: return EnumShape.OUTSIDE_VERTICAL_LEFT;
+		default: return shape;
+		}
+	}
 
 	@Override
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
@@ -59,20 +75,10 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		for (EnumPlacing newPlacing : EnumPlacing.values())
 		{
 			if (newPlacing.front == newFront && newPlacing.top == newTop) return getBlockState(newPlacing, state.getRight(), blockState);
-			else if (newPlacing.front == newTop && newPlacing.top == newFront)  return getBlockState(newPlacing,
-					switch (state.getRight())
-					{
-					case INSIDE_LEFT -> EnumShape.INSIDE_RIGHT;
-					case INSIDE_RIGHT -> EnumShape.INSIDE_LEFT;
-					case OUTSIDE_LEFT -> EnumShape.OUTSIDE_RIGHT;
-					case OUTSIDE_RIGHT -> EnumShape.OUTSIDE_LEFT;
-					case OUTSIDE_HORIZONTAL_LEFT -> EnumShape.OUTSIDE_HORIZONTAL_RIGHT;
-					case OUTSIDE_HORIZONTAL_RIGHT -> EnumShape.OUTSIDE_HORIZONTAL_LEFT;
-					case OUTSIDE_VERTICAL_LEFT -> EnumShape.OUTSIDE_VERTICAL_RIGHT;
-					case OUTSIDE_VERTICAL_RIGHT -> EnumShape.OUTSIDE_VERTICAL_LEFT;
-					default -> state.getRight();
-					}
-			, blockState);
+			else if (newPlacing.front == newTop && newPlacing.top == newFront)
+			{
+				return getBlockState(newPlacing, getOpposite(state.getRight()), blockState);
+			}
 		}
 		return blockState;
 	}
@@ -100,37 +106,24 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 				break;
 			}
 		}
-		return getBlockState(newPlacing, !mirrorShape ? state.getRight() :
-			switch (state.getRight())
-			{
-			case INSIDE_LEFT -> EnumShape.INSIDE_RIGHT;
-			case INSIDE_RIGHT -> EnumShape.INSIDE_LEFT;
-			case OUTSIDE_LEFT -> EnumShape.OUTSIDE_RIGHT;
-			case OUTSIDE_RIGHT -> EnumShape.OUTSIDE_LEFT;
-			case OUTSIDE_HORIZONTAL_LEFT -> EnumShape.OUTSIDE_HORIZONTAL_RIGHT;
-			case OUTSIDE_HORIZONTAL_RIGHT -> EnumShape.OUTSIDE_HORIZONTAL_LEFT;
-			case OUTSIDE_VERTICAL_LEFT -> EnumShape.OUTSIDE_VERTICAL_RIGHT;
-			case OUTSIDE_VERTICAL_RIGHT -> EnumShape.OUTSIDE_VERTICAL_LEFT;
-			default -> state.getRight();
-			}
-		, blockState);
+		return getBlockState(newPlacing, !mirrorShape ? state.getRight() : getOpposite(state.getRight()), blockState);
 	}
 
 	@Override
-	public default BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
+	public default BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos)
 	{
         EnumPlacing placing = StairStateHelper.getPlacing(state);
         return placing == null ? state : getBlockState(placing, getShape(placing, level, pos), state);
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState blockState)
+	public default BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState blockState)
 	{
         EnumPlacing placing = getPlacing(context);
         return getBlockState(placing, getShape(placing, context.getLevel(), context.getClickedPos()), blockState);
 	}
 
-	public default EnumShape getShape(EnumPlacing placing, BlockGetter level, BlockPos pos)
+	public default EnumShape getShape(EnumPlacing placing, IBlockReader level, BlockPos pos)
 	{
 		//prioritize back, bottom, front and left, right
 		BlockState behind = level.getBlockState(pos.relative(placing.back));
@@ -234,7 +227,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial)
+	public default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial)
 	{
 		Matrix4f poseMat = pose.last().pose();
 		Matrix3f normMat = pose.last().normal();
@@ -271,10 +264,10 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default boolean disablePlacement()
 	{
-		return this instanceof StairBlock && AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
+		return this instanceof StairsBlock && AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
 	}
 
-	public default EnumPlacing getPlacing(BlockPlaceContext context)
+	public default EnumPlacing getPlacing(BlockItemUseContext context)
 	{
 		double hitX = context.getClickLocation().x - context.getClickedPos().getX() - .5;
 		double hitY = context.getClickLocation().y - context.getClickedPos().getY() - .5;
@@ -412,8 +405,8 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
     @Override
-	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
+	public default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
-		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.vertical_placement"));
+		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
 	}
 }

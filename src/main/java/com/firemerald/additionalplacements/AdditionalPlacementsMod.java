@@ -8,10 +8,11 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.firemerald.additionalplacements.common.ConfigCommon;
+import com.firemerald.additionalplacements.common.ConfigServer;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -27,14 +28,18 @@ public class AdditionalPlacementsMod
 	//TODO: fences walls panes bars
 	public static final String MOD_ID = "additionalplacements";
 	public static final String OLD_ID = "dvsas";
-    public static final Logger LOGGER = LoggerFactory.getLogger("Additional Placements");
+    public static final Logger LOGGER = LogManager.getLogger("Additional Placements");
 
-    static final ForgeConfigSpec commonSpec;
+    static final ForgeConfigSpec commonSpec, serverSpec;
     public static final ConfigCommon COMMON_CONFIG;
+    public static final ConfigServer SERVER_CONFIG;
     static {
-        final Pair<ConfigCommon, ForgeConfigSpec> clientSpecPair = new ForgeConfigSpec.Builder().configure(ConfigCommon::new);
-        commonSpec = clientSpecPair.getRight();
-        COMMON_CONFIG = clientSpecPair.getLeft();
+        final Pair<ConfigCommon, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(ConfigCommon::new);
+        commonSpec = commonSpecPair.getRight();
+        COMMON_CONFIG = commonSpecPair.getLeft();
+        final Pair<ConfigServer, ForgeConfigSpec> serverSpecPair = new ForgeConfigSpec.Builder().configure(ConfigServer::new);
+        serverSpec = serverSpecPair.getRight();
+        SERVER_CONFIG = serverSpecPair.getLeft();
     }
     
     public static boolean dynamicRegistration = false;
@@ -42,6 +47,7 @@ public class AdditionalPlacementsMod
     public AdditionalPlacementsMod()
     {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, commonSpec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, serverSpec);
 		try
 		{
 			LOGGER.info("Attempting to manually load Additional Placements config early.");

@@ -2,24 +2,39 @@ package com.firemerald.additionalplacements.common;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.util.ResourceLocation;
+
+import java.util.*;
+import java.util.function.IntPredicate;
+import java.util.stream.Collectors;
 
 public class AdditionalPlacementsBlockTags
 {
-	public static final TagKey<Block> VERTICAL_SLABS = create("vertical_slabs");
-	public static final TagKey<Block> VERTICAL_WOODEN_SLABS = create("vertical_wooden_slabs");
-	public static final TagKey<Block> VERTICAL_STAIRS = create("vertical_stairs");
-	public static final TagKey<Block> VERTICAL_WOODEN_STAIRS = create("vertical_wooden_stairs");
-	public static final TagKey<Block> ADDITIONAL_CARPETS = create("additional_carpets");
-	public static final TagKey<Block> ADDITIONAL_PRESSURE_PLATES = create("additional_pressure_plates");
-	public static final TagKey<Block> ADDITIONAL_WOODEN_PRESSURE_PLATES = create("additional_wooden_pressure_plates");
-	public static final TagKey<Block> ADDITIONAL_STONE_PRESSURE_PLATES = create("additional_stone_pressure_plates");
-
-	private static TagKey<Block> create(String name)
+	private static final IntPredicate SEPERATOR = c -> { return c == '_' || c == ' ' || c == '/' || c == '.'; };
+	private static Map<String, Map<ResourceLocation, ResourceLocation>> remappedTags = new HashMap<>();
+	
+	public static Set<ResourceLocation> remap(Set<ResourceLocation> tags, String typeName, String typeNamePlural)
 	{
-		return BlockTags.create(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name));
+		Map<ResourceLocation, ResourceLocation> mapped = remappedTags.computeIfAbsent(typeName, key -> new HashMap<>());
+		return tags.stream().map(tag -> mapped.computeIfAbsent(tag, name -> {
+			int beginPlural = tag.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeNamePlural.toLowerCase(Locale.ENGLISH));
+			if (beginPlural < 0)
+			{
+				int begin = tag.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeName.toLowerCase(Locale.ENGLISH));
+				if (begin < 0) return tag;
+				else return remap(begin, tag, typeName);
+			}
+			else return remap(beginPlural, tag, typeNamePlural);
+		})).collect(Collectors.toSet());
+	}
+	
+	private static ResourceLocation remap(int begin, ResourceLocation tag, String typeName)
+	{
+		String path = tag.getPath();
+		if (begin > 0 //check char before
+				&& !SEPERATOR.test(path.charAt(begin - 1))) return tag;
+		if (begin + typeName.length() < path.length() //check char after
+				&& !SEPERATOR.test(path.charAt(begin + typeName.length()))) return tag;
+		return new ResourceLocation(AdditionalPlacementsMod.MOD_ID, tag.getNamespace() + "/" + path.substring(0, begin) + "vertical_" + path.substring(begin));
 	}
 }

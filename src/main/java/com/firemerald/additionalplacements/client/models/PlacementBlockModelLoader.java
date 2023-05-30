@@ -10,8 +10,8 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.resources.IResourceManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModelLoader;
 
 public class PlacementBlockModelLoader implements IModelLoader<PlacementBlockModel>
@@ -20,7 +20,7 @@ public class PlacementBlockModelLoader implements IModelLoader<PlacementBlockMod
 	public static final Map<ModelKey, Pair<TextureAtlasSprite, Integer>> TEXTURE_CACHE = new HashMap<>();
 
 	@Override
-	public void onResourceManagerReload(ResourceManager manager)
+	public void onResourceManagerReload(IResourceManager manager)
 	{
 		TEXTURE_CACHE.clear();
 	}

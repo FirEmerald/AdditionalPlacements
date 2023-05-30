@@ -6,8 +6,8 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPressurePlateBlock;
 import com.firemerald.additionalplacements.block.AdditionalWeightedPressurePlateBlock;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.WeightedPressurePlateBlock;
+import net.minecraft.block.WeightedPressurePlateBlock;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 

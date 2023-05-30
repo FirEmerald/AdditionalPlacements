@@ -1,18 +1,20 @@
 package com.firemerald.additionalplacements.client;
 
+import javax.annotation.Nullable;
+
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockDisplayReader;
 
-public class AdditionalBlockColor implements BlockColor
+public class AdditionalBlockColor implements IBlockColor
 {
 	@Override
-	public int getColor(BlockState state, BlockAndTintGetter tintGetter, BlockPos pos, int i)
+	public int getColor(BlockState state, @Nullable IBlockDisplayReader tintGetter, BlockPos pos, int i)
 	{
 		Block block = state.getBlock();
 		if (block instanceof AdditionalPlacementBlock) return Minecraft.getInstance().getBlockColors().getColor(((AdditionalPlacementBlock<?>) block).getModelState(state), tintGetter, pos, i);

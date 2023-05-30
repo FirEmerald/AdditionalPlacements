@@ -5,11 +5,11 @@ import java.util.function.Function;
 
 import org.apache.http.util.Asserts;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.item.Item;
+import net.minecraft.state.Property;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
@@ -76,9 +76,9 @@ public class ModelType<T extends Block>
 				stateProvider.getVariantBuilder(block).forAllStatesExcept(state -> {
 					StateModelDefinition modelDef = getModelDefinition.apply(state);
 					return ConfiguredModel.builder()
-					.modelFile(modelProvider.getExistingFile(modelProvider.modLoc(folder + modelDef.model())))
-					.rotationX(modelDef.xRotation())
-					.rotationY(modelDef.yRotation())
+					.modelFile(modelProvider.getExistingFile(modelProvider.modLoc(folder + modelDef.model)))
+					.rotationX(modelDef.xRotation)
+					.rotationY(modelDef.yRotation)
 					.uvLock(uvLock)
 					.build();
 				}, ignoredStateProperties.apply(block));

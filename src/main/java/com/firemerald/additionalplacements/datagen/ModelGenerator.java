@@ -3,7 +3,7 @@ package com.firemerald.additionalplacements.datagen;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 
 import net.minecraft.data.DataGenerator;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 

@@ -11,27 +11,27 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.client.BlockModelUtils;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.ItemOverrides;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureAtlas;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
+import net.minecraft.client.renderer.model.ItemOverrideList;
+import net.minecraft.client.renderer.texture.AtlasTexture;
+import net.minecraft.client.renderer.texture.MissingTextureSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockDisplayReader;
 import net.minecraftforge.client.model.data.IDynamicBakedModel;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelDataMap;
 
 public class BakedPlacementBlockModel implements IDynamicBakedModel
 {
-	public final BakedModel model;
+	public final IBakedModel model;
 	private final Map<ModelKey, List<BakedQuad>> bakedQuadsCache = new HashMap<>();
 
-	public BakedPlacementBlockModel(BakedModel model)
+	public BakedPlacementBlockModel(IBakedModel model)
 	{
 		this.model = model;
 	}
@@ -64,28 +64,28 @@ public class BakedPlacementBlockModel implements IDynamicBakedModel
 	@Override
 	public TextureAtlasSprite getParticleIcon()
 	{
-		return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(MissingTextureAtlasSprite.getLocation());
+		return Minecraft.getInstance().getTextureAtlas(AtlasTexture.LOCATION_BLOCKS).apply(MissingTextureSprite.getLocation());
 	}
 
 	@Override
-	public TextureAtlasSprite getParticleIcon(IModelData extraData)
+	public TextureAtlasSprite getParticleTexture(IModelData extraData)
 	{
 		BlockState modelState = extraData.getData(BlockModelUtils.MODEL_STATE);
-		if (modelState != null) return BlockModelUtils.getBakedModel(modelState).getParticleIcon(BlockModelUtils.getModelData(modelState, extraData));
+		if (modelState != null) return BlockModelUtils.getBakedModel(modelState).getParticleTexture(BlockModelUtils.getModelData(modelState, extraData));
 		else return getParticleIcon();
 	}
 
 
 	@Override
-	public @Nonnull IModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData modelData)
+	public @Nonnull IModelData getModelData(@Nonnull IBlockDisplayReader level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull IModelData modelData)
     {
 		return new ModelDataMap.Builder().withInitial(BlockModelUtils.MODEL_STATE, BlockModelUtils.getModeledState(state)).build();
     }
 
 	@Override
-	public ItemOverrides getOverrides()
+	public ItemOverrideList getOverrides()
 	{
-		return ItemOverrides.EMPTY;
+		return ItemOverrideList.EMPTY;
 	}
 
 	@Override

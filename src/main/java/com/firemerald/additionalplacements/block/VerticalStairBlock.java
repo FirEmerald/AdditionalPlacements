@@ -1,26 +1,21 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.Collection;
-
 import com.firemerald.additionalplacements.block.interfaces.IStairBlock;
-import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 import com.firemerald.additionalplacements.util.VoxelShapes;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.state.EnumProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
 
-public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBlock> implements IStairBlock<StairBlock>
+public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlock> implements IStairBlock<StairsBlock>
 {
 	public static final EnumProperty<EnumPlacing> PLACING = EnumProperty.create("placing", EnumPlacing.class);
 	public static final EnumProperty<EnumShape> SHAPE = EnumProperty.create("shape", EnumShape.class);
@@ -44,7 +39,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 	}
 
 	@SuppressWarnings("deprecation")
-	public VerticalStairBlock(StairBlock stairs)
+	public VerticalStairBlock(StairsBlock stairs)
 	{
 		super(stairs);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, EnumPlacing.NORTH_EAST).setValue(SHAPE, EnumShape.STRAIGHT));
@@ -52,7 +47,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(PLACING, SHAPE);
 		super.createBlockStateDefinition(builder);
@@ -60,7 +55,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 
 	@Override
 	@Deprecated
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	public VoxelShape getShape(BlockState state, IBlockReader level, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPE_CACHE[state.getValue(PLACING).ordinal()][state.getValue(SHAPE).ordinal()];
 	}
@@ -78,15 +73,18 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 	}
 
 	@Override
-	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	public String getTagTypeName()
 	{
-		tags.remove(BlockTags.STAIRS);
-		tags.add(AdditionalPlacementsBlockTags.VERTICAL_STAIRS);
-		if (tags.remove(BlockTags.WOODEN_STAIRS)) tags.add(AdditionalPlacementsBlockTags.VERTICAL_WOODEN_STAIRS);
-		return tags;
+		return "stair";
 	}
 
-    public static enum EnumPlacing implements StringRepresentable
+	@Override
+	public String getTagTypeNamePlural()
+	{
+		return "stairs";
+	}
+
+    public static enum EnumPlacing implements IStringSerializable
     {
     	NORTH_EAST("north_east", Direction.NORTH, Direction.EAST),
     	EAST_SOUTH("east_south", Direction.EAST, Direction.SOUTH),
@@ -118,7 +116,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
         }
     }
 
-    public static enum EnumShape implements StringRepresentable
+    public static enum EnumShape implements IStringSerializable
     {
         STRAIGHT("straight", false, false, false, false),
 

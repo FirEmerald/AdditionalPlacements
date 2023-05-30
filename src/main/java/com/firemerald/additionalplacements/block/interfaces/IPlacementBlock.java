@@ -7,33 +7,32 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.client.Camera;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.IItemProvider;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.vector.Quaternion;
+import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 
-public interface IPlacementBlock<T extends Block> extends ItemLike
+public interface IPlacementBlock<T extends Block> extends IItemProvider
 {
 	public T getOtherBlock();
 	
@@ -41,16 +40,16 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 
 	public BlockState mirrorImpl(BlockState blockState, Mirror mirror);
 
-	public BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState);
+	public BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState);
 
-	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos);
+	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos);
 
-	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
+	public default void appendHoverTextImpl(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		if (AdditionalPlacementsMod.COMMON_CONFIG.showTooltip.get() && !disablePlacement()) addPlacementTooltip(stack, level, tooltip, flag);
 	}
 
-	public void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag);
+	public void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag);
 
 	public boolean hasAdditionalStates();
 
@@ -61,16 +60,16 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	public boolean isThis(BlockState blockState);
 
 	public static Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {
-		Quaternion.fromXYZDegrees(new Vector3f(90, 0, 0)), //DOWN
-		Quaternion.fromXYZDegrees(new Vector3f(-90, 0, 0)), //UP
-		Quaternion.fromXYZDegrees(new Vector3f(0, 180, 0)), //NORTH
+		new Quaternion(90, 0, 0, true), //DOWN
+		new Quaternion(-90, 0, 0, true), //UP
+		new Quaternion(0, 180, 0, true), //NORTH
 		Quaternion.ONE, //SOUTH
-		Quaternion.fromXYZDegrees(new Vector3f(0, -90, 0)), //WEST
-		Quaternion.fromXYZDegrees(new Vector3f(0, 90, 0)), //EAST
+		new Quaternion(0, -90, 0, true), //WEST
+		new Quaternion(0, 90, 0, true), //EAST
 	};
 
 	@OnlyIn(Dist.CLIENT)
-	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
+	public default void renderHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, ActiveRenderInfo camera, float partial)
 	{
 		if (disablePlacement()) return;
 		pose.pushPose();
@@ -100,7 +99,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 			break;
 		default:
 		}
-		Vec3 pos = camera.getPosition();
+		Vector3d pos = camera.getPosition();
 		pose.translate(hitX - pos.x + .5, hitY - pos.y + .5, hitZ - pos.z + .5);
 		pose.mulPose(DIRECTION_TRANSFORMS[result.getDirection().ordinal()]);
 		renderPlacementHighlight(pose, vertexConsumer, player, result, partial);
@@ -108,7 +107,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
+	public void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial);
 
 	public abstract boolean disablePlacement();
 

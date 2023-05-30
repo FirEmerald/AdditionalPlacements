@@ -5,10 +5,10 @@ import javax.annotation.Nullable;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
 
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.PressurePlateBlock;
+import net.minecraft.util.Direction;
 
 public interface IPressurePlateBlock<T extends Block> extends IFloorBlock<T>
 {

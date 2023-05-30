@@ -1,38 +1,33 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.Collection;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
-import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.BasePressurePlateBlock;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SupportType;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.AbstractPressurePlateBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.material.PushReaction;
+import net.minecraft.entity.Entity;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.BlockVoxelShape;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
+import net.minecraft.world.World;
+import net.minecraft.world.server.ServerWorld;
 
-public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePlateBlock> extends AdditionalPlacementBlock<T> implements IPressurePlateBlock<T>
+public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressurePlateBlock> extends AdditionalPlacementBlock<T> implements IPressurePlateBlock<T>
 {
 	public static final DirectionProperty PLACING = AdditionalBlockStateProperties.HORIZONTAL_OR_UP_FACING;
 	public static final VoxelShape[] AABBS = {
@@ -49,12 +44,12 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 			Block.box(0, 1, 1, .5, 15, 15),
 			Block.box(15.5, 1, 1, 16, 15, 15)
 	};
-	public static final AABB[] TOUCH_AABBS = {
-			new AABB(0.125, 0.75, 0.125, 0.875, 1, 0.875),
-			new AABB(0.125, 0.125, 0, 0.875, 0.875, 0.25),
-			new AABB(0.125, 0.125, 0.75, 0.875, 0.875, 1),
-			new AABB(0, 0.125, 0.125, 0.25, 0.875, 0.875),
-			new AABB(0.75, 0.125, 0.125, 1, 0.875, 0.875)
+	public static final AxisAlignedBB[] TOUCH_AABBS = {
+			new AxisAlignedBB(0.125, 0.75, 0.125, 0.875, 1, 0.875),
+			new AxisAlignedBB(0.125, 0.125, 0, 0.875, 0.875, 0.25),
+			new AxisAlignedBB(0.125, 0.125, 0.75, 0.875, 0.875, 1),
+			new AxisAlignedBB(0, 0.125, 0.125, 0.25, 0.875, 0.875),
+			new AxisAlignedBB(0.75, 0.125, 0.125, 1, 0.875, 0.875)
 	};
 	
 	public final IBasePressurePlateBlock plateMethods;
@@ -69,7 +64,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(PLACING);
 		super.createBlockStateDefinition(builder);
@@ -77,7 +72,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 
 	@Override
 	@Deprecated
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext collisionContext)
+	public VoxelShape getShape(BlockState state, IBlockReader level, BlockPos pos, ISelectionContext collisionContext)
 	{
 		return plateMethods.getSignalForStatePublic(state) > 0 ? PRESSED_AABBS[state.getValue(PLACING).ordinal() - 1] : AABBS[state.getValue(PLACING).ordinal() - 1];
 	}
@@ -101,36 +96,38 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	public String getTagTypeName()
 	{
-		tags.remove(BlockTags.PRESSURE_PLATES);
-		tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_PRESSURE_PLATES);
-		if (tags.remove(BlockTags.WOODEN_PRESSURE_PLATES)) tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_WOODEN_PRESSURE_PLATES);
-		if (tags.remove(BlockTags.STONE_PRESSURE_PLATES)) tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_STONE_PRESSURE_PLATES);
-		return tags;
+		return "pressure_plate";
 	}
 
 	@Override
-	public BlockState updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos)
+	public String getTagTypeNamePlural()
+	{
+		return "pressure_plates";
+	}
+
+	@Override
+	public BlockState updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, IWorld level, BlockPos thisPos, BlockPos otherPos)
 	{
 		return !thisState.canSurvive(level, thisPos) ? Blocks.AIR.defaultBlockState() : thisState;
 	}
 
 	@Override
 	@Deprecated
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+	public boolean canSurvive(BlockState state, IWorldReader level, BlockPos pos)
 	{
 		Direction dir = state.getValue(PLACING);
 		BlockPos blockpos = pos.relative(dir);
 		return canSupportRigidBlock(level, blockpos, dir.getOpposite()) || canSupportCenter(level, blockpos, dir.getOpposite());
 	}
 	
-	public static boolean canSupportRigidBlock(BlockGetter level, BlockPos pos, Direction dir)
+	public static boolean canSupportRigidBlock(IBlockReader level, BlockPos pos, Direction dir)
 	{
-		return level.getBlockState(pos).isFaceSturdy(level, pos, dir, SupportType.RIGID);
+		return level.getBlockState(pos).isFaceSturdy(level, pos, dir, BlockVoxelShape.RIGID);
 	}
 
-	protected abstract int getSignalStrength(Level level, BlockPos pos);
+	protected abstract int getSignalStrength(World level, BlockPos pos);
 	
 	@Override
 	public boolean isPossibleToRespawnInThis()
@@ -139,14 +136,14 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand)
+	public void tick(BlockState state, ServerWorld level, BlockPos pos, Random rand)
 	{
 		int strength = plateMethods.getSignalForStatePublic(state);
 		if (strength > 0) this.checkPressed(null, level, pos, state, strength);
 	}
 
 	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
+	public void entityInside(BlockState state, World level, BlockPos pos, Entity entity)
 	{
 		if (!level.isClientSide)
 		{
@@ -155,7 +152,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 		}
 	}
 
-	protected void checkPressed(@Nullable Entity entity, Level level, BlockPos pos, BlockState state, int oldStrength)
+	protected void checkPressed(@Nullable Entity entity, World level, BlockPos pos, BlockState state, int oldStrength)
 	{
 		int strength = this.getSignalStrength(level, pos);
 		boolean prevPowered = oldStrength > 0;
@@ -170,18 +167,18 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 		if (!powered && prevPowered)
 		{
 			plateMethods.playOffSoundPublic(level, pos);
-			level.gameEvent(entity, GameEvent.BLOCK_UNPRESS, pos);
+			//level.gameEvent(entity, GameEvent.BLOCK_UNPRESS, pos);
 		}
 		else if (powered && !prevPowered)
 		{
 			plateMethods.playOnSoundPublic(level, pos);
-			level.gameEvent(entity, GameEvent.BLOCK_PRESS, pos);
+			//level.gameEvent(entity, GameEvent.BLOCK_PRESS, pos);
 		}
-		if (powered) level.scheduleTick(new BlockPos(pos), this, plateMethods.getPressedTimePublic());
+		if (powered) level.getBlockTicks().scheduleTick(new BlockPos(pos), this, plateMethods.getPressedTimePublic());
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onRemove(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		if (!isMoving && !state.is(oldState.getBlock()))
 		{
@@ -190,20 +187,20 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 		}
 	}
 
-	protected void updateNeighbours(Level level, BlockPos pos, BlockState state)
+	protected void updateNeighbours(World level, BlockPos pos, BlockState state)
 	{
 		level.updateNeighborsAt(pos, this);
 		level.updateNeighborsAt(pos.relative(state.getValue(PLACING)), this);
 	}
 	
 	@Override
-	public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
+	public int getSignal(BlockState state, IBlockReader level, BlockPos pos, Direction dir)
 	{
 		return this.plateMethods.getSignalForStatePublic(state);
 	}
 
 	@Override
-	public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
+	public int getDirectSignal(BlockState state, IBlockReader level, BlockPos pos, Direction dir)
 	{
 		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.getSignalForStatePublic(state) : 0;
 	}
@@ -219,6 +216,6 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	@Deprecated
 	public PushReaction getPistonPushReaction(BlockState state)
 	{
-		return parentBlock.getPistonPushReaction(state);
+		return parentBlock.getPistonPushReaction(state); //TODO
 	}
 }

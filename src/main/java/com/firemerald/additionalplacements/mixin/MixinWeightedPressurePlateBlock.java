@@ -9,12 +9,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock.IVanillaPressurePlateBlock;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.WeightedPressurePlateBlock;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 
 @Mixin(WeightedPressurePlateBlock.class)
 public abstract class MixinWeightedPressurePlateBlock extends Block implements IVanillaPressurePlateBlock
@@ -75,7 +78,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 
 	//@Override
 	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
-	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
+	private void getStateForPlacement(BlockItemUseContext context, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates() && !disablePlacement()) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
@@ -83,7 +86,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 	//@Override
 	@Override
 	@Intrinsic
-	public BlockState getStateForPlacement(BlockPlaceContext context)
+	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		if (this.hasAdditionalStates() && !disablePlacement()) return getStateForPlacementImpl(context, super.getStateForPlacement(context));
 		else return super.getStateForPlacement(context);
@@ -125,7 +128,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
+	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos)
 	{
 		return super.updateShape(state, direction, otherState, level, pos, otherPos);
 	}

@@ -2,12 +2,12 @@ package com.firemerald.additionalplacements.block;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.Half;
-import net.minecraft.world.level.block.state.properties.StairsShape;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.state.properties.Half;
+import net.minecraft.state.properties.StairsShape;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.vector.Vector3i;
 
 public class StairStateHelper
 {
@@ -39,7 +39,7 @@ public class StairStateHelper
 			@Override
 			public BlockState apply(BlockState state)
 			{
-				return state.setValue(StairBlock.HALF, half).setValue(StairBlock.FACING, facing).setValue(StairBlock.SHAPE, shape);
+				return state.setValue(StairsBlock.HALF, half).setValue(StairsBlock.FACING, facing).setValue(StairsBlock.SHAPE, shape);
 			}
 
 			@Override
@@ -178,9 +178,9 @@ public class StairStateHelper
 	}
 	public static EnumPlacing getPlacing(BlockState blockState)
 	{
-		if (blockState.getBlock() instanceof StairBlock)
+		if (blockState.getBlock() instanceof StairsBlock)
 		{
-			if (blockState.getValue(StairBlock.HALF) == Half.BOTTOM) switch (blockState.getValue(StairBlock.FACING))
+			if (blockState.getValue(StairsBlock.HALF) == Half.BOTTOM) switch (blockState.getValue(StairsBlock.FACING))
 			{
 			case SOUTH: return EnumPlacing.UP_NORTH;
 			case WEST: return EnumPlacing.UP_EAST;
@@ -188,7 +188,7 @@ public class StairStateHelper
 			case EAST: return EnumPlacing.UP_WEST;
 			default: return null;
 			}
-			else switch (blockState.getValue(StairBlock.FACING))
+			else switch (blockState.getValue(StairsBlock.FACING))
 			{
 			case SOUTH: return EnumPlacing.DOWN_NORTH;
 			case WEST: return EnumPlacing.DOWN_EAST;
@@ -274,7 +274,7 @@ public class StairStateHelper
 
 	public static Pair<EnumPlacing, EnumShape> getFullState(BlockState blockState)
 	{
-		if (blockState.getBlock() instanceof StairBlock) return getFullState(blockState.getValue(StairBlock.HALF), blockState.getValue(StairBlock.FACING), blockState.getValue(StairBlock.SHAPE));
+		if (blockState.getBlock() instanceof StairsBlock) return getFullState(blockState.getValue(StairsBlock.HALF), blockState.getValue(StairsBlock.FACING), blockState.getValue(StairsBlock.SHAPE));
 		else return getFullState(blockState.getValue(VerticalStairBlock.PLACING), blockState.getValue(VerticalStairBlock.SHAPE));
 	}
 
@@ -301,7 +301,7 @@ public class StairStateHelper
             this.bottom = top.getOpposite();
             this.front = front;
             this.back = front.getOpposite();
-    		Vec3i rightV = front.getNormal().cross(top.getNormal());
+    		Vector3i rightV = front.getNormal().cross(top.getNormal());
     		this.right = Direction.fromNormal(rightV.getX(),rightV.getY(), rightV.getZ());
     		this.left = right.getOpposite();
         }

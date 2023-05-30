@@ -1,25 +1,20 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.Collection;
-
 import com.firemerald.additionalplacements.block.interfaces.ICarpetBlock;
-import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CarpetBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CarpetBlock;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
+import net.minecraft.world.IWorldReader;
 
 public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock> implements ICarpetBlock<CarpetBlock>
 {
@@ -41,7 +36,7 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		builder.add(PLACING);
 		super.createBlockStateDefinition(builder);
@@ -49,7 +44,7 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 
 	@Override
 	@Deprecated
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	public VoxelShape getShape(BlockState state, IBlockReader level, BlockPos pos, ISelectionContext context)
 	{
 		return SHAPES[state.getValue(PLACING).ordinal() - 1];
 	}
@@ -73,22 +68,26 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 	}
 
 	@Override
-	public Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags)
+	public String getTagTypeName()
 	{
-		tags.remove(BlockTags.CARPETS);
-		tags.add(AdditionalPlacementsBlockTags.ADDITIONAL_CARPETS);
-		return tags;
+		return "carpet";
 	}
 
 	@Override
-	public BlockState updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos)
+	public String getTagTypeNamePlural()
+	{
+		return "carpets";
+	}
+
+	@Override
+	public BlockState updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, IWorld level, BlockPos thisPos, BlockPos otherPos)
 	{
 		return !thisState.canSurvive(level, thisPos) ? Blocks.AIR.defaultBlockState() : thisState;
 	}
 
 	@Override
 	@Deprecated
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
+	public boolean canSurvive(BlockState state, IWorldReader level, BlockPos pos)
 	{
 		return !level.isEmptyBlock(pos.relative(state.getValue(PLACING)));
 	}

@@ -2,12 +2,12 @@ package com.firemerald.additionalplacements.block;
 
 import java.util.List;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.block.PressurePlateBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock>
 {
@@ -17,9 +17,9 @@ public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlo
 	}
 
 	@Override
-	protected int getSignalStrength(Level level, BlockPos pos)
+	protected int getSignalStrength(World level, BlockPos pos)
 	{
-		AABB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos);
+		AxisAlignedBB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos);
 		List<? extends Entity> list;
 		switch (this.parentBlock.sensitivity)
 		{

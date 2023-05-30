@@ -11,8 +11,8 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.*;
+import net.minecraft.block.*;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.registries.IForgeRegistryInternal;
 import net.minecraftforge.registries.RegistryManager;
 
@@ -35,14 +35,14 @@ public class MixinBlockCallbacks
 					}
 				}
 			}
-			else if (block instanceof StairBlock)
+			else if (block instanceof StairsBlock)
 			{
 				if (AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
 				{
 					ResourceLocation name = block.getRegistryName();
 					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 					{
-						owner.register(new VerticalStairBlock((StairBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+						owner.register(new VerticalStairBlock((StairsBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 					}
 				}
 			}

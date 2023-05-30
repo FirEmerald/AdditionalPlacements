@@ -1,38 +1,33 @@
 package com.firemerald.additionalplacements.block;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
-import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.google.common.collect.Streams;
+import org.apache.commons.lang3.tuple.Triple;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.tags.TagKey;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.biome.Biome;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.world.level.material.FluidState;
-import net.minecraft.world.level.pathfinder.PathComputationType;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
+import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
+
+import net.minecraft.block.*;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootContext;
+import net.minecraft.pathfinding.PathType;
+import net.minecraft.state.Property;
+import net.minecraft.state.StateContainer;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.*;
+import net.minecraft.world.server.ServerWorld;
 
 public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock<T>
 {
@@ -43,7 +38,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public AdditionalPlacementBlock(T parentBlock)
 	{
 		super(theHack(parentBlock));
-		this.copyProps = copyPropsStatic.toArray(Property[]::new);
+		this.copyProps = copyPropsStatic.toArray(new Property[copyPropsStatic.size()]);
 		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
 	}
@@ -57,14 +52,14 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	{
 		Set<Property<?>> props = new HashSet<>(parentBlock.defaultBlockState().getProperties());
 		if (parentBlock instanceof SlabBlock) props.remove(SlabBlock.TYPE);
-		else if (parentBlock instanceof StairBlock)
+		else if (parentBlock instanceof StairsBlock)
 		{
-			props.remove(StairBlock.FACING);
-			props.remove(StairBlock.SHAPE);
-			props.remove(StairBlock.HALF);
+			props.remove(StairsBlock.FACING);
+			props.remove(StairsBlock.SHAPE);
+			props.remove(StairsBlock.HALF);
 		}
 		copyPropsStatic = props;
-		return BlockBehaviour.Properties.copy(parentBlock);
+		return Properties.copy(parentBlock);
 	}
 	
 	public boolean hasCustomColors()
@@ -85,7 +80,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
+	protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder)
 	{
 		super.createBlockStateDefinition(builder);
 		Set<Property<?>> invalid = new HashSet<>();
@@ -133,43 +128,51 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+	@Deprecated
+	public ItemStack getCloneItemStack(IBlockReader level, BlockPos pos, BlockState state)
 	{
-		return parentBlock.getCloneItemStack(state, target, level, pos, player);
+		return parentBlock.getCloneItemStack(level, pos, state);
 	}
 
 	@Override
-	public void animateTick(BlockState state, Level level, BlockPos pos, Random random)
+	public void animateTick(BlockState state, World level, BlockPos pos, Random random)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().animateTick(modelState, level, pos, random);
 	}
 
 	@Override
-	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float damage)
+	public void fallOn(World level, BlockPos pos, Entity entity, float damage)
 	{
-		BlockState modelState = getModelState(state);
-		modelState.getBlock().fallOn(level, modelState, pos, entity, damage);
+		try
+		{
+			getOtherBlock().fallOn(level, pos, entity, damage);
+		}
+		catch (Exception e)
+		{
+			AdditionalPlacementsMod.LOGGER.error("Block errored during \"fallOn\", cannot provide intended  behavior. defaulting.", e);
+			super.fallOn(level, pos, entity, damage);
+		}
 	}
 
 	@Override
-	public void updateEntityAfterFallOn(BlockGetter level, Entity entity)
+	public void updateEntityAfterFallOn(IBlockReader level, Entity entity)
 	{
 		getOtherBlock().updateEntityAfterFallOn(level, entity);
 	}
 
 	@Override
-	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity)
+	public void stepOn(World level, BlockPos pos, Entity entity)
 	{
-		BlockState modelState = getModelState(state);
-		modelState.getBlock().stepOn(level, pos, modelState, entity);
-	}
-
-	@Override
-	public void handlePrecipitation(BlockState state, Level level, BlockPos pos, Biome.Precipitation precipitation)
-	{
-		BlockState modelState = getModelState(state);
-		modelState.getBlock().handlePrecipitation(modelState, level, pos, precipitation);
+		try
+		{
+			getOtherBlock().stepOn(level, pos, entity);
+		}
+		catch (Exception e)
+		{
+			AdditionalPlacementsMod.LOGGER.error("Block errored during \"stepOn\", cannot provide intended  behavior. defaulting.", e);
+			super.stepOn(level, pos, entity);
+		}
 	}
 
 	@Override
@@ -179,13 +182,13 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void attack(BlockState state, Level level, BlockPos pos, Player player)
+	public void attack(BlockState state, World level, BlockPos pos, PlayerEntity player)
 	{
 		getModelState(state).attack(level, pos, player);
 	}
 
 	@Override
-	public void destroy(LevelAccessor level, BlockPos pos, BlockState state)
+	public void destroy(IWorld level, BlockPos pos, BlockState state)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().destroy(level, pos, modelState);
@@ -200,7 +203,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onPlace(BlockState state, World level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
 		if (!state.is(oldState.getBlock()))
 		{
@@ -211,7 +214,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, World level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
 		if (!state.is(newState.getBlock()))
 		{
@@ -227,7 +230,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	public void randomTick(BlockState state, ServerLevel level, BlockPos pos, Random rand)
+	public void randomTick(BlockState state, ServerWorld level, BlockPos pos, Random rand)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().randomTick(modelState, level, pos, rand);
@@ -236,7 +239,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	public void tick(BlockState state, ServerLevel level, BlockPos pos, Random rand)
+	public void tick(BlockState state, ServerWorld level, BlockPos pos, Random rand)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().tick(modelState, level, pos, rand);
@@ -244,15 +247,15 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult)
+	public ActionResultType use(BlockState state, World level, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hitResult)
 	{
 		BlockState modelState = getModelState(state);
-		InteractionResult res = getModelState(state).use(level, player, hand, hitResult);
+		ActionResultType res = getModelState(state).use(level, player, hand, hitResult);
 		applyChanges(state, modelState, level, pos);
 		return res;
 	}
 	
-	public void applyChanges(BlockState oldState, BlockState modelState, Level level, BlockPos pos)
+	public void applyChanges(BlockState oldState, BlockState modelState, World level, BlockPos pos)
 	{
 		BlockState newState = level.getBlockState(pos);
 		if (newState.getBlock() != this) //block has changed
@@ -280,25 +283,43 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void wasExploded(Level level, BlockPos pos, Explosion explosion)
+	public void wasExploded(World level, BlockPos pos, Explosion explosion)
 	{
 		getOtherBlock().wasExploded(level, pos, explosion);
 	}
 
 	@Override
-	public boolean isPathfindable(BlockState state, BlockGetter level, BlockPos pos, PathComputationType pathType)
+	public boolean isPathfindable(BlockState state, IBlockReader level, BlockPos pos, PathType pathType)
 	{
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
-	public void bindTags()
+	@Nullable
+	public Triple<Block, Collection<ResourceLocation>, Collection<ResourceLocation>> checkTagMismatch()
 	{
-		this.builtInRegistryHolder().bindTags(Streams.concat(modifyTags(parentBlock.builtInRegistryHolder().tags().collect(Collectors.toSet())).stream(), this.builtInRegistryHolder().tags()).collect(Collectors.toSet())); //add the model block's tags
+		Set<ResourceLocation> desiredTags = getDesiredTags();
+		Set<ResourceLocation> hasTags = getTags();
+		List<ResourceLocation> hasTagsList = new ArrayList<>(hasTags);
+		List<ResourceLocation> desiredTagsList = new ArrayList<>(desiredTags);
+		hasTagsList.removeAll(desiredTags);
+		desiredTagsList.removeAll(hasTags);
+		if (!hasTagsList.isEmpty() || !desiredTagsList.isEmpty()) return Triple.of(this, desiredTagsList, hasTagsList);
+		else return null;
 	}
+	
+	public Set<ResourceLocation> getDesiredTags()
+	{
+		return modifyTags(parentBlock.getTags());
+	}
+	
+	public abstract String getTagTypeName();
+	
+	public abstract String getTagTypeNamePlural();
 
-	public abstract Collection<TagKey<Block>> modifyTags(Collection<TagKey<Block>> tags);
-
+	public Set<ResourceLocation> modifyTags(Set<ResourceLocation> tags)
+	{
+		return AdditionalPlacementsBlockTags.remap(tags, getTagTypeName(), getTagTypeNamePlural());
+	}
 
 	@Override
 	public boolean hasAdditionalStates()
@@ -313,7 +334,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public BlockState getStateForPlacement(BlockPlaceContext context)
+	public BlockState getStateForPlacement(BlockItemUseContext context)
 	{
 		return getStateForPlacementImpl(context, this.defaultBlockState());
 	}
@@ -331,14 +352,14 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
+	public void appendHoverText(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		appendHoverTextImpl(stack, level, tooltip, flag);
 	}
 
 	@Override
 	@Deprecated
-	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
+	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos)
 	{
 		return updateShapeImpl(state, direction, otherState, level, pos, otherPos);
 	}
@@ -351,19 +372,19 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 	
 	@Override
-	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
+	public boolean propagatesSkylightDown(BlockState state, IBlockReader level, BlockPos pos)
 	{
 		return this.getModelState(state).propagatesSkylightDown(level, pos);
 	}
 	
 	@Override
-	public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
+	public float getShadeBrightness(BlockState state, IBlockReader level, BlockPos pos)
 	{
 		return this.getModelState(state).getShadeBrightness(level, pos);
 	}
 	
 	@Override
-	public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos1, BlockPos pos2)
+	public float[] getBeaconColorMultiplier(BlockState state, IWorldReader level, BlockPos pos1, BlockPos pos2)
 	{
 		return this.getModelState(state).getBeaconColorMultiplier(level, pos1, pos2);
 	}

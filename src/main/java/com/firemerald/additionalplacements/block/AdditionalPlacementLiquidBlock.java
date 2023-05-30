@@ -1,18 +1,17 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.IBucketPickupHandler;
+import net.minecraft.block.ILiquidContainer;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IWorld;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.FluidState;
-
-public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends AdditionalPlacementBlock<T> implements BucketPickup, LiquidBlockContainer
+public abstract class AdditionalPlacementLiquidBlock<T extends Block & IBucketPickupHandler & ILiquidContainer> extends AdditionalPlacementBlock<T> implements IBucketPickupHandler, ILiquidContainer
 {
 	public AdditionalPlacementLiquidBlock(T parentBlock)
 	{
@@ -20,13 +19,14 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState blockState)
+	public Fluid takeLiquid(IWorld level, BlockPos pos, BlockState blockState)
 	{
-		ItemStack ret = this.getOtherBlock().pickupBlock(level, pos, this.getModelState(blockState));
+		Fluid ret = this.getOtherBlock().takeLiquid(level, pos, this.getModelState(blockState));
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return ret;
 	}
 
+	/*
 	@Override
     public Optional<SoundEvent> getPickupSound(BlockState blockState)
     {
@@ -39,15 +39,16 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	{
 		return this.getOtherBlock().getPickupSound();
 	}
+	*/
 
 	@Override
-	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState blockState, Fluid fluid)
+	public boolean canPlaceLiquid(IBlockReader level, BlockPos pos, BlockState blockState, Fluid fluid)
 	{
 		return this.getOtherBlock().canPlaceLiquid(level, pos, getModelState(blockState), fluid);
 	}
 
 	@Override
-	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState)
+	public boolean placeLiquid(IWorld level, BlockPos pos, BlockState blockState, FluidState fluidState)
 	{
 		boolean flag = this.getOtherBlock().placeLiquid(level, pos, getModelState(blockState), fluidState);
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
@@ -56,10 +57,10 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 
 	@Override
 	@Deprecated
-	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
+	public BlockState updateShape(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos)
 	{
 		FluidState fluid = level.getFluidState(pos);
-		if (!fluid.isEmpty()) level.scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(level));
+		if (!fluid.isEmpty()) level.getLiquidTicks().scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(level));
 		return super.updateShape(state, direction, otherState, level, pos, otherPos);
 	}
 }

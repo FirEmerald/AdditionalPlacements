@@ -6,27 +6,27 @@ import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.state.properties.SlabType;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.vector.Matrix3f;
+import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -48,10 +48,10 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 		return placing == null ? blockState : forPlacing(mirror.mirror(placing), blockState);
 	}
 
-	public default boolean canBeReplacedImpl(BlockState state, BlockPlaceContext context)
+	public default boolean canBeReplacedImpl(BlockState state, BlockItemUseContext context)
 	{
 		ItemStack itemstack = context.getItemInHand();
-		if (itemstack.is(this.asItem()))
+		if (itemstack.getItem() == this.asItem())
 		{
 			if (context.replacingClickedOnBlock())
 			{
@@ -69,7 +69,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
+	public default BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState)
 	{
 		BlockPos blockPos = context.getClickedPos();
 		BlockState blockState = context.getLevel().getBlockState(blockPos);
@@ -95,7 +95,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 		else return blockState.getValue(VerticalSlabBlock.PLACING);
 	}
 
-	public default Direction getPlacingDirection(BlockPlaceContext context)
+	public default Direction getPlacingDirection(BlockItemUseContext context)
 	{
 		double hitX = context.getClickLocation().x - context.getClickedPos().getX() - .5;
 		double hitY = context.getClickLocation().y - context.getClickedPos().getY() - .5;
@@ -181,7 +181,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial)
+	public default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial)
 	{
 		Matrix4f poseMat = pose.last().pose();
 		Matrix3f normMat = pose.last().normal();
@@ -218,8 +218,8 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
     @Override
-	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
+	public default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
-		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.vertical_placement"));
+		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
 	}
 }

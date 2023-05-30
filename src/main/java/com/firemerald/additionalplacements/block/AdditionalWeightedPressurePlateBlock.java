@@ -1,11 +1,11 @@
 package com.firemerald.additionalplacements.block;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.WeightedPressurePlateBlock;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.block.WeightedPressurePlateBlock;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock>
 {
@@ -15,11 +15,11 @@ public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressure
 	}
 
 	@Override
-	protected int getSignalStrength(Level level, BlockPos pos)
+	protected int getSignalStrength(World level, BlockPos pos)
 	{
-		AABB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos);
+		AxisAlignedBB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos);
 		int i = Math.min(level.getEntitiesOfClass(Entity.class, aabb).size(), parentBlock.maxWeight);
-		if (i > 0) return Mth.ceil(15 * (float) Math.min(parentBlock.maxWeight, i) / (float)parentBlock.maxWeight);
+		if (i > 0) return MathHelper.ceil(15 * (float) Math.min(parentBlock.maxWeight, i) / (float)parentBlock.maxWeight);
 		else return 0;
 	}
 }

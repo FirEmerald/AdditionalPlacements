@@ -5,19 +5,19 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.AbstractPressurePlateBlock;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 
-@Mixin(BasePressurePlateBlock.class)
+@Mixin(AbstractPressurePlateBlock.class)
 public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateBlock
 {
 	@Shadow
-	protected abstract void playOnSound(LevelAccessor pLevel, BlockPos pPos);
+	protected abstract void playOnSound(IWorld pLevel, BlockPos pPos);
 
 	@Shadow
-	protected abstract void playOffSound(LevelAccessor pLevel, BlockPos pPos);
+	protected abstract void playOffSound(IWorld pLevel, BlockPos pPos);
 	
 	@Shadow
 	protected abstract BlockState setSignalForState(BlockState pState, int pStrength);
@@ -29,13 +29,13 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 	protected abstract int getPressedTime();
 
 	@Override
-	public void playOnSoundPublic(LevelAccessor pLevel, BlockPos pPos)
+	public void playOnSoundPublic(IWorld pLevel, BlockPos pPos)
 	{
 		playOnSound(pLevel, pPos);
 	}
 
 	@Override
-	public void playOffSoundPublic(LevelAccessor pLevel, BlockPos pPos)
+	public void playOffSoundPublic(IWorld pLevel, BlockPos pPos)
 	{
 		playOffSound(pLevel, pPos);
 	}

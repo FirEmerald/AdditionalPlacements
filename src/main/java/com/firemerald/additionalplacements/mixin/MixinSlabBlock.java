@@ -9,15 +9,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock.IVanillaSlabBlock;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.SlabBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.SlabBlock;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 
 @Mixin(SlabBlock.class)
 public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
@@ -83,7 +83,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 
 	//@Override
 	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
-	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
+	private void getStateForPlacement(BlockItemUseContext context, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates() && !disablePlacement()) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
@@ -124,14 +124,14 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 
 	//@Override
 	@Inject(method = "canBeReplaced", at = @At("HEAD"), cancellable = true)
-	private void canBeReplaced(BlockState state, BlockPlaceContext context, CallbackInfoReturnable<Boolean> ci)
+	private void canBeReplaced(BlockState state, BlockItemUseContext context, CallbackInfoReturnable<Boolean> ci)
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(canBeReplacedImpl(state, context));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
+	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos)
 	{
 		return super.updateShape(state, direction, otherState, level, pos, otherPos);
 	}

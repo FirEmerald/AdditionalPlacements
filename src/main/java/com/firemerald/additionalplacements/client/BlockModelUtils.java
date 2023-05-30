@@ -5,17 +5,16 @@ import java.util.List;
 import java.util.Random;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 
+import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.model.BakedQuad;
+import net.minecraft.client.renderer.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.EntityBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EmptyBlockReader;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 
@@ -29,19 +28,19 @@ public class BlockModelUtils
 		else return null;
 	}
 
-	public static final BakedModel getBakedModel(BlockState state)
+	public static final IBakedModel getBakedModel(BlockState state)
 	{
 		return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
 	}
 
 	public static final IModelData getModelData(BlockState blockState, IModelData defaultData)
 	{
-		return blockState.hasBlockEntity() ? ((EntityBlock) blockState.getBlock()).newBlockEntity(new BlockPos(0, 0, 0), blockState).getModelData() : defaultData;
+		return blockState.hasTileEntity() ? (blockState.getBlock()).createTileEntity(blockState, EmptyBlockReader.INSTANCE).getModelData() : defaultData; //TODO
 	}
 
 	public static final List<BakedQuad> getBakedQuads(BlockState referredState, Direction side, Random rand, IModelData modelData)
 	{
-		BakedModel referredBakedModel = getBakedModel(referredState);
+		IBakedModel referredBakedModel = getBakedModel(referredState);
 		IModelData referredModelData = getModelData(referredState, modelData);
 		List<BakedQuad> referredBakedQuads = new ArrayList<>();
 		for (BakedQuad referredBakedQuad : referredBakedModel.getQuads(referredState, side, rand, referredModelData))
@@ -75,8 +74,8 @@ public class BlockModelUtils
 	public static final short Z_OFFSET = 2;
 	public static final short U_OFFSET = 4;
 	public static final short V_OFFSET = 5;
-	public static final int VERTEX_COUNT = DefaultVertexFormat.BLOCK.getVertexSize();
-	public static final int VERTEX_SIZE = DefaultVertexFormat.BLOCK.getIntegerSize();
+	public static final int VERTEX_COUNT = DefaultVertexFormats.BLOCK.getVertexSize();
+	public static final int VERTEX_SIZE = DefaultVertexFormats.BLOCK.getIntegerSize();
 	public static final float[] ZERO_POINT = {0, 0, 0};
 
 	public static final float getFaceSize(int[] vertices)
@@ -124,10 +123,10 @@ public class BlockModelUtils
 	
 	public static float getArea(float[] ab, float[] ac)
 	{
-		return .5f * Mth.sqrt( 
-				Mth.square(ab[0] * ac[1] - ab[1] * ac[0]) + 
-				Mth.square(ab[1] * ac[2] - ab[2] * ac[1]) + 
-				Mth.square(ab[2] * ac[0] - ab[0] * ac[2])
+		return .5f * MathHelper.sqrt( 
+				MathHelper.square(ab[0] * ac[1] - ab[1] * ac[0]) + 
+				MathHelper.square(ab[1] * ac[2] - ab[2] * ac[1]) + 
+				MathHelper.square(ab[2] * ac[0] - ab[0] * ac[2])
 				);
 	}
 

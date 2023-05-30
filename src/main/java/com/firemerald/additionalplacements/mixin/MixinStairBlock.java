@@ -11,25 +11,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.firemerald.additionalplacements.block.VerticalStairBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStairBlock.IVanillaStairBlock;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.StairBlock;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.StairsBlock;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 
-@Mixin(StairBlock.class)
+@Mixin(StairsBlock.class)
 public abstract class MixinStairBlock implements IVanillaStairBlock
 {
 	public VerticalStairBlock stairs;
 	@Shadow(remap = false)
 	private Supplier<BlockState> stateSupplier;
 
-	public StairBlock asStair()
+	public StairsBlock asStair()
 	{
-		return (StairBlock) (Object) this;
+		return (StairsBlock) (Object) this;
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public abstract class MixinStairBlock implements IVanillaStairBlock
 
 	//@Override
 	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
-	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
+	private void getStateForPlacement(BlockItemUseContext context, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates() && !disablePlacement()) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
@@ -88,7 +88,7 @@ public abstract class MixinStairBlock implements IVanillaStairBlock
 	}
 
 	@Inject(method = "updateShape", at = @At("HEAD"), cancellable = true)
-	private void updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos, CallbackInfoReturnable<BlockState> ci)
+	private void updateShape(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(updateShapeImpl(state, direction, otherState, level, pos, otherPos));
 	}

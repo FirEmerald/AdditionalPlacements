@@ -6,22 +6,22 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.vertex.IVertexBuilder;
 
-import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Direction;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
+import net.minecraft.world.IBlockReader;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
@@ -43,7 +43,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
+	public default BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState)
 	{
 		return forPlacing(getPlacingDirection(context), currentState);
 	}
@@ -52,20 +52,20 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 
 	public abstract Direction getPlacing(BlockState blockState);
 
-	public default Direction getPlacingDirection(BlockPlaceContext context)
+	public default Direction getPlacingDirection(BlockItemUseContext context)
 	{
 		return context.getClickedFace().getOpposite();
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial) {}
+	public default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial) {}
 
     @Override
-	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
+	public default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
-		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.vertical_placement"));
-		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.ceiling_placement"));
+		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
+		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.ceiling_placement"));
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -77,49 +77,59 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 	@OnlyIn(Dist.CLIENT)
 	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)
 	{
-		return switch(getPlacing(state)) {
-		case UP -> side -> switch (side) {
-		case UP -> Direction.DOWN;
-		case DOWN -> Direction.UP;
-		case NORTH -> Direction.SOUTH;
-		case SOUTH -> Direction.NORTH;
-		default -> side;
+		switch (getPlacing(state)) {
+		case UP: return side -> {
+			switch (side) {
+			case UP: return Direction.DOWN;
+			case DOWN: return Direction.UP;
+			case NORTH: return Direction.SOUTH;
+			case SOUTH: return Direction.NORTH;
+			default: return side;
+			}
 		};
-		case NORTH -> side -> switch (side) {
-		case UP -> Direction.NORTH;
-		case DOWN -> Direction.SOUTH;
-		case NORTH -> Direction.DOWN;
-		case SOUTH -> Direction.UP;
-		default -> side;
+		case NORTH: return side -> {
+			switch (side) {
+			case UP: return Direction.NORTH;
+			case DOWN: return Direction.SOUTH;
+			case NORTH: return Direction.DOWN;
+			case SOUTH: return Direction.UP;
+			default: return side;
+			}
 		};
-		case SOUTH -> side -> switch (side) {
-		case UP -> Direction.NORTH;
-		case DOWN -> Direction.SOUTH;
-		case NORTH -> Direction.UP;
-		case SOUTH -> Direction.DOWN;
-		case EAST -> Direction.WEST;
-		case WEST -> Direction.EAST;
-		default -> side;
+		case SOUTH: return side -> { 
+			switch (side) {
+			case UP: return Direction.NORTH;
+			case DOWN: return Direction.SOUTH;
+			case NORTH: return Direction.UP;
+			case SOUTH: return Direction.DOWN;
+			case EAST: return Direction.WEST;
+			case WEST: return Direction.EAST;
+			default: return side;
+			}
 		};
-		case EAST -> side -> switch (side) {
-		case UP -> Direction.NORTH;
-		case DOWN -> Direction.SOUTH;
-		case NORTH -> Direction.WEST;
-		case SOUTH -> Direction.EAST;
-		case EAST -> Direction.DOWN;
-		case WEST -> Direction.UP;
-		default -> side;
+		case EAST: return side -> {
+			switch (side) {
+			case UP: return Direction.NORTH;
+			case DOWN: return Direction.SOUTH;
+			case NORTH: return Direction.WEST;
+			case SOUTH: return Direction.EAST;
+			case EAST: return Direction.DOWN;
+			case WEST: return Direction.UP;
+			default: return side;
+			}
 		};
-		case WEST -> side -> switch (side) {
-		case UP -> Direction.NORTH;
-		case DOWN -> Direction.SOUTH;
-		case NORTH -> Direction.EAST;
-		case SOUTH -> Direction.WEST;
-		case EAST -> Direction.UP;
-		case WEST -> Direction.DOWN;
-		default -> side;
+		case WEST: return side -> {
+			switch (side) {
+			case UP: return Direction.NORTH;
+			case DOWN: return Direction.SOUTH;
+			case NORTH: return Direction.EAST;
+			case SOUTH: return Direction.WEST;
+			case EAST: return Direction.UP;
+			case WEST: return Direction.DOWN;
+			default: return side;
+			}
 		};
-		default -> Function.identity();
-		};
+		default: return Function.identity();
+		}
 	}
 }

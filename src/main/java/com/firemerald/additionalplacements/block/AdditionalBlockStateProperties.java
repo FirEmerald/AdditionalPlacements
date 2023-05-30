@@ -1,7 +1,7 @@
 package com.firemerald.additionalplacements.block;
 
-import net.minecraft.core.Direction;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.util.Direction;
 
 public class AdditionalBlockStateProperties
 {

@@ -1,14 +1,14 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 
 public interface IBasePressurePlateBlock
 {
-	public abstract void playOnSoundPublic(LevelAccessor level, BlockPos pos);
+	public abstract void playOnSoundPublic(IWorld level, BlockPos pos);
 	
-	public abstract void playOffSoundPublic(LevelAccessor level, BlockPos pos);
+	public abstract void playOffSoundPublic(IWorld level, BlockPos pos);
 	
 	public abstract int getSignalForStatePublic(BlockState state);
 
