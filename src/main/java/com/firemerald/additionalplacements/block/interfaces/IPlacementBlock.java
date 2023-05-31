@@ -28,6 +28,7 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
@@ -71,9 +72,9 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider
 	@OnlyIn(Dist.CLIENT)
 	public default void renderHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, ActiveRenderInfo camera, float partial)
 	{
-		if (disablePlacement()) return;
-		pose.pushPose();
 		BlockPos hit = result.getBlockPos();
+		if (disablePlacement(hit, player.level, result.getDirection())) return;
+		pose.pushPose();
 		double hitX = hit.getX();
 		double hitY = hit.getY();
 		double hitZ = hit.getZ();
@@ -108,6 +109,11 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider
 
 	@OnlyIn(Dist.CLIENT)
 	public void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial);
+
+	public default boolean disablePlacement(BlockPos pos, World world, Direction direction)
+	{
+		return disablePlacement();
+	}
 
 	public abstract boolean disablePlacement();
 

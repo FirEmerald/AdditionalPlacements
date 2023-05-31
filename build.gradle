@@ -168,6 +168,9 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    
+	implementation fg.deobf("curse.maven:double-slabs-350179:3873479")
+	//implementation fg.deobf("curse.maven:kleeslabs-241895:3222119")
 }
 
 mixin {

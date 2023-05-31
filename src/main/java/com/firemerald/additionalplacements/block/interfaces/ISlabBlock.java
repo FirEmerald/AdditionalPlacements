@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
+import com.firemerald.additionalplacements.common.CommonModEventHandler;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -27,12 +28,33 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 {
-	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock> {}
+	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
+	{
+		@Override
+		public default boolean disablePlacement(BlockPos pos, World world, Direction direction)
+		{
+			if (ISlabBlock.super.disablePlacement(pos, world, direction)) return true;
+			else if (CommonModEventHandler.doubleslabsLoaded)
+			{
+				BlockState blockState = world.getBlockState(pos);
+				if (blockState.getBlock() instanceof SlabBlock)
+				{
+					if (
+							(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM && direction == Direction.UP) || 
+							(blockState.getValue(SlabBlock.TYPE) == SlabType.TOP && direction == Direction.DOWN)) return true;
+					else return false;
+				}
+				else return false;
+			}
+			else return false;
+		}
+	}
 
 	@Override
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)

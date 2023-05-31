@@ -12,7 +12,9 @@ import net.minecraft.block.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.GatherDataEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 
@@ -61,74 +63,6 @@ public class CommonModEventHandler
 		created.forEach(registry::register);
 		AdditionalPlacementsMod.dynamicRegistration = true;
 	}
-
-	/* this is not needed, copper did not exist till 1.17
-	@SubscribeEvent
-	public static void init(FMLCommonSetupEvent event)
-	{
-		try
-		{
-			Class<?> clazz = Class.forName("com.google.common.base.Suppliers$NonSerializableMemoizingSupplier");
-			Field delegate = clazz.getDeclaredField("delegate");
-			delegate.setAccessible(true);
-			Field initialized = clazz.getDeclaredField("initialized");
-			initialized.setAccessible(true);
-			Field value = clazz.getDeclaredField("value");
-			value.setAccessible(true);
-			Function<BiMap<Block, Block>, BiMap<Block, Block>> withAdditionalStates = oldMap -> {
-				BiMap<Block, Block> newMap = HashBiMap.create(oldMap);
-				oldMap.forEach((b1, b2) -> {
-					if (b1 instanceof IPlacementBlock && b2 instanceof IPlacementBlock)
-					{
-						IPlacementBlock<?> p1 = (IPlacementBlock<?>) b1;
-						IPlacementBlock<?> p2 = (IPlacementBlock<?>) b2;
-						if (p1.hasAdditionalStates() && p2.hasAdditionalStates()) newMap.put(p1.getOtherBlock(), p2.getOtherBlock());
-					}
-				});
-				return newMap;
-			};
-			try
-			{
-				modifyMap(WeatheringCopper.NEXT_BY_BLOCK, WeatheringCopper.PREVIOUS_BY_BLOCK, withAdditionalStates, delegate, initialized, value);
-			}
-			catch (IllegalArgumentException | IllegalAccessException e)
-			{
-				AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper maps, copper slabs and stairs will weather into vanilla states. Sorry.", e);
-			}
-			try
-			{
-				modifyMap(HoneycombItem.WAXABLES, HoneycombItem.WAX_OFF_BY_BLOCK, withAdditionalStates, delegate, initialized, value);
-			}
-			catch (IllegalArgumentException | IllegalAccessException e)
-			{
-				AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper maps, copper slabs and stairs will weather into vanilla states. Sorry.", e);
-			}
-		}
-		catch (ClassNotFoundException | NoSuchFieldException | SecurityException e)
-		{
-			AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper and HoneycombItem maps, copper slabs and stairs will weather into vanilla states and cannot be waxed. Sorry.", e);
-		}
-	}
-	
-	public static <T, U> void modifyMap(Supplier<BiMap<T, U>> forwardMemoized, Supplier<BiMap<U, T>> backwardMemoized, Function<BiMap<T, U>, BiMap<T, U>> modify, Field delegate, Field initialized, Field value) throws IllegalArgumentException, IllegalAccessException
-	{
-		@SuppressWarnings("unchecked")
-		com.google.common.base.Supplier<BiMap<T, U>> supplier = (com.google.common.base.Supplier<BiMap<T, U>>) delegate.get(forwardMemoized);
-		if (supplier == null)
-		{
-			@SuppressWarnings("unchecked")
-			BiMap<T, U> map = (BiMap<T, U>) value.get(forwardMemoized);
-			supplier = () -> map;
-		}
-		final com.google.common.base.Supplier<BiMap<T, U>> oldSupplier = supplier;
-		delegate.set(forwardMemoized, (com.google.common.base.Supplier<BiMap<T, U>>) () -> modify.apply(oldSupplier.get()));
-		initialized.setBoolean(forwardMemoized, false);
-		value.set(forwardMemoized, null);
-		delegate.set(backwardMemoized, (com.google.common.base.Supplier<BiMap<U, T>>) () -> forwardMemoized.get().inverse());
-		initialized.setBoolean(backwardMemoized, false);
-		value.set(backwardMemoized, null);
-	}
-	*/
 	
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event)
@@ -137,5 +71,13 @@ public class CommonModEventHandler
 		{
 			event.getGenerator().addProvider(new ModelGenerator(event.getGenerator(), AdditionalPlacementsMod.MOD_ID, event.getExistingFileHelper()));
 		}
+	}
+	
+	public static boolean doubleslabsLoaded;
+	
+	@SubscribeEvent
+	public static void onFMLCommonSetup(FMLCommonSetupEvent event)
+	{
+		doubleslabsLoaded = ModList.get().isLoaded("doubleslabs");
 	}
 }
