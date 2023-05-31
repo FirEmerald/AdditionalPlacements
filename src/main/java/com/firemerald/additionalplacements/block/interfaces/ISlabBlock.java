@@ -6,11 +6,13 @@ import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
+import com.firemerald.additionalplacements.common.CommonModEventHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 
+import cjminecraft.doubleslabs.common.config.DSConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -20,6 +22,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -32,7 +35,28 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 {
-	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock> {}
+	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
+	{
+		@Override
+		public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
+		{
+			if (ISlabBlock.super.disablePlacement(pos, level, direction)) return true;
+			else if (CommonModEventHandler.doubleslabsLoaded)
+			{
+				if (!DSConfig.SERVER.disableVerticalSlabPlacement.get()) return true;
+				BlockState blockState = level.getBlockState(pos);
+				if (blockState.getBlock() instanceof SlabBlock)
+				{
+					if (
+							(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM && direction == Direction.UP) || 
+							(blockState.getValue(SlabBlock.TYPE) == SlabType.TOP && direction == Direction.DOWN)) return true;
+					else return false;
+				}
+				else return false;
+			}
+			else return false;
+		}
+	}
 
 	@Override
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)

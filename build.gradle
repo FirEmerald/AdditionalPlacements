@@ -182,6 +182,7 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 	implementation fg.deobf("curse.maven:mekanism-268560:3875976")
 	implementation fg.deobf("curse.maven:mekanism-additions-345425:3875980")
+	implementation fg.deobf("curse.maven:double-slabs-350179:3867079")
 }
 
 mixin {
