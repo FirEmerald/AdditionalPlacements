@@ -18,6 +18,7 @@ import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.level.block.*;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -146,5 +147,13 @@ public class CommonModEventHandler
 		{
 			event.getGenerator().addProvider(true, new ModelGenerator(event.getGenerator(), AdditionalPlacementsMod.MOD_ID, event.getExistingFileHelper()));
 		}
+	}
+	
+	public static boolean doubleslabsLoaded;
+	
+	@SubscribeEvent
+	public static void onFMLCommonSetup(FMLCommonSetupEvent event)
+	{
+		doubleslabsLoaded = ModList.get().isLoaded("doubleslabs");
 	}
 }

@@ -80,7 +80,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
-		if (this.hasAdditionalStates() && !disablePlacement()) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
+		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
 	//@Override
@@ -88,7 +88,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 	@Intrinsic
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
-		if (this.hasAdditionalStates() && !disablePlacement()) return getStateForPlacementImpl(context, super.getStateForPlacement(context));
+		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) return getStateForPlacementImpl(context, super.getStateForPlacement(context));
 		else return super.getStateForPlacement(context);
 	}
 

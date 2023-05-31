@@ -22,6 +22,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
@@ -72,9 +73,9 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	@OnlyIn(Dist.CLIENT)
 	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
-		if (disablePlacement()) return;
-		pose.pushPose();
 		BlockPos hit = result.getBlockPos();
+		if (disablePlacement(hit, player.level, result.getDirection())) return;
+		pose.pushPose();
 		double hitX = hit.getX();
 		double hitY = hit.getY();
 		double hitZ = hit.getZ();
@@ -111,6 +112,11 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
 
 	public abstract boolean disablePlacement();
+
+	public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
+	{
+		return disablePlacement();
+	}
 
 	@OnlyIn(Dist.CLIENT)
 	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, RandomSource rand, ModelData extraData)
