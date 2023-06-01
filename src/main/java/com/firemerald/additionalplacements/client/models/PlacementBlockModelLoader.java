@@ -21,7 +21,7 @@ public class PlacementBlockModelLoader implements IGeometryLoader<PlacementBlock
 	public static final Map<ModelKey, Pair<TextureAtlasSprite, Integer>> TEXTURE_CACHE = new HashMap<>();
 
 	@Override
-	public void onResourceManagerReload(ResourceManager manager) //TODO
+	public void onResourceManagerReload(ResourceManager manager)
 	{
 		TEXTURE_CACHE.clear();
 	}

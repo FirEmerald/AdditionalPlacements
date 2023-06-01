@@ -30,7 +30,7 @@ public class AdditionalPlacementsMod
 	public static final String OLD_ID = "dvsas";
     public static final Logger LOGGER = LoggerFactory.getLogger("Additional Placements");
 
-    static final ForgeConfigSpec commonSpec, serverSpec;
+    public static final ForgeConfigSpec commonSpec, serverSpec;
     public static final ConfigCommon COMMON_CONFIG;
     public static final ConfigServer SERVER_CONFIG;
     static {
