@@ -9,6 +9,7 @@ import java.util.*;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
+import com.firemerald.additionalplacements.common.TagMismatchChecker;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -64,7 +65,7 @@ public class CommandExportTags
 	
 	public static void register(CommandDispatcher<CommandSourceStack> dispatch)
 	{
-		dispatch.register(Commands.literal("ad_tags_export").requires(source -> source.hasPermission(2)).executes(context -> {
+		dispatch.register(Commands.literal("ap_tags_export").requires(TagMismatchChecker::canGenerateTags).executes(context -> {
 			CommandSourceStack source = context.getSource();
 			MinecraftServer server = source.getServer();
 			Path packPath = server.getWorldPath(LevelResource.DATAPACK_DIR).resolve(PACK_FOLDER_NAME);

@@ -82,7 +82,7 @@ public class CommonEventHandler
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event)
 	{
-		if (misMatchedTags && event.getPlayer().hasPermissions(2)) event.getPlayer().sendMessage(TagMismatchChecker.MESSAGE, Util.NIL_UUID);
+		if (misMatchedTags && TagMismatchChecker.canGenerateTags(event.getPlayer())) event.getPlayer().sendMessage(TagMismatchChecker.MESSAGE, Util.NIL_UUID);
 	}
 
 	@SubscribeEvent
