@@ -35,7 +35,7 @@ public class BlockModelUtils
 
 	public static final IModelData getModelData(BlockState blockState, IModelData defaultData)
 	{
-		return blockState.hasTileEntity() ? (blockState.getBlock()).createTileEntity(blockState, EmptyBlockReader.INSTANCE).getModelData() : defaultData; //TODO
+		return blockState.hasTileEntity() ? (blockState.getBlock()).createTileEntity(blockState, EmptyBlockReader.INSTANCE).getModelData() : defaultData;
 	}
 
 	public static final List<BakedQuad> getBakedQuads(BlockState referredState, Direction side, Random rand, IModelData modelData)

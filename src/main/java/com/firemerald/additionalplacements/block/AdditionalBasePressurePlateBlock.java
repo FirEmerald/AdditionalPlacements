@@ -216,6 +216,6 @@ public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressur
 	@Deprecated
 	public PushReaction getPistonPushReaction(BlockState state)
 	{
-		return parentBlock.getPistonPushReaction(state); //TODO
+		return parentBlock.getPistonPushReaction(state);
 	}
 }
