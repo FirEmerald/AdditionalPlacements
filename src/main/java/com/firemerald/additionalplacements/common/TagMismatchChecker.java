@@ -15,9 +15,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.rcon.RconConsoleSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.loading.FMLLoader;
@@ -118,15 +122,18 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 		}
 	}
 	
-	@SuppressWarnings("resource")
 	public static boolean canGenerateTags(Player player, IntPredicate hasPermission)
 	{
-		if (FMLLoader.getDist().isClient()) //client world, only world host
-		{
-			Player clientPlayer = Minecraft.getInstance().player;
-			return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
-		}
+		if (FMLLoader.getDist().isClient()) return canGenerateTagsClient(player);
 		else return hasPermission.test(2);
+	}
+
+	@SuppressWarnings("resource")
+	@OnlyIn(Dist.CLIENT)
+	public static boolean canGenerateTagsClient(Player player)
+	{
+		Player clientPlayer = Minecraft.getInstance().player;
+		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
 	}
 	
 	public static boolean canGenerateTags(Player player)
@@ -136,6 +143,6 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 	
 	public static boolean canGenerateTags(CommandSourceStack source)
 	{
-		return source.getEntity() instanceof Player && canGenerateTags((Player) source.getEntity(), source::hasPermission);
+		return source.source instanceof RconConsoleSource || source.source instanceof MinecraftServer || (source.getEntity() instanceof Player && canGenerateTags((Player) source.getEntity(), source::hasPermission));
 	}
 }
