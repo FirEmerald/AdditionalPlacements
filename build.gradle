@@ -171,6 +171,8 @@ dependencies {
     
 	implementation fg.deobf("curse.maven:double-slabs-350179:3873479")
 	//implementation fg.deobf("curse.maven:kleeslabs-241895:3222119")
+	implementation fg.deobf("curse.maven:create-328085:3536025")
+	implementation fg.deobf("curse.maven:flywheel-486392:3535459")
 }
 
 mixin {

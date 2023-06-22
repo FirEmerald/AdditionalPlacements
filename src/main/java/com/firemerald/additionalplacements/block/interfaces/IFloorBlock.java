@@ -16,8 +16,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
@@ -29,17 +27,10 @@ import net.minecraftforge.client.model.data.IModelData;
 public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 {
 	@Override
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(rotation.rotate(placing), blockState);
-	}
-
-	@Override
-	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
-	{
-		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(mirror.mirror(placing), blockState);
+		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
 	}
 
 	@Override

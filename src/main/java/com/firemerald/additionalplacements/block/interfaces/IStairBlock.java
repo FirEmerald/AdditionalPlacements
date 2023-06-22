@@ -1,6 +1,7 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
 import java.util.List;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -23,8 +24,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Direction;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
 import net.minecraft.util.math.vector.Matrix3f;
@@ -66,31 +65,13 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Pair<EnumPlacing, EnumShape> state = StairStateHelper.getFullState(blockState);
 		EnumPlacing placing = state.getLeft();
-		Direction newFront = rotation.rotate(placing.front);
-		Direction newTop = rotation.rotate(placing.top);
-		for (EnumPlacing newPlacing : EnumPlacing.values())
-		{
-			if (newPlacing.front == newFront && newPlacing.top == newTop) return getBlockState(newPlacing, state.getRight(), blockState);
-			else if (newPlacing.front == newTop && newPlacing.top == newFront)
-			{
-				return getBlockState(newPlacing, getOpposite(state.getRight()), blockState);
-			}
-		}
-		return blockState;
-	}
-
-	@Override
-	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
-	{
-		Pair<EnumPlacing, EnumShape> state = StairStateHelper.getFullState(blockState);
-		EnumPlacing placing = state.getLeft();
-		Direction newFront = mirror.mirror(placing.front);
-		Direction newTop = mirror.mirror(placing.top);
-		boolean mirrorShape = newFront != placing.front ^ newTop != placing.top ^ mirror.mirror(placing.left) != placing.left;
+		Direction newFront = transform.apply(placing.front);
+		Direction newTop = transform.apply(placing.top);
+		boolean mirrorShape = newFront != placing.front ^ newTop != placing.top ^ transform.apply(placing.left) != placing.left;
 		EnumPlacing newPlacing = placing;
 		for (EnumPlacing newerPlacing : EnumPlacing.values())
 		{

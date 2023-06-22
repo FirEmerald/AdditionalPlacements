@@ -37,9 +37,17 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider
 {
 	public T getOtherBlock();
 	
-	public BlockState rotateImpl(BlockState blockState, Rotation rotation);
+	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	{
+		return transform(blockState, rotation::rotate);
+	}
 
-	public BlockState mirrorImpl(BlockState blockState, Mirror mirror);
+	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
+	{
+		return transform(blockState, mirror::mirror);
+	}
+	
+	public BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
 
 	public BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState);
 
