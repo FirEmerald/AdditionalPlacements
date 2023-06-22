@@ -4,6 +4,7 @@
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "mixins.additionalplacements.refmap.json",
 	"mixins": [
+		"MixinStructureTransform",
 		"MixinBasePressurePlateBlock",
 		"MixinBlockCallbacks",
 		"MixinCarpetBlock",

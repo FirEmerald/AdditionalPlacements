@@ -19,8 +19,6 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
@@ -30,17 +28,10 @@ import net.minecraftforge.client.model.data.ModelData;
 public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 {
 	@Override
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(rotation.rotate(placing), blockState);
-	}
-
-	@Override
-	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
-	{
-		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(mirror.mirror(placing), blockState);
+		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
 	}
 
 	@Override

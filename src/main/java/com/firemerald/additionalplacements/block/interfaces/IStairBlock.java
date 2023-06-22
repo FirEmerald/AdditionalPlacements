@@ -1,6 +1,7 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
 import java.util.List;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -29,8 +30,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -51,41 +50,13 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Pair<EnumPlacing, EnumShape> state = StairStateHelper.getFullState(blockState);
 		EnumPlacing placing = state.getLeft();
-		Direction newFront = rotation.rotate(placing.front);
-		Direction newTop = rotation.rotate(placing.top);
-		for (EnumPlacing newPlacing : EnumPlacing.values())
-		{
-			if (newPlacing.front == newFront && newPlacing.top == newTop) return getBlockState(newPlacing, state.getRight(), blockState);
-			else if (newPlacing.front == newTop && newPlacing.top == newFront)  return getBlockState(newPlacing,
-					switch (state.getRight())
-					{
-					case INSIDE_LEFT -> EnumShape.INSIDE_RIGHT;
-					case INSIDE_RIGHT -> EnumShape.INSIDE_LEFT;
-					case OUTSIDE_LEFT -> EnumShape.OUTSIDE_RIGHT;
-					case OUTSIDE_RIGHT -> EnumShape.OUTSIDE_LEFT;
-					case OUTSIDE_HORIZONTAL_LEFT -> EnumShape.OUTSIDE_HORIZONTAL_RIGHT;
-					case OUTSIDE_HORIZONTAL_RIGHT -> EnumShape.OUTSIDE_HORIZONTAL_LEFT;
-					case OUTSIDE_VERTICAL_LEFT -> EnumShape.OUTSIDE_VERTICAL_RIGHT;
-					case OUTSIDE_VERTICAL_RIGHT -> EnumShape.OUTSIDE_VERTICAL_LEFT;
-					default -> state.getRight();
-					}
-			, blockState);
-		}
-		return blockState;
-	}
-
-	@Override
-	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
-	{
-		Pair<EnumPlacing, EnumShape> state = StairStateHelper.getFullState(blockState);
-		EnumPlacing placing = state.getLeft();
-		Direction newFront = mirror.mirror(placing.front);
-		Direction newTop = mirror.mirror(placing.top);
-		boolean mirrorShape = newFront != placing.front ^ newTop != placing.top ^ mirror.mirror(placing.left) != placing.left;
+		Direction newFront = transform.apply(placing.front);
+		Direction newTop = transform.apply(placing.top);
+		boolean mirrorShape = newFront != placing.front ^ newTop != placing.top ^ transform.apply(placing.left) != placing.left;
 		EnumPlacing newPlacing = placing;
 		for (EnumPlacing newerPlacing : EnumPlacing.values())
 		{

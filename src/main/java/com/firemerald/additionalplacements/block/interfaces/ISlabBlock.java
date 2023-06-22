@@ -1,6 +1,7 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
 import java.util.List;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -25,8 +26,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
@@ -60,17 +59,10 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(rotation.rotate(placing), blockState);
-	}
-
-	@Override
-	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
-	{
-		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(mirror.mirror(placing), blockState);
+		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
 	}
 
 	public default boolean canBeReplacedImpl(BlockState state, BlockPlaceContext context)

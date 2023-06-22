@@ -164,7 +164,7 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.19.2-43.1.25'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.2.3'
 	
 	// Apply Mixin AP
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
@@ -184,6 +184,7 @@ dependencies {
 	implementation fg.deobf("curse.maven:mekanism-268560:4020942")
 	implementation fg.deobf("curse.maven:mekanism-additions-345425:4020946")
 	implementation fg.deobf("curse.maven:double-slabs-350179:3873442")
+	implementation fg.deobf("curse.maven:create-328085:4550987")
 }
 
 eclipse.classpath.file {
