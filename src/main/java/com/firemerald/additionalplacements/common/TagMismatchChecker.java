@@ -8,6 +8,8 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -93,8 +95,10 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 			if (!blockMissingExtra.isEmpty())
 			{
 				CommonEventHandler.misMatchedTags = true;
-				ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayers().forEach(player -> {
-					if (canGenerateTags(player)) player.sendMessage(MESSAGE, Util.NIL_UUID);
+				boolean autoRebuild = AdditionalPlacementsMod.COMMON_CONFIG.autoRebuildTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.autoRebuildTags.get();
+				MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+				if (!autoRebuild) server.getPlayerList().getPlayers().forEach(player -> {
+					if (autoRebuild || canGenerateTags(player)) player.sendMessage(MESSAGE, Util.NIL_UUID);
 				});
 				AdditionalPlacementsMod.LOGGER.warn("Found missing and/or extra tags on generated blocks. Use \"/ap_tags_export\" to generate the tags, then \"/reload\" to re-load them (or re-load the world if that fails).");
 				if (AdditionalPlacementsMod.COMMON_CONFIG.logTagMismatch.get())
@@ -118,6 +122,21 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 					AdditionalPlacementsMod.LOGGER.warn("====== END LIST ======");
 				}
 				else AdditionalPlacementsMod.LOGGER.info("Not logging tag mismatches as it is disabled in the common config");
+				if (autoRebuild)
+				{
+					AdditionalPlacementsMod.LOGGER.info("Rebuilding block tags and reloading datapacks as automatic tag rebuilding is enabled");
+					CommandDispatcher<CommandSource> dispatch = server.getCommands().getDispatcher();
+					CommandSource source = server.createCommandSourceStack();
+					try
+					{
+						dispatch.execute("ap_tags_export", source);
+						dispatch.execute("reload", source);
+					}
+					catch (CommandSyntaxException e)
+					{
+						AdditionalPlacementsMod.LOGGER.error("Unexpected error whilst automatically rebuilding tags", e);
+					}
+				}
 			}
 		}
 	}

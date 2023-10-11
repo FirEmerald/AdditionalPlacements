@@ -22,8 +22,7 @@ public class ConfigCommon
 	public final BooleanValue disableAutomaticPressurePlatePlacement;
 	public final BooleanValue disableAutomaticWeightedPressurePlatePlacement;
 	public final BooleanValue showTooltip;
-	public final BooleanValue checkTags;
-	public final BooleanValue logTagMismatch;
+	public final BooleanValue checkTags, autoRebuildTags, logTagMismatch;
 	public final IntValue checkerPriority;
 	public final ConfigValue<List<String>> blockBlacklist;
 	public final ConfigValue<List<String>> modBlacklist;
@@ -69,6 +68,9 @@ public class ConfigCommon
         checkTags = builder
         		.comment("Check for and notify of mismatching tags. Only works when the same option in the server/world config is true.")
         		.define("check_tags", true);
+        autoRebuildTags = builder
+        		.comment("Automatically rebuild and reload the generated tags datapack when a tagging mismatch is detected. Only works when the same option in the server/world config is true.")
+        		.define("auto_rebuild_tags", true);
         logTagMismatch = builder
         		.comment("Log missing or additional tags on generated blocks.")
         		.define("log_tag_mismatch", false);
