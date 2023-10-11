@@ -99,8 +99,37 @@ public class VoxelShapes
 	STAIRS_FLAT_NORTH_EAST_UP = Shapes.or(SLAB_SOUTH, CORNER_WEST_DOWN_NORTH),
 	STAIRS_FLAT_NORTH_WEST_UP = Shapes.or(SLAB_SOUTH, CORNER_EAST_DOWN_NORTH),
 	STAIRS_FLAT_NORTH_EAST_DOWN = Shapes.or(SLAB_SOUTH, CORNER_WEST_UP_NORTH),
-	STAIRS_FLAT_NORTH_WEST_DOWN = Shapes.or(SLAB_SOUTH, CORNER_EAST_UP_NORTH);
+	STAIRS_FLAT_NORTH_WEST_DOWN = Shapes.or(SLAB_SOUTH, CORNER_EAST_UP_NORTH),
 	//52
+	STAIRS_TWIST_CLOCKWISE_UP_SOUTH = Shapes.or(PILLAR_WEST_DOWN, PILLAR_EAST_NORTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_UP_SOUTH = Shapes.or(PILLAR_EAST_DOWN, PILLAR_WEST_NORTH),
+	STAIRS_TWIST_CLOCKWISE_UP_NORTH = Shapes.or(PILLAR_EAST_DOWN, PILLAR_WEST_SOUTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_UP_NORTH = Shapes.or(PILLAR_WEST_DOWN, PILLAR_EAST_SOUTH),
+	STAIRS_TWIST_CLOCKWISE_DOWN_SOUTH = Shapes.or(PILLAR_WEST_UP, PILLAR_EAST_NORTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_SOUTH = Shapes.or(PILLAR_EAST_UP, PILLAR_WEST_NORTH),
+	STAIRS_TWIST_CLOCKWISE_DOWN_NORTH = Shapes.or(PILLAR_EAST_UP, PILLAR_WEST_SOUTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_NORTH = Shapes.or(PILLAR_WEST_UP, PILLAR_EAST_SOUTH),
+	//60
+	STAIRS_TWIST_CLOCKWISE_UP_EAST = Shapes.or(PILLAR_DOWN_SOUTH, PILLAR_WEST_NORTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_UP_EAST = Shapes.or(PILLAR_DOWN_NORTH, PILLAR_WEST_SOUTH),
+	STAIRS_TWIST_CLOCKWISE_UP_WEST = Shapes.or(PILLAR_DOWN_NORTH, PILLAR_EAST_SOUTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_UP_WEST = Shapes.or(PILLAR_DOWN_SOUTH, PILLAR_EAST_NORTH),
+	STAIRS_TWIST_CLOCKWISE_DOWN_EAST = Shapes.or(PILLAR_UP_SOUTH, PILLAR_WEST_NORTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_EAST = Shapes.or(PILLAR_UP_NORTH, PILLAR_WEST_SOUTH),
+	STAIRS_TWIST_CLOCKWISE_DOWN_WEST = Shapes.or(PILLAR_UP_NORTH, PILLAR_EAST_SOUTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_WEST = Shapes.or(PILLAR_UP_SOUTH, PILLAR_EAST_NORTH),
+	//68
+	STAIRS_TWIST_CLOCKWISE_EAST_SOUTH = Shapes.or(PILLAR_WEST_DOWN, PILLAR_UP_NORTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_EAST_SOUTH = Shapes.or(PILLAR_WEST_UP, PILLAR_DOWN_NORTH),
+	STAIRS_TWIST_CLOCKWISE_EAST_NORTH = Shapes.or(PILLAR_WEST_UP, PILLAR_DOWN_SOUTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_EAST_NORTH = Shapes.or(PILLAR_WEST_DOWN, PILLAR_UP_SOUTH),
+	STAIRS_TWIST_CLOCKWISE_WEST_SOUTH = Shapes.or(PILLAR_EAST_UP, PILLAR_DOWN_NORTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_WEST_SOUTH = Shapes.or(PILLAR_EAST_DOWN, PILLAR_UP_NORTH),
+	STAIRS_TWIST_CLOCKWISE_WEST_NORTH = Shapes.or(PILLAR_EAST_DOWN, PILLAR_UP_SOUTH),
+	STAIRS_TWIST_COUNTER_CLOCKWISE_WEST_NORTH = Shapes.or(PILLAR_EAST_UP, PILLAR_DOWN_SOUTH);
+	//76
+			
+			
 	private static final VoxelShape[] SLABS_BY_SIDE = new VoxelShape[] {
 			SLAB_DOWN,
 			SLAB_UP,
@@ -116,6 +145,7 @@ public class VoxelShapes
 	private static final VoxelShape[][][] INNER_STAIRS_BY_FACING = new VoxelShape[6][4][2];
 	private static final VoxelShape[][][] OUTER_STAIRS_BY_FACING = new VoxelShape[6][4][2];
 	private static final VoxelShape[][][] OUTER_FLAT_STAIRS_BY_TOP_AND_FACING = new VoxelShape[6][4][2];
+	private static final VoxelShape[][][] OUTER_TWIST_STAIRS_BY_FACING = new VoxelShape[6][4][2];
 
 	static
 	{
@@ -191,6 +221,19 @@ public class VoxelShapes
 		setOuterFlatStairs(Direction.NORTH, Direction.WEST, Direction.UP, STAIRS_FLAT_NORTH_WEST_UP);
 		setOuterFlatStairs(Direction.NORTH, Direction.EAST, Direction.DOWN, STAIRS_FLAT_NORTH_EAST_DOWN);
 		setOuterFlatStairs(Direction.NORTH, Direction.WEST, Direction.DOWN, STAIRS_FLAT_NORTH_WEST_DOWN);
+
+		setOuterTwistStairs(Direction.UP, Direction.SOUTH, STAIRS_TWIST_CLOCKWISE_UP_SOUTH, STAIRS_TWIST_COUNTER_CLOCKWISE_UP_SOUTH);
+		setOuterTwistStairs(Direction.UP, Direction.NORTH, STAIRS_TWIST_CLOCKWISE_UP_NORTH, STAIRS_TWIST_COUNTER_CLOCKWISE_UP_NORTH);
+		setOuterTwistStairs(Direction.DOWN, Direction.SOUTH, STAIRS_TWIST_CLOCKWISE_DOWN_SOUTH, STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_SOUTH);
+		setOuterTwistStairs(Direction.DOWN, Direction.NORTH, STAIRS_TWIST_CLOCKWISE_DOWN_NORTH, STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_NORTH);
+		setOuterTwistStairs(Direction.UP, Direction.EAST, STAIRS_TWIST_CLOCKWISE_UP_EAST, STAIRS_TWIST_COUNTER_CLOCKWISE_UP_EAST);
+		setOuterTwistStairs(Direction.UP, Direction.WEST, STAIRS_TWIST_CLOCKWISE_UP_WEST, STAIRS_TWIST_COUNTER_CLOCKWISE_UP_WEST);
+		setOuterTwistStairs(Direction.DOWN, Direction.EAST, STAIRS_TWIST_CLOCKWISE_DOWN_EAST, STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_EAST);
+		setOuterTwistStairs(Direction.DOWN, Direction.WEST, STAIRS_TWIST_CLOCKWISE_DOWN_WEST, STAIRS_TWIST_COUNTER_CLOCKWISE_DOWN_WEST);
+		setOuterTwistStairs(Direction.EAST, Direction.SOUTH, STAIRS_TWIST_CLOCKWISE_EAST_SOUTH, STAIRS_TWIST_COUNTER_CLOCKWISE_EAST_SOUTH);
+		setOuterTwistStairs(Direction.EAST, Direction.NORTH, STAIRS_TWIST_CLOCKWISE_EAST_NORTH, STAIRS_TWIST_COUNTER_CLOCKWISE_EAST_NORTH);
+		setOuterTwistStairs(Direction.WEST, Direction.SOUTH, STAIRS_TWIST_CLOCKWISE_WEST_SOUTH, STAIRS_TWIST_COUNTER_CLOCKWISE_WEST_SOUTH);
+		setOuterTwistStairs(Direction.WEST, Direction.NORTH, STAIRS_TWIST_CLOCKWISE_WEST_NORTH, STAIRS_TWIST_COUNTER_CLOCKWISE_WEST_NORTH);
 	}
 
 	private static int getIndex(Direction dir)
@@ -232,6 +275,17 @@ public class VoxelShapes
 	private static VoxelShape get(VoxelShape[][] array, Direction side1, Direction side2)
 	{
 		return array[getIndex(side1)][getIndex(side2, side1)];
+	}
+
+	private static void set(VoxelShape[][][] array, Direction side1, Direction side2, int index3, VoxelShape shape)
+	{
+		array[getIndex(side1)][getIndex(side2, side1)][index3] =
+		array[getIndex(side2)][getIndex(side1, side2)][index3] = shape;
+	}
+
+	private static VoxelShape get(VoxelShape[][][] array, Direction side1, Direction side2, int index3)
+	{
+		return array[getIndex(side1)][getIndex(side2, side1)][index3];
 	}
 
 	private static void set(VoxelShape[][] array, Direction ignore, Direction side1, Direction side2, VoxelShape shape)
@@ -323,5 +377,16 @@ public class VoxelShapes
 	public static VoxelShape getOuterFlatStairs(Direction top, Direction face1, Direction face2)
 	{
 		return get(OUTER_FLAT_STAIRS_BY_TOP_AND_FACING[getIndex(top)], top, face1, face2);
+	}
+
+	private static void setOuterTwistStairs(Direction top, Direction front, VoxelShape clockwise, VoxelShape counterClockwise)
+	{
+		set(OUTER_TWIST_STAIRS_BY_FACING, top, front, 0, clockwise);
+		set(OUTER_TWIST_STAIRS_BY_FACING, top, front, 1, counterClockwise);
+	}
+
+	public static VoxelShape getOuterTwistStairs(Direction top, Direction front, boolean clockwise)
+	{
+		return get(OUTER_TWIST_STAIRS_BY_FACING, top, front, clockwise ? 0 : 1);
 	}
 }

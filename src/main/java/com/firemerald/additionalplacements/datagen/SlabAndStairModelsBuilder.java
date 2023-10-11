@@ -39,13 +39,19 @@ public class SlabAndStairModelsBuilder
 			"/inner_down",
 			"/outer_down",
 			"/outer_down_cw",
-			"/outer_down_ccw"
+			"/outer_down_ccw",
+			"/outer_twist_cw",
+			"/outer_twist_ccw",
+			"/outer_twist_up_cw",
+			"/outer_twist_up_ccw",
+			"/outer_twist_down_cw",
+			"/outer_twist_down_ccw",
 	};
 	public static final String STAIRS_BASE = "block/stairs/base";
 	public static final String STAIRS_COLUMN = "block/stairs/column";
 	public static final String STAIRS_SIDE_ALL = "block/stairs/side_all";
 	public static final String STAIRS_DYNAMIC = "block/stairs/dynamic";
-	public static final StateModelDefinition[][] STAIR_MODEL_DEFINITIONS = new StateModelDefinition[4][17];
+	public static final StateModelDefinition[][] STAIR_MODEL_DEFINITIONS = new StateModelDefinition[4][23];
 
 	static
 	{
@@ -75,6 +81,12 @@ public class SlabAndStairModelsBuilder
 		models[VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_FROM_CW.ordinal()] = new StateModelDefinition("/vertical/outer_down_cw", rotation);
 		models[VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_CCW.ordinal()] =
 		models[VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_FROM_CCW.ordinal()] = new StateModelDefinition("/vertical/outer_down_ccw", rotation);
+		models[VerticalStairBlock.EnumShape.OUTER_TWIST_CW.ordinal()] = new StateModelDefinition("/vertical/outer_twist_cw", rotation);
+		models[VerticalStairBlock.EnumShape.OUTER_TWIST_CCW.ordinal()] = new StateModelDefinition("/vertical/outer_twist_ccw", rotation);
+		models[VerticalStairBlock.EnumShape.OUTER_TWIST_UP_CW.ordinal()] = new StateModelDefinition("/vertical/outer_twist_up_cw", rotation);
+		models[VerticalStairBlock.EnumShape.OUTER_TWIST_UP_CCW.ordinal()] = new StateModelDefinition("/vertical/outer_twist_up_ccw", rotation);
+		models[VerticalStairBlock.EnumShape.OUTER_TWIST_DOWN_CW.ordinal()] = new StateModelDefinition("/vertical/outer_twist_down_cw", rotation);
+		models[VerticalStairBlock.EnumShape.OUTER_TWIST_DOWN_CCW.ordinal()] = new StateModelDefinition("/vertical/outer_twist_down_ccw", rotation);
 	}
 
 	private final BlockStateProvider stateProvider;
