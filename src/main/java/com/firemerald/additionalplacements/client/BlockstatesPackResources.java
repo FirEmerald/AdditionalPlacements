@@ -3,9 +3,7 @@ package com.firemerald.additionalplacements.client;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
@@ -43,20 +41,39 @@ public class BlockstatesPackResources implements PackResources
 		{
 			String blockName = resource.getPath().substring(12, resource.getPath().length() - 5);
 			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, blockName));
-			if (block instanceof VerticalSlabBlock) return Minecraft.getInstance().getResourceManager().getResource(SLAB_BLOCKSTATES).get().open();
-			else if (block instanceof VerticalStairBlock) return Minecraft.getInstance().getResourceManager().getResource(STAIR_BLOCKSTATES).get().open();
-			else if (block instanceof AdditionalCarpetBlock) return Minecraft.getInstance().getResourceManager().getResource(CARPET_BLOCKSTATES).get().open();
-			else if (block instanceof AdditionalPressurePlateBlock) return Minecraft.getInstance().getResourceManager().getResource(PRESSURE_PLATE_BLOCKSTATES).get().open();
-			else if (block instanceof AdditionalWeightedPressurePlateBlock) return Minecraft.getInstance().getResourceManager().getResource(WEIGHTED_PRESSURE_PLATE_BLOCKSTATES).get().open();
+			ResourceLocation blockStateJson = getBlockstateJson(block);
+			if (blockStateJson != null) return Minecraft.getInstance().getResourceManager().getResource(blockStateJson).get().open();
 			else throw new FileNotFoundException("Cannot provide " + resource + ": invalid block additionalplacements:" + blockName);
 		}
 		else throw new FileNotFoundException("Cannot provide " + resource + ": invalid file " + resource.getPath());
 	}
 
 	@Override
-	public Collection<ResourceLocation> getResources(PackType packType, String p_215340_, String p_215341_, Predicate<ResourceLocation> filter)
+	public Collection<ResourceLocation> getResources(PackType packType, String domain, String path, Predicate<ResourceLocation> filter)
 	{
-		return Collections.emptyList();
+		if (packType == PackType.CLIENT_RESOURCES && AdditionalPlacementsMod.MOD_ID.equals(domain) && path.length() >= 11 && (path.length() == 11 ? path.equals("blockstates") : path.startsWith("blockstates/")))
+		{
+			List<ResourceLocation> found = new LinkedList<>();
+			ForgeRegistries.BLOCKS.getEntries().forEach(entry -> {
+				ResourceLocation id = entry.getKey().location();
+				if (id.getNamespace().equals(AdditionalPlacementsMod.MOD_ID))
+				{
+					ResourceLocation blockStateJson = getBlockstateJson(entry.getValue());
+					if (blockStateJson != null)
+					{
+						String startingFolder = path + "/";
+						String file = "blockstates/" + id.getPath() + ".json";
+						if (file.startsWith(startingFolder))
+						{
+							ResourceLocation loc = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, file);
+							if (filter.test(loc)) found.add(loc);
+						}
+					}
+				}
+			});
+			return found;
+		}
+		else return Collections.emptyList();
 	}
 
 	@Override
@@ -69,14 +86,19 @@ public class BlockstatesPackResources implements PackResources
 		{
 			String blockName = resource.getPath().substring(12, resource.getPath().length() - 5);
 			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, blockName));
-			if (block instanceof VerticalSlabBlock) return true;
-			else if (block instanceof VerticalStairBlock) return true;
-			else if (block instanceof AdditionalCarpetBlock) return true;
-			else if (block instanceof AdditionalPressurePlateBlock) return true;
-			else if (block instanceof AdditionalWeightedPressurePlateBlock) return true;
-			else return false;
+			return getBlockstateJson(block) != null;
 		}
 		else return false;
+	}
+	
+	public static ResourceLocation getBlockstateJson(Block block)
+	{
+		if (block instanceof VerticalSlabBlock) return SLAB_BLOCKSTATES;
+		else if (block instanceof VerticalStairBlock) return STAIR_BLOCKSTATES;
+		else if (block instanceof AdditionalCarpetBlock) return CARPET_BLOCKSTATES;
+		else if (block instanceof AdditionalPressurePlateBlock) return PRESSURE_PLATE_BLOCKSTATES;
+		else if (block instanceof AdditionalWeightedPressurePlateBlock) return WEIGHTED_PRESSURE_PLATE_BLOCKSTATES;
+		else return null;
 	}
 
 	@Override
