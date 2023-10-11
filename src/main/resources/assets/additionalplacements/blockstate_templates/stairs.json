@@ -322,6 +322,125 @@
       "model": "additionalplacements:block/stairs/dynamic/outer_down_ccw",
       "y": 270,
       "uvlock": true
-    }
+    },
+	
+	"placing=north_east,shape=outer_twist_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_cw",
+      "uvlock": true
+	},
+	"placing=north_east,shape=outer_twist_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_ccw",
+      "uvlock": true
+	},
+	"placing=east_south,shape=outer_twist_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_cw",
+      "y": 90,
+      "uvlock": true
+	},
+	"placing=east_south,shape=outer_twist_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_ccw",
+      "y": 90,
+      "uvlock": true
+	},
+	"placing=south_west,shape=outer_twist_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_cw",
+      "y": 180,
+      "uvlock": true
+	},
+	"placing=south_west,shape=outer_twist_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_ccw",
+      "y": 180,
+      "uvlock": true
+	},
+	"placing=west_north,shape=outer_twist_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_cw",
+      "y": 270,
+      "uvlock": true
+	},
+	"placing=west_north,shape=outer_twist_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_ccw",
+      "y": 270,
+      "uvlock": true
+	},
+	
+	"placing=north_east,shape=outer_twist_up_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_cw",
+      "uvlock": true
+	},
+	"placing=north_east,shape=outer_twist_up_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_ccw",
+      "uvlock": true
+	},
+	"placing=north_east,shape=outer_twist_down_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_cw",
+      "uvlock": true
+	},
+	"placing=north_east,shape=outer_twist_down_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_ccw",
+      "uvlock": true
+	},
+	
+	"placing=east_south,shape=outer_twist_up_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_cw",
+      "y": 90,
+      "uvlock": true
+	},
+	"placing=east_south,shape=outer_twist_up_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_ccw",
+      "y": 90,
+      "uvlock": true
+	},
+	"placing=east_south,shape=outer_twist_down_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_cw",
+      "y": 90,
+      "uvlock": true
+	},
+	"placing=east_south,shape=outer_twist_down_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_ccw",
+      "y": 90,
+      "uvlock": true
+	},
+	
+	"placing=south_west,shape=outer_twist_up_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_cw",
+      "y": 180,
+      "uvlock": true
+	},
+	"placing=south_west,shape=outer_twist_up_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_ccw",
+      "y": 180,
+      "uvlock": true
+	},
+	"placing=south_west,shape=outer_twist_down_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_cw",
+      "y": 180,
+      "uvlock": true
+	},
+	"placing=south_west,shape=outer_twist_down_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_ccw",
+      "y": 180,
+      "uvlock": true
+	},
+	
+	"placing=west_north,shape=outer_twist_up_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_cw",
+      "y": 270,
+      "uvlock": true
+	},
+	"placing=west_north,shape=outer_twist_up_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_up_ccw",
+      "y": 270,
+      "uvlock": true
+	},
+	"placing=west_north,shape=outer_twist_down_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_cw",
+      "y": 270,
+      "uvlock": true
+	},
+	"placing=west_north,shape=outer_twist_down_counter_clockwise": {
+      "model": "additionalplacements:block/stairs/dynamic/outer_twist_down_ccw",
+      "y": 270,
+      "uvlock": true
+	}
   }
 }

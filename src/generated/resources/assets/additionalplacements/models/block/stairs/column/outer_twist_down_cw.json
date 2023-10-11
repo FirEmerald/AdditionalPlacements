@@ -1,0 +1,7 @@
+{
+  "parent": "additionalplacements:block/stairs/base/outer_twist_down_cw",
+  "textures": {
+    "bottom": "#end",
+    "top": "#end"
+  }
+}
