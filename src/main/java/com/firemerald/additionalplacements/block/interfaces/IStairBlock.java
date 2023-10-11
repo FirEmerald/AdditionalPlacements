@@ -120,6 +120,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 					if (belowPlace != null)
 					{
 						if ((belowPlace.right == placing.top && belowPlace.front == placing.front) || (belowPlace.left == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_LEFT;
+						if ((belowPlace.left == placing.top && belowPlace.front == placing.front) || (belowPlace.right == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_TWIST_RIGHT; 
 					}
 					return EnumShape.OUTSIDE_HORIZONTAL_LEFT;
 				}
@@ -130,6 +131,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 					if (belowPlace != null)
 					{
 						if ((belowPlace.left == placing.top && belowPlace.front == placing.front) || (belowPlace.right == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_RIGHT;
+						if ((belowPlace.right == placing.top && belowPlace.front == placing.front) || (belowPlace.left == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_TWIST_LEFT;
 					}
 					return EnumShape.OUTSIDE_HORIZONTAL_RIGHT;
 				}
@@ -143,6 +145,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 					if (belowPlace != null)
 					{
 						if ((belowPlace.right == placing.top && belowPlace.front == placing.front) || (belowPlace.left == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_LEFT;
+						if ((belowPlace.left == placing.top && belowPlace.front == placing.front) || (belowPlace.right == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_TWIST_RIGHT;
 					}
 					return EnumShape.OUTSIDE_HORIZONTAL_LEFT;
 				}
@@ -153,6 +156,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 					if (belowPlace != null)
 					{
 						if ((belowPlace.left == placing.top && belowPlace.front == placing.front) || (belowPlace.right == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_RIGHT;
+						if ((belowPlace.right == placing.top && belowPlace.front == placing.front) || (belowPlace.left == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_TWIST_LEFT;
 					}
 					return EnumShape.OUTSIDE_HORIZONTAL_RIGHT;
 				}

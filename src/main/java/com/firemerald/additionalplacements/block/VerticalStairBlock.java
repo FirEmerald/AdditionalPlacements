@@ -19,7 +19,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlo
 {
 	public static final EnumProperty<EnumPlacing> PLACING = EnumProperty.create("placing", EnumPlacing.class);
 	public static final EnumProperty<EnumShape> SHAPE = EnumProperty.create("shape", EnumShape.class);
-	public static final VoxelShape[][] SHAPE_CACHE = new VoxelShape[4][17];
+	public static final VoxelShape[][] SHAPE_CACHE = new VoxelShape[4][23];
 
 	static
 	{
@@ -35,6 +35,12 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlo
 			shapes[EnumShape.OUTER_DOWN_FROM_CW.ordinal()] = shapes[EnumShape.OUTER_DOWN_FROM_CCW.ordinal()] = shapes[EnumShape.OUTER_DOWN.ordinal()] = VoxelShapes.getOuterStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.DOWN);
 			shapes[EnumShape.OUTER_FLAT_DOWN_CW.ordinal()] = shapes[EnumShape.OUTER_FLAT_DOWN_FROM_CW.ordinal()] = VoxelShapes.getOuterFlatStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.DOWN);
 			shapes[EnumShape.OUTER_FLAT_DOWN_CCW.ordinal()] = shapes[EnumShape.OUTER_FLAT_DOWN_FROM_CCW.ordinal()] = VoxelShapes.getOuterFlatStairs(placing.counterClockWiseFront, placing.clockWiseFront, Direction.DOWN);
+			shapes[EnumShape.OUTER_TWIST_CW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, placing.counterClockWiseFront, true);
+			shapes[EnumShape.OUTER_TWIST_CCW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, placing.counterClockWiseFront, false);
+			shapes[EnumShape.OUTER_TWIST_UP_CW.ordinal()]  = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, Direction.UP, true);
+			shapes[EnumShape.OUTER_TWIST_UP_CCW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.counterClockWiseFront, Direction.UP, false);
+			shapes[EnumShape.OUTER_TWIST_DOWN_CW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, Direction.DOWN, true);
+			shapes[EnumShape.OUTER_TWIST_DOWN_CCW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.counterClockWiseFront, Direction.DOWN, false);
 		}
 	}
 
@@ -119,6 +125,9 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlo
     public static enum EnumShape implements IStringSerializable
     {
         STRAIGHT("straight", false, false, false, false),
+        
+        OUTER_TWIST_CW("outer_twist_clockwise", false, false, false, false),
+        OUTER_TWIST_CCW("outer_twist_counter_clockwise", false, false, false, false),
 
 
         INNER_UP("inner_up", true, false, false, false),
@@ -133,6 +142,9 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlo
         OUTER_FLAT_UP_CCW("outer_flat_up_counter_clockwise", true, false, false, false),
         OUTER_FLAT_UP_FROM_CCW("outer_flat_up_from_counter_clockwise", true, false, false, true),
 
+        OUTER_TWIST_UP_CW("outer_twist_up_clockwise", true, false, true, false),
+        OUTER_TWIST_UP_CCW("outer_twist_up_counter_clockwise", true, false, false, true),
+
 
         INNER_DOWN("inner_down", false, true, false, false),
 
@@ -144,7 +156,10 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlo
         OUTER_FLAT_DOWN_FROM_CW("outer_flat_down_from_clockwise", false, true, true, false),
 
         OUTER_FLAT_DOWN_CCW("outer_flat_down_counter_clockwise", false, true, false, false),
-        OUTER_FLAT_DOWN_FROM_CCW("outer_flat_down_from_counter_clockwise", false, true, false, true);
+        OUTER_FLAT_DOWN_FROM_CCW("outer_flat_down_from_counter_clockwise", false, true, false, true),
+
+        OUTER_TWIST_DOWN_CW("outer_twist_down_clockwise", false, true, true, false),
+        OUTER_TWIST_DOWN_CCW("outer_twist_down_counter_clockwise", false, true, false, true);
 
         private final String name;
         public final boolean isUp, isDown, isClockwise, isCounterClockwise;

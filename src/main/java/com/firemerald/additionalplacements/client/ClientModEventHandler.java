@@ -46,7 +46,8 @@ public class ClientModEventHandler
 	@SubscribeEvent
 	public static void onConstructModEvent(FMLConstructModEvent event)
 	{
-    	Minecraft.getInstance().getResourcePackRepository().addPackFinder((addPack, buildPack) -> addPack.accept(GENERATED_RESOURCES_PACK));
+		Minecraft mc = Minecraft.getInstance();
+		if (mc != null) mc.getResourcePackRepository().addPackFinder((addPack, buildPack) -> addPack.accept(GENERATED_RESOURCES_PACK));
 	}
 
     @SuppressWarnings("deprecation")

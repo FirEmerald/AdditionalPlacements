@@ -80,11 +80,11 @@ public class StairStateHelper
 		}
 	}
 
-	private static final PartialState[][] FULL_TO_PARTIAL = new PartialState[12][9];
+	private static final PartialState[][] FULL_TO_PARTIAL = new PartialState[12][11];
 	@SuppressWarnings("unchecked")
 	private static final Pair<EnumPlacing, EnumShape>[][][] HORIZONTAL_TO_FULL = new Pair[2][4][5];
 	@SuppressWarnings("unchecked")
-	private static final Pair<EnumPlacing, EnumShape>[][] VERTICAL_TO_FULL = new Pair[4][17];
+	private static final Pair<EnumPlacing, EnumShape>[][] VERTICAL_TO_FULL = new Pair[4][23];
 
 	static
 	{
@@ -123,6 +123,8 @@ public class StairStateHelper
 	{
 		EnumPlacing placing = EnumPlacing.forFacing(direction.counterClockWiseFront, direction.clockWiseFront);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.STRAIGHT, placing, EnumShape.STRAIGHT);
+		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_TWIST_CCW, placing, EnumShape.OUTSIDE_TWIST_LEFT);
+		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_TWIST_CW, placing, EnumShape.OUTSIDE_TWIST_RIGHT);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.INNER_UP, placing, EnumShape.INSIDE_RIGHT);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_UP, placing, EnumShape.OUTSIDE_RIGHT);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_UP_CCW, placing, EnumShape.OUTSIDE_HORIZONTAL_RIGHT);
@@ -134,15 +136,19 @@ public class StairStateHelper
 		placing = EnumPlacing.forFacing(Direction.UP, direction.counterClockWiseFront);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_UP_FROM_CCW, placing, EnumShape.OUTSIDE_RIGHT);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_UP_FROM_CCW, placing, EnumShape.OUTSIDE_VERTICAL_RIGHT);
+		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_TWIST_UP_CCW, placing, EnumShape.OUTSIDE_TWIST_RIGHT);
 		placing = EnumPlacing.forFacing(Direction.UP, direction.clockWiseFront);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_UP_FROM_CW, placing, EnumShape.OUTSIDE_LEFT);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_UP_FROM_CW, placing, EnumShape.OUTSIDE_VERTICAL_LEFT);
+		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_TWIST_UP_CW, placing, EnumShape.OUTSIDE_TWIST_LEFT);
 		placing = EnumPlacing.forFacing(Direction.DOWN, direction.counterClockWiseFront);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_DOWN_FROM_CCW, placing, EnumShape.OUTSIDE_LEFT);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_FROM_CCW, placing, EnumShape.OUTSIDE_VERTICAL_LEFT);
+		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_TWIST_DOWN_CCW, placing, EnumShape.OUTSIDE_TWIST_LEFT);
 		placing = EnumPlacing.forFacing(Direction.DOWN, direction.clockWiseFront);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_DOWN_FROM_CW, placing, EnumShape.OUTSIDE_RIGHT);
 		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_FLAT_DOWN_FROM_CW, placing, EnumShape.OUTSIDE_VERTICAL_RIGHT);
+		setVerticalStateMap(direction, VerticalStairBlock.EnumShape.OUTER_TWIST_DOWN_CW, placing, EnumShape.OUTSIDE_TWIST_RIGHT);
 	}
 
 	private static void setPartialStateMap(EnumPlacing placing, EnumShape shape, PartialState state)
@@ -320,9 +326,11 @@ public class StairStateHelper
         OUTSIDE_RIGHT, //no flat
         OUTSIDE_HORIZONTAL_RIGHT, //flat on XZ plane or flat on right plane
         OUTSIDE_VERTICAL_RIGHT, //other flat
+        OUTSIDE_TWIST_RIGHT, //no flat
         INSIDE_LEFT, //flat on all planes
         OUTSIDE_LEFT, //no flat
         OUTSIDE_HORIZONTAL_LEFT, //flat on XZ plane or flat on right plane
-        OUTSIDE_VERTICAL_LEFT; //other flat
+        OUTSIDE_VERTICAL_LEFT, //other flat
+        OUTSIDE_TWIST_LEFT; //no flat
     }
 }
