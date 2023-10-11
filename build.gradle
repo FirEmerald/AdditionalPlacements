@@ -184,7 +184,7 @@ dependencies {
 	implementation fg.deobf("curse.maven:mekanism-268560:4020942")
 	implementation fg.deobf("curse.maven:mekanism-additions-345425:4020946")
 	implementation fg.deobf("curse.maven:double-slabs-350179:3873442")
-	implementation fg.deobf("curse.maven:create-328085:4550987")
+	implementation fg.deobf("curse.maven:create-328085:4762215")
 }
 
 eclipse.classpath.file {
