@@ -183,7 +183,7 @@ dependencies {
 	implementation fg.deobf("curse.maven:mekanism-268560:3875976")
 	implementation fg.deobf("curse.maven:mekanism-additions-345425:3875980")
 	implementation fg.deobf("curse.maven:double-slabs-350179:3867079")
-	implementation fg.deobf("curse.maven:create-328085:4550986")
+	implementation fg.deobf("curse.maven:create-328085:4762214")
 }
 
 mixin {
