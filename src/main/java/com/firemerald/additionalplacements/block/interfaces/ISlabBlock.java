@@ -5,20 +5,18 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 import com.firemerald.additionalplacements.common.CommonModEventHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
 
-import cjminecraft.doubleslabs.common.config.DSConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -43,7 +41,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 			if (ISlabBlock.super.disablePlacement(pos, level, direction)) return true;
 			else if (CommonModEventHandler.doubleslabsLoaded)
 			{
-				if (!DSConfig.COMMON.disableVerticalSlabPlacement.get()) return true;
+				//if (!DSConfig.COMMON.disableVerticalSlabPlacement.get()) return true;
 				BlockState blockState = level.getBlockState(pos);
 				if (blockState.getBlock() instanceof SlabBlock)
 				{
@@ -237,6 +235,6 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(MutableComponent.create(new TranslatableContents("tooltip.additionalplacements.vertical_placement")));
+		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 	}
 }

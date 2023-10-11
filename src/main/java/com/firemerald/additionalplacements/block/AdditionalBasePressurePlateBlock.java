@@ -22,7 +22,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -130,9 +129,9 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	protected abstract int getSignalStrength(Level level, BlockPos pos);
 	
 	@Override
-	public boolean isPossibleToRespawnInThis()
+	public boolean isPossibleToRespawnInThis(BlockState state)
 	{
-		return parentBlock.isPossibleToRespawnInThis();
+		return parentBlock.isPossibleToRespawnInThis(this.getDefaultVanillaState(state));
 	}
 
 	@Override
@@ -210,12 +209,5 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	public boolean isSignalSource(BlockState state)
 	{
 		return parentBlock.isSignalSource(state);
-	}
-
-	@Override
-	@Deprecated
-	public PushReaction getPistonPushReaction(BlockState state)
-	{
-		return parentBlock.getPistonPushReaction(state);
 	}
 }

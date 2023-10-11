@@ -13,6 +13,8 @@ import com.firemerald.additionalplacements.datagen.ModelGenerator;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import net.minecraft.data.DataProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.level.block.*;
@@ -145,7 +147,7 @@ public class CommonModEventHandler
 	{
 		if (event.includeClient())
 		{
-			event.getGenerator().addProvider(true, new ModelGenerator(event.getGenerator(), AdditionalPlacementsMod.MOD_ID, event.getExistingFileHelper()));
+			event.getGenerator().addProvider(true, (DataProvider.Factory<ModelGenerator>) (PackOutput pack) -> new ModelGenerator(pack, AdditionalPlacementsMod.MOD_ID, event.getExistingFileHelper()));
 		}
 	}
 	

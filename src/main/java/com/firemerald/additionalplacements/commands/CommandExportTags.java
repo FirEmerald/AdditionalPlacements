@@ -119,7 +119,7 @@ public class CommandExportTags
 					}
 				});
 				AdditionalPlacementsMod.LOGGER.info("Finished exporting tags");
-				source.sendSuccess(Component.translatable("msg.additionalplacements.generate.success"), true);
+				source.sendSuccess(() -> Component.translatable("msg.additionalplacements.generate.success"), true);
 			}
 			catch (IOException e)
 			{

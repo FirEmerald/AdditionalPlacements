@@ -31,3 +31,6 @@ gradlew
 gradlew.bat
 changelog.txt
 build.bat
+.factorypath
+/.apt_generated/
+/.apt_generated_tests/

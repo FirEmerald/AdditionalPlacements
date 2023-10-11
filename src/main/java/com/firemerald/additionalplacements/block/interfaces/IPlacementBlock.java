@@ -5,11 +5,11 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
+import org.joml.Quaternionf;
+
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
 
 import net.minecraft.client.Camera;
 import net.minecraft.core.BlockPos;
@@ -69,20 +69,23 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 
 	public boolean isThis(BlockState blockState);
 
-	public static Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {
-		Quaternion.fromXYZDegrees(new Vector3f(90, 0, 0)), //DOWN
-		Quaternion.fromXYZDegrees(new Vector3f(-90, 0, 0)), //UP
-		Quaternion.fromXYZDegrees(new Vector3f(0, 180, 0)), //NORTH
-		Quaternion.ONE, //SOUTH
-		Quaternion.fromXYZDegrees(new Vector3f(0, -90, 0)), //WEST
-		Quaternion.fromXYZDegrees(new Vector3f(0, 90, 0)), //EAST
+	public static final float SQRT_2_INV = 0.70710678118654752440084436210485f;
+	
+	public static Quaternionf[] DIRECTION_TRANSFORMS = new Quaternionf[] {
+			
+		new Quaternionf(SQRT_2_INV, 0, 0, SQRT_2_INV), //DOWN
+		new Quaternionf(-SQRT_2_INV, 0, 0, SQRT_2_INV), //UP
+		new Quaternionf(0, 1, 0, 0), //NORTH
+		new Quaternionf(0, 0, 0, 1), //SOUTH
+		new Quaternionf(0, -SQRT_2_INV, 0, SQRT_2_INV), //WEST
+		new Quaternionf(0, SQRT_2_INV, 0, SQRT_2_INV), //EAST
 	};
 
 	@OnlyIn(Dist.CLIENT)
 	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
-		if (disablePlacement(hit, player.level, result.getDirection())) return;
+		if (disablePlacement(hit, player.level(), result.getDirection())) return;
 		pose.pushPose();
 		double hitX = hit.getX();
 		double hitY = hit.getY();

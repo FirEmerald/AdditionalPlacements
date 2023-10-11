@@ -6,18 +6,17 @@ import org.spongepowered.asm.mixin.Shadow;
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 
 @Mixin(BasePressurePlateBlock.class)
 public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateBlock
 {
 	@Shadow
-	protected abstract void playOnSound(LevelAccessor pLevel, BlockPos pPos);
-
-	@Shadow
-	protected abstract void playOffSound(LevelAccessor pLevel, BlockPos pPos);
+	private BlockSetType type;
 	
 	@Shadow
 	protected abstract BlockState setSignalForState(BlockState pState, int pStrength);
@@ -31,13 +30,13 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 	@Override
 	public void playOnSoundPublic(LevelAccessor pLevel, BlockPos pPos)
 	{
-		playOnSound(pLevel, pPos);
+		pLevel.playSound(null, pPos, type.pressurePlateClickOn(), SoundSource.BLOCKS);
 	}
 
 	@Override
 	public void playOffSoundPublic(LevelAccessor pLevel, BlockPos pPos)
 	{
-		playOffSound(pLevel, pPos);
+		pLevel.playSound(null, pPos, type.pressurePlateClickOff(), SoundSource.BLOCKS);
 	}
 	
 	@Override

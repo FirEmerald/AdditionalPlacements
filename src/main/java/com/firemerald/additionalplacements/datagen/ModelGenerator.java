@@ -2,16 +2,16 @@ package com.firemerald.additionalplacements.datagen;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 
-import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModelGenerator extends BlockStateProvider
 {
-	public ModelGenerator(DataGenerator gen, String modid, ExistingFileHelper exFileHelper)
+	public ModelGenerator(PackOutput output, String modid, ExistingFileHelper exFileHelper)
 	{
-		super(gen, modid, exFileHelper);
+		super(output, modid, exFileHelper);
 	}
 
 	@Override

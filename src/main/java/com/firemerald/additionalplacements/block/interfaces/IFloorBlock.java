@@ -11,8 +11,6 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -56,8 +54,8 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(MutableComponent.create(new TranslatableContents("tooltip.additionalplacements.vertical_placement")));
-		tooltip.add(MutableComponent.create(new TranslatableContents("tooltip.additionalplacements.ceiling_placement")));
+		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
+		tooltip.add(Component.translatable("tooltip.additionalplacements.ceiling_placement"));
 	}
 
 	@OnlyIn(Dist.CLIENT)

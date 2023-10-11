@@ -308,7 +308,7 @@ public class StairStateHelper
             this.front = front;
             this.back = front.getOpposite();
     		Vec3i rightV = front.getNormal().cross(top.getNormal());
-    		this.right = Direction.fromNormal(rightV.getX(),rightV.getY(), rightV.getZ());
+    		this.right = Direction.getNearest(rightV.getX(),rightV.getY(), rightV.getZ());
     		this.left = right.getOpposite();
         }
 

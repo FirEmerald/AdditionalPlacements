@@ -1,10 +1,8 @@
 package com.firemerald.additionalplacements.client;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
-import java.util.function.Predicate;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
@@ -14,6 +12,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -26,69 +25,48 @@ public class BlockstatesPackResources implements PackResources
 	static final ResourceLocation WEIGHTED_PRESSURE_PLATE_BLOCKSTATES = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "blockstate_templates/weighted_pressure_plate.json");
 
 	@Override
-	public InputStream getRootResource(String p_10294_) throws IOException
+	public IoSupplier<InputStream> getRootResource(String... p_10294_)
 	{
 		return null;
 	}
 
 	@Override
-	public InputStream getResource(PackType packType, ResourceLocation resource) throws IOException
+	public IoSupplier<InputStream> getResource(PackType packType, ResourceLocation resource)
 	{
-		if (packType != PackType.CLIENT_RESOURCES) throw new FileNotFoundException("Cannot provide " + resource + ": invalid pack type " + packType);
-		else if (!resource.getNamespace().equals(AdditionalPlacementsMod.MOD_ID)) throw new FileNotFoundException("Cannot provide " + resource + ": invalid namespace " + resource.getNamespace());
-		else if (!resource.getPath().endsWith(".json")) throw new FileNotFoundException("Cannot provide " + resource + ": invalid file " + resource.getPath());
+		if (packType != PackType.CLIENT_RESOURCES) return null;
+		else if (!resource.getNamespace().equals(AdditionalPlacementsMod.MOD_ID)) return null;
+		else if (!resource.getPath().endsWith(".json")) return null;
 		else if (resource.getPath().startsWith("blockstates/")) //blockstate json
 		{
 			String blockName = resource.getPath().substring(12, resource.getPath().length() - 5);
 			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, blockName));
-			ResourceLocation blockStateJson = getBlockstateJson(block);
-			if (blockStateJson != null) return Minecraft.getInstance().getResourceManager().getResource(blockStateJson).get().open();
-			else throw new FileNotFoundException("Cannot provide " + resource + ": invalid block additionalplacements:" + blockName);
+			IoSupplier<InputStream> ioResource = getResourceFor(block);
+			if (ioResource != null) return ioResource;
+			else return null;
 		}
-		else throw new FileNotFoundException("Cannot provide " + resource + ": invalid file " + resource.getPath());
+		else return null;
 	}
 
 	@Override
-	public Collection<ResourceLocation> getResources(PackType packType, String domain, String path, Predicate<ResourceLocation> filter)
+	public void listResources(PackType packType, String domain, String path, ResourceOutput filter)
 	{
-		if (packType == PackType.CLIENT_RESOURCES && AdditionalPlacementsMod.MOD_ID.equals(domain) && path.length() >= 11 && (path.length() == 11 ? path.equals("blockstates") : path.startsWith("blockstates/")))
+		if (packType == PackType.CLIENT_RESOURCES && AdditionalPlacementsMod.MOD_ID.equals(domain) && "blockstates".equals(path))
 		{
-			List<ResourceLocation> found = new LinkedList<>();
 			ForgeRegistries.BLOCKS.getEntries().forEach(entry -> {
 				ResourceLocation id = entry.getKey().location();
 				if (id.getNamespace().equals(AdditionalPlacementsMod.MOD_ID))
 				{
-					ResourceLocation blockStateJson = getBlockstateJson(entry.getValue());
-					if (blockStateJson != null)
-					{
-						String startingFolder = path + "/";
-						String file = "blockstates/" + id.getPath() + ".json";
-						if (file.startsWith(startingFolder))
-						{
-							ResourceLocation loc = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, file);
-							if (filter.test(loc)) found.add(loc);
-						}
-					}
+					IoSupplier<InputStream> ioResource = getResourceFor(entry.getValue());
+					if (ioResource != null) filter.accept(new ResourceLocation(id.getNamespace(), "blockstates/" + id.getPath() + ".json"), ioResource);
 				}
 			});
-			return found;
 		}
-		else return Collections.emptyList();
 	}
-
-	@Override
-	public boolean hasResource(PackType packType, ResourceLocation resource)
+	
+	public static IoSupplier<InputStream> getResourceFor(Block block)
 	{
-		if (packType != PackType.CLIENT_RESOURCES) return false;
-		else if (!resource.getNamespace().equals(AdditionalPlacementsMod.MOD_ID)) return false;
-		else if (!resource.getPath().endsWith(".json")) return false;
-		else if (resource.getPath().startsWith("blockstates/")) //blockstate json
-		{
-			String blockName = resource.getPath().substring(12, resource.getPath().length() - 5);
-			Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, blockName));
-			return getBlockstateJson(block) != null;
-		}
-		else return false;
+		ResourceLocation loc = getBlockstateJson(block);
+		return loc == null ? null : () -> Minecraft.getInstance().getResourceManager().getResource(loc).get().open();
 	}
 	
 	public static ResourceLocation getBlockstateJson(Block block)
@@ -114,11 +92,23 @@ public class BlockstatesPackResources implements PackResources
 	}
 
 	@Override
-	public String getName()
+	public String packId()
 	{
 		return "Additional Placements blockstate redirection pack";
 	}
 
 	@Override
 	public void close() {}
+
+	@Override
+	public boolean isBuiltin()
+	{
+		return true;
+	}
+	
+	@Override
+	public boolean isHidden()
+	{
+		return true;
+	}
 }
