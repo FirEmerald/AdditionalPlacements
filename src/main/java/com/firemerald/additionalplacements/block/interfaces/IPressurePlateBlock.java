@@ -30,6 +30,6 @@ public interface IPressurePlateBlock<T extends Block> extends IFloorBlock<T>
     @Override
 	public default boolean disablePlacement()
 	{
-		return this instanceof PressurePlateBlock && AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticSlabPlacement.get();
+		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticPressurePlatePlacement.get();
 	}
 }

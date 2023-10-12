@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
-import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock.IVanillaPressurePlateBlock;
+import com.firemerald.additionalplacements.block.interfaces.IWeightedPressurePlateBlock.IVanillaWeightedPressurePlateBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 
 @Mixin(WeightedPressurePlateBlock.class)
-public abstract class MixinWeightedPressurePlateBlock extends Block implements IVanillaPressurePlateBlock
+public abstract class MixinWeightedPressurePlateBlock extends Block implements IVanillaWeightedPressurePlateBlock
 {
 	private MixinWeightedPressurePlateBlock(Properties properties)
 	{

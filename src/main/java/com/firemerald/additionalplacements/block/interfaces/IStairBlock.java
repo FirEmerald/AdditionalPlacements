@@ -18,7 +18,6 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.StairsBlock;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
@@ -249,7 +248,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default boolean disablePlacement()
 	{
-		return this instanceof StairsBlock && AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
+		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
 	}
 
 	public default EnumPlacing getPlacing(BlockItemUseContext context)
