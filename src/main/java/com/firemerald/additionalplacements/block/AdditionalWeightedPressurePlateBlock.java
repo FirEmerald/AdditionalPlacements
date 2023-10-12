@@ -1,5 +1,7 @@
 package com.firemerald.additionalplacements.block;
 
+import com.firemerald.additionalplacements.block.interfaces.IWeightedPressurePlateBlock;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -7,7 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.phys.AABB;
 
-public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock>
+public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock> implements IWeightedPressurePlateBlock<WeightedPressurePlateBlock>
 {
 	public AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
 	{

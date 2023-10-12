@@ -30,7 +30,6 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.api.distmarker.Dist;
@@ -247,7 +246,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default boolean disablePlacement()
 	{
-		return this instanceof StairBlock && AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
+		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
 	}
 
 	public default EnumPlacing getPlacing(BlockPlaceContext context)
