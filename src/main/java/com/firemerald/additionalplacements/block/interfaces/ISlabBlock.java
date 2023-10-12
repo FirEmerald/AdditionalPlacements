@@ -230,7 +230,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default boolean disablePlacement()
 	{
-		return this instanceof SlabBlock && AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticSlabPlacement.get();
+		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticSlabPlacement.get();
 	}
 
     @Override

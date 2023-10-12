@@ -30,6 +30,6 @@ public interface ICarpetBlock<T extends Block> extends IFloorBlock<T>
     @Override
 	public default boolean disablePlacement()
 	{
-		return this instanceof CarpetBlock && AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticSlabPlacement.get();
+		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticCarpetPlacement.get();
 	}
 }
