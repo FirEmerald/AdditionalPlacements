@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
+import com.firemerald.additionalplacements.block.AdditionalWeightedPressurePlateBlock;
 import com.firemerald.additionalplacements.block.interfaces.IWeightedPressurePlateBlock.IVanillaWeightedPressurePlateBlock;
 
 import net.minecraft.core.BlockPos;
@@ -24,7 +24,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 		super(properties);
 	}
 
-	public AdditionalBasePressurePlateBlock<?> plate;
+	public AdditionalWeightedPressurePlateBlock plate;
 
 	public WeightedPressurePlateBlock asPlate()
 	{
@@ -32,13 +32,13 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 	}
 
 	@Override
-	public void setOtherBlock(AdditionalBasePressurePlateBlock<?> plate)
+	public void setOtherBlock(AdditionalWeightedPressurePlateBlock plate)
 	{
 		this.plate = plate;
 	}
 
 	@Override
-	public AdditionalBasePressurePlateBlock<?> getOtherBlock()
+	public AdditionalWeightedPressurePlateBlock getOtherBlock()
 	{
 		return plate;
 	}
