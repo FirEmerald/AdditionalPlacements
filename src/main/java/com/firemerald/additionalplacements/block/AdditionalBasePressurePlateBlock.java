@@ -4,8 +4,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlockExtensions;
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
-import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
 
 import net.minecraft.block.AbstractPressurePlateBlock;
 import net.minecraft.block.Block;
@@ -27,7 +27,7 @@ import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
-public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressurePlateBlock> extends AdditionalPlacementBlock<T> implements IPressurePlateBlock<T>
+public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressurePlateBlock> extends AdditionalPlacementBlock<T> implements IBasePressurePlateBlock<T>
 {
 	public static final DirectionProperty PLACING = AdditionalBlockStateProperties.HORIZONTAL_OR_UP_FACING;
 	public static final VoxelShape[] AABBS = {
@@ -52,15 +52,15 @@ public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressur
 			new AxisAlignedBB(0.75, 0.125, 0.125, 1, 0.875, 0.875)
 	};
 	
-	public final IBasePressurePlateBlock plateMethods;
+	public final IBasePressurePlateBlockExtensions plateMethods;
 
-	@SuppressWarnings("deprecation")
+	@SuppressWarnings({ "deprecation", "unchecked" })
 	public AdditionalBasePressurePlateBlock(T plate)
 	{
 		super(plate);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
-		((IVanillaPressurePlateBlock) plate).setOtherBlock(this);
-		plateMethods = (IBasePressurePlateBlock) plate;
+		((IVanillaBasePressurePlateBlock<AdditionalBasePressurePlateBlock<T>>) plate).setOtherBlock(this);
+		plateMethods = (IBasePressurePlateBlockExtensions) plate;
 	}
 
 	@Override
