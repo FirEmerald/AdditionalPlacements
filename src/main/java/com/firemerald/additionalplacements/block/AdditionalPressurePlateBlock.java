@@ -2,6 +2,8 @@ package com.firemerald.additionalplacements.block;
 
 import java.util.List;
 
+import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -9,7 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.phys.AABB;
 
-public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock>
+public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock>
 {
 	public AdditionalPressurePlateBlock(PressurePlateBlock plate)
 	{

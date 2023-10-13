@@ -3,7 +3,7 @@ package com.firemerald.additionalplacements.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
+import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlockExtensions;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
@@ -11,7 +11,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(BasePressurePlateBlock.class)
-public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateBlock
+public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateBlockExtensions
 {
 	@Shadow
 	protected abstract void playOnSound(LevelAccessor pLevel, BlockPos pPos);
