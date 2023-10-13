@@ -1,18 +1,28 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.LevelAccessor;
+import javax.annotation.Nullable;
+
+import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
+
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-public interface IBasePressurePlateBlock
+public interface IBasePressurePlateBlock<T extends Block> extends IFloorBlock<T>
 {
-	public abstract void playOnSoundPublic(LevelAccessor level, BlockPos pos);
-	
-	public abstract void playOffSoundPublic(LevelAccessor level, BlockPos pos);
-	
-	public abstract int getSignalForStatePublic(BlockState state);
+	public static interface IVanillaBasePressurePlateBlock<T extends AdditionalBasePressurePlateBlock<?>> extends IBasePressurePlateBlock<T>, IVanillaBlock<T> {}
 
-	public abstract BlockState setSignalForStatePublic(BlockState state, int strength);
-	
-	public abstract int getPressedTimePublic();
+	public default BlockState forPlacing(Direction dir, BlockState blockState)
+	{
+    	if (dir == Direction.DOWN) return getDefaultVanillaState(blockState);
+    	else return getDefaultAdditionalState(blockState).setValue(AdditionalBasePressurePlateBlock.PLACING, dir);
+	}
+
+	@Nullable
+	public default Direction getPlacing(BlockState blockState)
+	{
+		if (blockState.getBlock() instanceof PressurePlateBlock) return Direction.DOWN;
+		else return blockState.getValue(AdditionalBasePressurePlateBlock.PLACING);
+	}
 }
