@@ -94,7 +94,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
 			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
-			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
+			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
 			})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{

@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock.IVanillaSlabBlock;
 
@@ -83,9 +82,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 		return currentState.is(slab) ? currentState : slab.copyProperties(currentState, slab.defaultBlockState());
 	}
 
-	@Inject(at = @At("RETURN"), cancellable = true, target = 
-			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockPlaceContext.class})
-	)
+	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
@@ -93,7 +90,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
 			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
-			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
+			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
 			})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{

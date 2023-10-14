@@ -7,7 +7,6 @@ import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
 import com.firemerald.additionalplacements.block.interfaces.ICarpetBlock.IVanillaCarpetBlock;
 
@@ -95,7 +94,7 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
 			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
-			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
+			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
 	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{
