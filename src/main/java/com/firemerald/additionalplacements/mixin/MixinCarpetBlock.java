@@ -1,8 +1,9 @@
 package com.firemerald.additionalplacements.mixin;
 
-import org.spongepowered.asm.mixin.Intrinsic;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -73,32 +74,34 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 		return currentState.is(carpet) ? currentState : carpet.copyProperties(currentState, carpet.defaultBlockState());
 	}
 
-	//@Override
-	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
+	@Inject(at = @At("RETURN"), remap = false, cancellable = true, target = {
+			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockPlaceContext.class}), 
+			@Desc(value = "m_5573_", ret = BlockState.class, args = {BlockPlaceContext.class})
+	})
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
-	//@Override
 	@Override
-	@Intrinsic
+	@Unique(silent = true)
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) return getStateForPlacementImpl(context, super.getStateForPlacement(context));
 		else return super.getStateForPlacement(context);
 	}
 
-	//@Override
-	@Inject(method = "rotate", at = @At("HEAD"), cancellable = true)
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
+			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
+			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
+	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(rotateImpl(blockState, rotation));
 	}
 
-	//@Override
 	@Override
-	@Intrinsic
+	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
 	public BlockState rotate(BlockState blockState, Rotation rotation) //this adds the method if it does not exist
 	{
@@ -106,16 +109,17 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 		else return super.rotate(blockState, rotation);
 	}
 
-	//@Override
-	@Inject(method = "mirror", at = @At("HEAD"), cancellable = true)
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
+			@Desc(value = "mirror", ret = BlockState.class, args = {BlockState.class, Mirror.class}),
+			@Desc(value = "m_6943_", ret = BlockState.class, args = {BlockState.class, Mirror.class})
+	})
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(mirrorImpl(blockState, mirror));
 	}
 
-	//@Override
 	@Override
-	@Intrinsic
+	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState blockState, Mirror mirror) //this adds the method if it does not exist
 	{
