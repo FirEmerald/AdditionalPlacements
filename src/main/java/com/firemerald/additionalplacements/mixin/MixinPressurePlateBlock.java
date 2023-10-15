@@ -84,7 +84,7 @@ public abstract class MixinPressurePlateBlock extends Block implements IVanillaP
 	}
 
 	@Override
-	@Unique
+	@Unique(silent = true)
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
 		BlockState superRet = super.getStateForPlacement(context);
@@ -102,7 +102,7 @@ public abstract class MixinPressurePlateBlock extends Block implements IVanillaP
 	}
 
 	@Override
-	@Unique
+	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
 	public BlockState rotate(BlockState blockState, Rotation rotation)
 	{
@@ -121,7 +121,7 @@ public abstract class MixinPressurePlateBlock extends Block implements IVanillaP
 	}
 
 	@Override
-	@Unique
+	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
 	public BlockState mirror(BlockState blockState, Mirror mirror)
 	{
