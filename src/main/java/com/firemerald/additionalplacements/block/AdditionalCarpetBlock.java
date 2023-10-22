@@ -26,9 +26,14 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 			Block.box(0, 0, 0, 1, 16, 16),
 			Block.box(15, 0, 0, 16, 16, 16)
 	};
+	
+	public static AdditionalCarpetBlock of(CarpetBlock carpet)
+	{
+		return new AdditionalCarpetBlock(carpet);
+	}
 
 	@SuppressWarnings("deprecation")
-	public AdditionalCarpetBlock(CarpetBlock carpet)
+	private AdditionalCarpetBlock(CarpetBlock carpet)
 	{
 		super(carpet);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));

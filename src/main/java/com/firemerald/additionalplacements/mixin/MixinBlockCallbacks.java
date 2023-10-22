@@ -1,5 +1,7 @@
 package com.firemerald.additionalplacements.mixin;
 
+import java.util.function.Function;
+
 import javax.annotation.Nullable;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,59 +29,36 @@ public class MixinBlockCallbacks
 		{
 			if (block instanceof SlabBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
-				{
-					ResourceLocation name = key.location();
-					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					{
-						owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalSlabBlock((SlabBlock) block));
-					}
-				}
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get()) tryAdd((SlabBlock) block, key, VerticalSlabBlock::of, owner);
 			}
 			else if (block instanceof StairBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
-				{
-					ResourceLocation name = key.location();
-					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					{
-						owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new VerticalStairBlock((StairBlock) block));
-					}
-				}
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get()) tryAdd((StairBlock) block, key, VerticalStairBlock::of, owner);
 			}
 			else if (block instanceof CarpetBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
-				{
-					ResourceLocation name = key.location();
-					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					{
-						owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new AdditionalCarpetBlock((CarpetBlock) block));
-					}
-				}
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get()) tryAdd((CarpetBlock) block, key, AdditionalCarpetBlock::of, owner);
 			}
 			else if (block instanceof PressurePlateBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
-				{
-					ResourceLocation name = key.location();
-					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					{
-						owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new AdditionalPressurePlateBlock((PressurePlateBlock) block));
-					}
-				}
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get()) tryAdd((PressurePlateBlock) block, key, AdditionalPressurePlateBlock::of, owner);
 			}
 			else if (block instanceof WeightedPressurePlateBlock)
 			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get() && !((IPlacementBlock<?>) block).hasAdditionalStates())
-				{
-					ResourceLocation name = key.location();
-					if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					{
-						owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), new AdditionalWeightedPressurePlateBlock((WeightedPressurePlateBlock) block));
-					}
-				}
+				if (AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get()) tryAdd((WeightedPressurePlateBlock) block, key, AdditionalWeightedPressurePlateBlock::of, owner);
 			}
 		}
     }
+	
+	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceKey<Block> key, Function<T, U> construct, IForgeRegistryInternal<Block> owner)
+	{
+		if (!((IPlacementBlock<?>) block).hasAdditionalStates())
+		{
+			ResourceLocation name = key.location();
+			if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
+			{
+				owner.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), construct.apply(block));
+			}
+		}
+	}
 }
