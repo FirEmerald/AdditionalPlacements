@@ -13,5 +13,8 @@
 		"MixinStairBlock",
 		"MixinWeightedPressurePlateBlock"
 	],
+	"client": [
+		"MixinBlockModelShaper"
+	],
 	"minVersion": "0.8"
 }
