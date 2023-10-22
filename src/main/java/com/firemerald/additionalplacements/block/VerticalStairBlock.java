@@ -44,8 +44,13 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 		}
 	}
 
+	public static VerticalStairBlock of(StairBlock stairs)
+	{
+		return new VerticalStairBlock(stairs);
+	}
+	
 	@SuppressWarnings("deprecation")
-	public VerticalStairBlock(StairBlock stairs)
+	private VerticalStairBlock(StairBlock stairs)
 	{
 		super(stairs);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, EnumPlacing.NORTH_EAST).setValue(SHAPE, EnumShape.STRAIGHT));

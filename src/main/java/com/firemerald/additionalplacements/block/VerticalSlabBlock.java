@@ -21,8 +21,13 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 {
 	public static final DirectionProperty PLACING = BlockStateProperties.HORIZONTAL_FACING;
 
+	public static VerticalSlabBlock of(SlabBlock slab)
+	{
+		return new VerticalSlabBlock(slab);
+	}
+	
 	@SuppressWarnings("deprecation")
-	public VerticalSlabBlock(SlabBlock slab)
+	private VerticalSlabBlock(SlabBlock slab)
 	{
 		super(slab);
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
