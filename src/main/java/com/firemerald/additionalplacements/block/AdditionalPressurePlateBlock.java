@@ -13,7 +13,12 @@ import net.minecraft.world.World;
 
 public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock>
 {
-	public AdditionalPressurePlateBlock(PressurePlateBlock plate)
+	public static AdditionalPressurePlateBlock of(PressurePlateBlock plate)
+	{
+		return new AdditionalPressurePlateBlock(plate);
+	}
+	
+	private AdditionalPressurePlateBlock(PressurePlateBlock plate)
 	{
 		super(plate);
 	}

@@ -1,7 +1,6 @@
 package com.firemerald.additionalplacements.common;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.function.Function;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
@@ -25,7 +24,6 @@ public class CommonModEventHandler
 	public static void onBlockRegistry(RegistryEvent.Register<Block> event)
 	{
 		IForgeRegistry<Block> registry = event.getRegistry();
-		final List<Block> created = new LinkedList<>();
 		boolean generateSlabs = AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get();
 		boolean generateStairs = AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get();
 		boolean generateCarpets = AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get();
@@ -36,32 +34,32 @@ public class CommonModEventHandler
 			Block block = entry.getValue();
 			if (block instanceof SlabBlock)
 			{
-				if (generateSlabs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					created.add(new VerticalSlabBlock((SlabBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+				if (generateSlabs) tryAdd((SlabBlock) block, name, VerticalSlabBlock::of, registry);
 			}
 			else if (block instanceof StairsBlock)
 			{
-				if (generateStairs && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					created.add(new VerticalStairBlock((StairsBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+				if (generateStairs) tryAdd((StairsBlock) block, name, VerticalStairBlock::of, registry);
 			}
 			else if (block instanceof CarpetBlock)
 			{
-				if (generateCarpets && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					created.add(new AdditionalCarpetBlock((CarpetBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+				if (generateCarpets) tryAdd((CarpetBlock) block, name, AdditionalCarpetBlock::of, registry);
 			}
 			else if (block instanceof PressurePlateBlock)
 			{
-				if (generatePressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					created.add(new AdditionalPressurePlateBlock((PressurePlateBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+				if (generatePressurePlates) tryAdd((PressurePlateBlock) block, name, AdditionalPressurePlateBlock::of, registry);
 			}
 			else if (block instanceof WeightedPressurePlateBlock)
 			{
-				if (generateWeightedPressurePlates && !((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-					created.add(new AdditionalWeightedPressurePlateBlock((WeightedPressurePlateBlock) block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
+				if (generateWeightedPressurePlates) tryAdd((WeightedPressurePlateBlock) block, name, AdditionalWeightedPressurePlateBlock::of, registry);
 			}
 		});
-		created.forEach(registry::register);
 		AdditionalPlacementsMod.dynamicRegistration = true;
+	}
+	
+	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceLocation name, Function<T, U> construct, IForgeRegistry<Block> registry)
+	{
+		if (!((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
+			registry.register(construct.apply(block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 	}
 	
 	@SubscribeEvent

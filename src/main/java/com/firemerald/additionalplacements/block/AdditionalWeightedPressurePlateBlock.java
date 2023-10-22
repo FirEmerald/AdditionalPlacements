@@ -11,7 +11,12 @@ import net.minecraft.world.World;
 
 public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock> implements IWeightedPressurePlateBlock<WeightedPressurePlateBlock>
 {
-	public AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
+	public static AdditionalWeightedPressurePlateBlock of(WeightedPressurePlateBlock plate)
+	{
+		return new AdditionalWeightedPressurePlateBlock(plate);
+	}
+	
+	private AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
 	{
 		super(plate);
 	}
