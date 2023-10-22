@@ -1,8 +1,12 @@
 package com.firemerald.additionalplacements.common;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
@@ -39,38 +43,40 @@ public class CommonModEventHandler
 			boolean generateCarpets = AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get();
 			boolean generatePressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get();
 			boolean generateWeightedPressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get();
+			List<Pair<ResourceLocation, Block>> created = new ArrayList<>();
 			registry.getEntries().forEach(entry -> {
 				ResourceLocation name = entry.getKey().location();
 				Block block = entry.getValue();
 				if (block instanceof SlabBlock)
 				{
-					if (generateSlabs) tryAdd((SlabBlock) block, name, VerticalSlabBlock::of, registry);
+					if (generateSlabs) tryAdd((SlabBlock) block, name, VerticalSlabBlock::of, created);
 				}
 				else if (block instanceof StairBlock)
 				{
-					if (generateStairs) tryAdd((StairBlock) block, name, VerticalStairBlock::of, registry);
+					if (generateStairs) tryAdd((StairBlock) block, name, VerticalStairBlock::of, created);
 				}
 				else if (block instanceof CarpetBlock)
 				{
-					if (generateCarpets) tryAdd((CarpetBlock) block, name, AdditionalCarpetBlock::of, registry);
+					if (generateCarpets) tryAdd((CarpetBlock) block, name, AdditionalCarpetBlock::of, created);
 				}
 				else if (block instanceof PressurePlateBlock)
 				{
-					if (generatePressurePlates) tryAdd((PressurePlateBlock) block, name, AdditionalPressurePlateBlock::of, registry);
+					if (generatePressurePlates) tryAdd((PressurePlateBlock) block, name, AdditionalPressurePlateBlock::of, created);
 				}
 				else if (block instanceof WeightedPressurePlateBlock)
 				{
-					if (generateWeightedPressurePlates) tryAdd((WeightedPressurePlateBlock) block, name, AdditionalWeightedPressurePlateBlock::of, registry);
+					if (generateWeightedPressurePlates) tryAdd((WeightedPressurePlateBlock) block, name, AdditionalWeightedPressurePlateBlock::of, created);
 				}
 			});
+			created.forEach(pair -> registry.register(pair.getLeft(), pair.getRight()));
 			AdditionalPlacementsMod.dynamicRegistration = true;
 		}
 	}
 	
-	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceLocation name, Function<T, U> construct, IForgeRegistry<Block> registry)
+	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceLocation name, Function<T, U> construct, List<Pair<ResourceLocation, Block>> list)
 	{
 		if (!((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-			registry.register(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), construct.apply(block));
+			list.add(Pair.of(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), construct.apply(block)));
 	}
 
 	@SubscribeEvent
