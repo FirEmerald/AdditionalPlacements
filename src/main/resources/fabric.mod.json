@@ -1,0 +1,46 @@
+{
+	"schemaVersion": 1,
+	"id": "additionalplacements",
+	"version": "${version}",
+	"name": "Additional Placements",
+	"description": "Adds additional placements for blocks:
+Slabs can be placed vertically.
+Stairs can be placed vertically.
+Carpets can be placed on walls and ceilings.
+Pressure plates can be placed on walls and ceilings.",
+	"authors": [
+		"FirEmerald"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT License",
+	"icon": "additionalplacements.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.firemerald.additionalplacements.AdditionalPlacementsMod",
+			"com.firemerald.additionalplacements.common.CommonModEvents"
+		],
+		"client": [
+			"com.firemerald.additionalplacements.client.ClientModEvents"
+		],
+		"fabric-datagen": [
+			"com.firemerald.additionalplacements.datagen.AdditionalPlacementsDataGenerator"
+		]
+	},
+	"mixins": [
+		"mixins.additionalplacements.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.14.21",
+		"minecraft": "~1.20.1",
+		"java": ">=17",
+		"fabric-api": "*",
+		"forgeconfigapiport": "*",
+		"porting_lib_models": "*",
+		"porting_lib_model_loader": "*",
+		"porting_lib_model_generators": "*"
+	}
+}

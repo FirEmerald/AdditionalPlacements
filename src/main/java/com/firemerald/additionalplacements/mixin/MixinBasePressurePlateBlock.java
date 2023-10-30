@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateBlockExtensions
 {
 	@Shadow
-	private BlockSetType type;
+    private BlockSetType type;
 	
 	@Shadow
 	protected abstract BlockState setSignalForState(BlockState pState, int pStrength);
@@ -30,13 +30,13 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 	@Override
 	public void playOnSoundPublic(LevelAccessor pLevel, BlockPos pPos)
 	{
-		pLevel.playSound(null, pPos, type.pressurePlateClickOn(), SoundSource.BLOCKS);
+		pLevel.playSound(null, pPos, this.type.pressurePlateClickOn(), SoundSource.BLOCKS);
 	}
 
 	@Override
 	public void playOffSoundPublic(LevelAccessor pLevel, BlockPos pPos)
 	{
-		pLevel.playSound(null, pPos, type.pressurePlateClickOff(), SoundSource.BLOCKS);
+		pLevel.playSound(null, pPos, this.type.pressurePlateClickOff(), SoundSource.BLOCKS);
 	}
 	
 	@Override

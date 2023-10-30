@@ -2,10 +2,10 @@ package com.firemerald.additionalplacements.datagen;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 
+import io.github.fabricators_of_create.porting_lib.data.ExistingFileHelper;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockStateProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class ModelGenerator extends BlockStateProvider
 {

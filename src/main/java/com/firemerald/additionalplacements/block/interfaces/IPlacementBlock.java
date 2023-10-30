@@ -11,6 +11,8 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,9 +32,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.ModelData;
 
 public interface IPlacementBlock<T extends Block> extends ItemLike
 {
@@ -70,7 +69,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	public boolean isThis(BlockState blockState);
 
 	public static final float SQRT_2_INV = 0.70710678118654752440084436210485f;
-	
+
 	public static Quaternionf[] DIRECTION_TRANSFORMS = new Quaternionf[] {
 		new Quaternionf(SQRT_2_INV, 0, 0, SQRT_2_INV), //DOWN
 		new Quaternionf(-SQRT_2_INV, 0, 0, SQRT_2_INV), //UP
@@ -80,7 +79,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 		new Quaternionf(0, SQRT_2_INV, 0, SQRT_2_INV), //EAST
 	};
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
@@ -118,18 +117,18 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 		pose.popPose();
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
-
-	public abstract boolean disablePlacement();
-
+	
 	public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
 	{
 		return disablePlacement();
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, RandomSource rand, ModelData extraData)
+	public abstract boolean disablePlacement();
+
+	@Environment(EnvType.CLIENT)
+	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, RandomSource rand)
 	{
 		return Function.identity();
 	}

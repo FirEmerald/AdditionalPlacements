@@ -28,13 +28,6 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-    public Optional<SoundEvent> getPickupSound(BlockState blockState)
-    {
-		return this.getOtherBlock().getPickupSound(this.getModelState(blockState));
-    }
-
-	@Override
-	@Deprecated
 	public Optional<SoundEvent> getPickupSound()
 	{
 		return this.getOtherBlock().getPickupSound();

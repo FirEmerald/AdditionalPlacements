@@ -87,16 +87,15 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 	@Unique(silent = true)
 	public BlockState getStateForPlacement(BlockPlaceContext context)
 	{
-		BlockState superRet = super.getStateForPlacement(context);
-		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) return getStateForPlacementImpl(context, superRet);
-		else return superRet;
+		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) return getStateForPlacementImpl(context, super.getStateForPlacement(context));
+		else return super.getStateForPlacement(context);
 	}
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
 			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
 			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
 	})
-	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
+	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(rotateImpl(blockState, rotation));
 	}
@@ -104,7 +103,7 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 	@Override
 	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
-	public BlockState rotate(BlockState blockState, Rotation rotation)
+	public BlockState rotate(BlockState blockState, Rotation rotation) //this adds the method if it does not exist
 	{
 		if (this.hasAdditionalStates()) return rotateImpl(blockState, rotation);
 		else return super.rotate(blockState, rotation);
@@ -114,7 +113,7 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 			@Desc(value = "mirror", ret = BlockState.class, args = {BlockState.class, Mirror.class}),
 			@Desc(value = "m_6943_", ret = BlockState.class, args = {BlockState.class, Mirror.class})
 	})
-	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
+	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(mirrorImpl(blockState, mirror));
 	}
@@ -122,7 +121,7 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 	@Override
 	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
-	public BlockState mirror(BlockState blockState, Mirror mirror)
+	public BlockState mirror(BlockState blockState, Mirror mirror) //this adds the method if it does not exist
 	{
 		if (this.hasAdditionalStates()) return mirrorImpl(blockState, mirror);
 		else return super.mirror(blockState, mirror);

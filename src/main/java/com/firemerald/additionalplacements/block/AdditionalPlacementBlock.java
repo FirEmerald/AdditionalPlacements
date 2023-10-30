@@ -36,7 +36,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 
 public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock<T>
 {
@@ -137,9 +136,16 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state)
 	{
-		return parentBlock.getCloneItemStack(state, target, level, pos, player);
+		try
+		{
+			return parentBlock.getCloneItemStack(level, pos, state);
+		}
+		catch (Exception e)
+		{
+			return ItemStack.EMPTY;
+		}
 	}
 
 	@Override
@@ -215,11 +221,11 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if (!state.is(oldState.getBlock()))
+		if (!state.is(newState.getBlock()))
 		{
-			getModelState(state).onRemove(level, pos, oldState, isMoving);
+			getModelState(state).onRemove(level, pos, newState, isMoving);
 		}
 	}
 
@@ -312,7 +318,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@SuppressWarnings("deprecation")
 	public Set<TagKey<Block>> getDesiredTags()
 	{
-		return modifyTags(parentBlock.builtInRegistryHolder().getTagKeys());
+		return modifyTags(parentBlock.builtInRegistryHolder().tags());
 	}
 	
 	public abstract String getTagTypeName();
@@ -323,7 +329,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	{
 		return AdditionalPlacementsBlockTags.remap(tags, getTagTypeName(), getTagTypeNamePlural());
 	}
-
 
 	@Override
 	public boolean hasAdditionalStates()
@@ -374,13 +379,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	{
 		return this.getModelState(state).getFluidState();
 	}
-
-	@Override
-	@Deprecated
-	public boolean skipRendering(BlockState thisState, BlockState adjacentState, Direction dir)
-	{
-		return this.getModelState(thisState).skipRendering(adjacentState, dir);
-	}
 	
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
@@ -394,9 +392,12 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		return this.getModelState(state).getShadeBrightness(level, pos);
 	}
 	
+	//TODO we need to make additional sub-classes for this now, fml
+	/*
 	@Override
 	public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos1, BlockPos pos2)
 	{
 		return this.getModelState(state).getBeaconColorMultiplier(level, pos1, pos2);
 	}
+	*/
 }

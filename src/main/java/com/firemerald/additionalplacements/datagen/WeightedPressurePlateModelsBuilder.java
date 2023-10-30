@@ -6,10 +6,10 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPressurePlateBlock;
 import com.firemerald.additionalplacements.block.AdditionalWeightedPressurePlateBlock;
 
+import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockModelBuilder;
+import io.github.fabricators_of_create.porting_lib.models.generators.block.BlockStateProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 
 public class WeightedPressurePlateModelsBuilder
 {
