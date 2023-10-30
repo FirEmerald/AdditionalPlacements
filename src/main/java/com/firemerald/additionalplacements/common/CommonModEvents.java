@@ -11,7 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.firemerald.additionalplacements.command.CommandExportTags;
+import com.firemerald.additionalplacements.commands.CommandExportTags;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mojang.brigadier.CommandDispatcher;

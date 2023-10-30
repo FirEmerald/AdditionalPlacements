@@ -1,4 +1,4 @@
-package com.firemerald.additionalplacements.command;
+package com.firemerald.additionalplacements.commands;
 
 import java.io.IOException;
 import java.nio.file.Files;
