@@ -9,6 +9,8 @@ import javax.annotation.Nullable;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -20,9 +22,6 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.IModelData;
 
 public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 {
@@ -49,7 +48,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial) {}
 
     @Override
@@ -59,14 +58,14 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.ceiling_placement"));
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public default Direction transformModelDirection(Direction from)
 	{
 		return from;
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)
+	@Environment(EnvType.CLIENT)
+	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand)
 	{
 		return switch(getPlacing(state)) {
 		case UP -> side -> switch (side) {

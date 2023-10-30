@@ -11,18 +11,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.client.model.data.IModelData;
-import net.minecraftforge.client.model.data.ModelProperty;
 
 public class BlockModelUtils
 {
-	public static final ModelProperty<BlockState> MODEL_STATE = new ModelProperty<>();
-
 	public static BlockState getModeledState(BlockState state)
 	{
 		if (state.getBlock() instanceof AdditionalPlacementBlock) return ((AdditionalPlacementBlock<?>) state.getBlock()).getModelState(state);
@@ -34,21 +28,15 @@ public class BlockModelUtils
 		return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
 	}
 
-	public static final IModelData getModelData(BlockState blockState, IModelData defaultData)
-	{
-		return blockState.hasBlockEntity() ? ((EntityBlock) blockState.getBlock()).newBlockEntity(new BlockPos(0, 0, 0), blockState).getModelData() : defaultData;
-	}
-
-	public static final List<BakedQuad> getBakedQuads(BlockState referredState, Direction side, Random rand, IModelData modelData)
+	public static final List<BakedQuad> getBakedQuads(BlockState referredState, Direction side, Random rand)
 	{
 		BakedModel referredBakedModel = getBakedModel(referredState);
-		IModelData referredModelData = getModelData(referredState, modelData);
 		List<BakedQuad> referredBakedQuads = new ArrayList<>();
-		for (BakedQuad referredBakedQuad : referredBakedModel.getQuads(referredState, side, rand, referredModelData))
+		for (BakedQuad referredBakedQuad : referredBakedModel.getQuads(referredState, side, rand))
 		{
 			if (referredBakedQuad.getDirection() == side) referredBakedQuads.add(referredBakedQuad);
 		}
-		for (BakedQuad referredBakedQuad : referredBakedModel.getQuads(referredState, null, rand, referredModelData))
+		for (BakedQuad referredBakedQuad : referredBakedModel.getQuads(referredState, null, rand))
 		{
 			if (referredBakedQuad.getDirection() == side) referredBakedQuads.add(referredBakedQuad);
 		}

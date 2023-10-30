@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.block;
 
+import com.firemerald.additionalplacements.block.interfaces.IAdditionalBeaconBeamBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStairBlock;
 import com.firemerald.additionalplacements.util.VoxelShapes;
 
@@ -7,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -46,7 +48,15 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 
 	public static VerticalStairBlock of(StairBlock stairs)
 	{
-		return new VerticalStairBlock(stairs);
+		return stairs instanceof BeaconBeamBlock ? new AdditionalBeaconBeamVerticalStairBlock(stairs) : new VerticalStairBlock(stairs);
+	}
+	
+	private static class AdditionalBeaconBeamVerticalStairBlock extends VerticalStairBlock implements IAdditionalBeaconBeamBlock<StairBlock>
+	{
+		AdditionalBeaconBeamVerticalStairBlock(StairBlock stairs)
+		{
+			super(stairs);
+		}
 	}
 	
 	@SuppressWarnings("deprecation")

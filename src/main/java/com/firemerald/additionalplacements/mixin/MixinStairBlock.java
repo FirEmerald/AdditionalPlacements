@@ -1,7 +1,5 @@
 package com.firemerald.additionalplacements.mixin;
 
-import java.util.function.Supplier;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,8 +22,8 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class MixinStairBlock implements IVanillaStairBlock
 {
 	public VerticalStairBlock stairs;
-	@Shadow(remap = false)
-	private Supplier<BlockState> stateSupplier;
+	@Shadow
+	private BlockState baseState;
 
 	public StairBlock asStair()
 	{
@@ -96,6 +94,6 @@ public abstract class MixinStairBlock implements IVanillaStairBlock
 	@Override
 	public BlockState getModelStateImpl()
 	{
-		return stateSupplier.get();
+		return baseState;
 	}
 }

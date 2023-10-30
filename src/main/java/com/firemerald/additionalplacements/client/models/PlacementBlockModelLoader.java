@@ -9,10 +9,10 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 
+import io.github.fabricators_of_create.porting_lib.model.IModelLoader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraftforge.client.model.IModelLoader;
 
 public class PlacementBlockModelLoader implements IModelLoader<PlacementBlockModel>
 {

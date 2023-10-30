@@ -1,7 +1,6 @@
 package com.firemerald.additionalplacements.common;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -11,10 +10,14 @@ import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.*;
 import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.server.MinecraftServer;
@@ -22,15 +25,8 @@ import net.minecraft.server.rcon.RconConsoleSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent.ServerTickEvent;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
 
-public class TagMismatchChecker extends Thread implements Consumer<ServerTickEvent>
+public class TagMismatchChecker extends Thread
 {
 	private static TagMismatchChecker thread = null;
 	public static final Component MESSAGE = new TranslatableComponent("msg.additionalplacements.mismatchedtags.0").append(
@@ -49,8 +45,13 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 		thread = new TagMismatchChecker();
 		if (old != null) old.halted = true;
 		thread.setPriority(AdditionalPlacementsMod.COMMON_CONFIG.checkerPriority.get());
-		CommonEventHandler.misMatchedTags = false;
+		CommonModEvents.misMatchedTags = false;
 		thread.start();
+	}
+	
+	public static void onServerTickEnd(MinecraftServer server)
+	{
+		if (thread != null) thread.accept(server);
 	}
 	
 	public static void stopChecker()
@@ -74,7 +75,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 	@Override
 	public void run()
 	{
-		for (Block block : ForgeRegistries.BLOCKS)
+		for (Block block : Registry.BLOCK)
 		{
 			if (halted) return;
 			if (block instanceof AdditionalPlacementBlock)
@@ -83,20 +84,18 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 				if (mismatch != null) blockMissingExtra.add(mismatch);
 			}
 		}
-		MinecraftForge.EVENT_BUS.addListener(this); //listen for next server tick
 	}
 	
 	//this is only ever called on the server thread
-	public void accept(ServerTickEvent event)
+	public void accept(MinecraftServer server)
 	{
-		MinecraftForge.EVENT_BUS.unregister(this); //only listen once
+		thread = null;
 		if (!halted) //wasn't canceled
 		{
 			if (!blockMissingExtra.isEmpty())
 			{
-				CommonEventHandler.misMatchedTags = true;
+				CommonModEvents.misMatchedTags = true;
 				boolean autoRebuild = AdditionalPlacementsMod.COMMON_CONFIG.autoRebuildTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.autoRebuildTags.get();
-				MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 				if (!autoRebuild) server.getPlayerList().getPlayers().forEach(player -> {
 					if (canGenerateTags(player)) player.sendMessage(MESSAGE, Util.NIL_UUID);
 				});
@@ -105,7 +104,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 				{
 					AdditionalPlacementsMod.LOGGER.warn("====== BEGIN LIST ======");
 					blockMissingExtra.forEach(blockMissingExtra -> {
-						AdditionalPlacementsMod.LOGGER.warn("\t" + blockMissingExtra.getLeft().getRegistryName());
+						AdditionalPlacementsMod.LOGGER.warn("\t" + Registry.BLOCK.getKey(blockMissingExtra.getLeft()));
 						Collection<TagKey<Block>> missing = blockMissingExtra.getMiddle();
 						if (!missing.isEmpty())
 						{
@@ -143,12 +142,12 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 	
 	public static boolean canGenerateTags(Player player, IntPredicate hasPermission)
 	{
-		if (FMLLoader.getDist().isClient()) return canGenerateTagsClient(player);
+		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) return canGenerateTagsClient(player);
 		else return hasPermission.test(2);
 	}
 
 	@SuppressWarnings("resource")
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public static boolean canGenerateTagsClient(Player player)
 	{
 		Player clientPlayer = Minecraft.getInstance().player;

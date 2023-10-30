@@ -2,18 +2,20 @@
 	"required": true,
 	"package": "com.firemerald.additionalplacements.mixin",
 	"compatibilityLevel": "JAVA_17",
-	"refmap": "mixins.additionalplacements.refmap.json",
+	"refmap": "additional-placements-fabric-refmap.json",
 	"mixins": [
 		"MixinStructureTransform",
 		"MixinBasePressurePlateBlock",
-		"MixinBlockCallbacks",
+		"MixinMappedRegistry",
 		"MixinCarpetBlock",
 		"MixinPressurePlateBlock",
 		"MixinSlabBlock",
 		"MixinStairBlock",
-		"MixinWeightedPressurePlateBlock"
+		"MixinWeightedPressurePlateBlock",
 	],
 	"client": [
+		"MixinModResourcePackCreator",
+		"MixinModelLoaderRegistry",
 		"MixinBlockModelShaper"
 	],
 	"minVersion": "0.8"
