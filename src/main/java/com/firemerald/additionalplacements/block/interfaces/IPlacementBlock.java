@@ -72,7 +72,6 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	public static final float SQRT_2_INV = 0.70710678118654752440084436210485f;
 	
 	public static Quaternionf[] DIRECTION_TRANSFORMS = new Quaternionf[] {
-			
 		new Quaternionf(SQRT_2_INV, 0, 0, SQRT_2_INV), //DOWN
 		new Quaternionf(-SQRT_2_INV, 0, 0, SQRT_2_INV), //UP
 		new Quaternionf(0, 1, 0, 0), //NORTH

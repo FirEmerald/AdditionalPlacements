@@ -13,7 +13,7 @@ public class BakedParticleDeferredBlockModel extends BakedModelWrapper<BakedMode
 {
 	private static final Map<Pair<BakedModel, ResourceLocation>, BakedParticleDeferredBlockModel> CACHE = new HashMap<>();
 	
-	public static BakedParticleDeferredBlockModel of(BakedModel model, TextureAtlasSprite particle)
+	public synchronized static BakedParticleDeferredBlockModel of(BakedModel model, TextureAtlasSprite particle)
 	{
 		return CACHE.computeIfAbsent(Pair.of(model, particle.atlasLocation()), k -> new BakedParticleDeferredBlockModel(model, particle));
 	}
