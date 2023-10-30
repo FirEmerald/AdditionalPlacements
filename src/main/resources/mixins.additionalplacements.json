@@ -6,14 +6,15 @@
 	"mixins": [
 		"MixinStructureTransform",
 		"MixinBasePressurePlateBlock",
-		"MixinBlockCallbacks",
+		"MixinMappedRegistry",
 		"MixinCarpetBlock",
 		"MixinPressurePlateBlock",
 		"MixinSlabBlock",
 		"MixinStairBlock",
-		"MixinWeightedPressurePlateBlock"
+		"MixinWeightedPressurePlateBlock",
 	],
 	"client": [
+		"MixinModResourcePackCreator",
 		"MixinBlockModelShaper"
 	],
 	"minVersion": "0.8"

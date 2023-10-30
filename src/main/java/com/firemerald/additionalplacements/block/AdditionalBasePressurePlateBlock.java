@@ -178,15 +178,15 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
 	{
-		if (!isMoving && !state.is(newState.getBlock()))
+		if (!isMoving && !state.is(oldState.getBlock()))
 		{
-			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, newState);
-			super.onRemove(state, level, pos, newState, isMoving);
+			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
+			super.onRemove(state, level, pos, oldState, isMoving);
 		}
 	}
-	
+
 	protected void updateNeighbours(Level level, BlockPos pos, BlockState state)
 	{
 		level.updateNeighborsAt(pos, this);

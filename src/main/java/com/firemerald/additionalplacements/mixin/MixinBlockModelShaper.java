@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(BlockModelShaper.class)
 public class MixinBlockModelShaper
 {
-	@SuppressWarnings("deprecation")
 	@Inject(method = "getBlockModel", at = @At("RETURN"), cancellable = true)
     public void onGetBlockModel(BlockState state, CallbackInfoReturnable<BakedModel> ci)
     {

@@ -7,56 +7,30 @@ import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
-import com.firemerald.additionalplacements.common.CommonModEventHandler;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 
-import cjminecraft.doubleslabs.common.config.DSConfig;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 {
-	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
-	{
-		@Override
-		public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
-		{
-			if (ISlabBlock.super.disablePlacement(pos, level, direction)) return true;
-			else if (CommonModEventHandler.doubleslabsLoaded)
-			{
-				if (!DSConfig.COMMON.disableVerticalSlabPlacement.get()) return true;
-				BlockState blockState = level.getBlockState(pos);
-				if (blockState.getBlock() instanceof SlabBlock)
-				{
-					if (
-							(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM && direction == Direction.UP) || 
-							(blockState.getValue(SlabBlock.TYPE) == SlabType.TOP && direction == Direction.DOWN)) return true;
-					else return false;
-				}
-				else return false;
-			}
-			else return false;
-		}
-	}
+	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock> {}
 
 	@Override
 	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
@@ -197,7 +171,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial)
 	{
 		Matrix4f poseMat = pose.last().pose();
@@ -237,6 +211,6 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(MutableComponent.create(new TranslatableContents("tooltip.additionalplacements.vertical_placement")));
+		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 	}
 }

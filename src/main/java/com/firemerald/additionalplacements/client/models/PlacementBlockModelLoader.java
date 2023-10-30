@@ -9,11 +9,11 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 
+import io.github.fabricators_of_create.porting_lib.model.geometry.IGeometryLoader;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraftforge.client.model.geometry.IGeometryLoader;
 
 public class PlacementBlockModelLoader implements IGeometryLoader<PlacementBlockModel>, ResourceManagerReloadListener
 {

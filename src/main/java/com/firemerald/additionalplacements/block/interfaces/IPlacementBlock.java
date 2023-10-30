@@ -11,6 +11,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Camera;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,9 +32,6 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.model.data.ModelData;
 
 public interface IPlacementBlock<T extends Block> extends ItemLike
 {
@@ -78,7 +77,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 		Quaternion.fromXYZDegrees(new Vector3f(0, 90, 0)), //EAST
 	};
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
@@ -116,18 +115,18 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 		pose.popPose();
 	}
 
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
-
-	public abstract boolean disablePlacement();
-
+	
 	public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
 	{
 		return disablePlacement();
 	}
 
-	@OnlyIn(Dist.CLIENT)
-	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, RandomSource rand, ModelData extraData)
+	public abstract boolean disablePlacement();
+
+	@Environment(EnvType.CLIENT)
+	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, RandomSource rand)
 	{
 		return Function.identity();
 	}

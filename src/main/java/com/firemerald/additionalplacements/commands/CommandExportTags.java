@@ -18,13 +18,13 @@ import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.LevelResource;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class CommandExportTags
 {
@@ -92,12 +92,13 @@ public class CommandExportTags
 					}
 				}
 				else Files.createDirectory(dataPath);
-				Map<TagKey<Block>, List<Block>> tagMap = new HashMap<>();
-				ForgeRegistries.BLOCKS.forEach(block -> {
+				Map<TagKey<Block>, List<ResourceLocation>> tagMap = new HashMap<>();
+				Registry.BLOCK.entrySet().forEach(entry -> {
+					Block block = entry.getValue();
 					if (block instanceof AdditionalPlacementBlock)
 					{
 						Set<TagKey<Block>> tags = ((AdditionalPlacementBlock<?>) block).getDesiredTags();
-						tags.forEach(tag -> tagMap.computeIfAbsent(tag, key -> new LinkedList<>()).add(block));
+						tags.forEach(tag -> tagMap.computeIfAbsent(tag, key -> new LinkedList<>()).add(entry.getKey().location()));
 					}
 				});
 				tagMap.forEach((tag, blocks) -> {
@@ -108,7 +109,7 @@ public class CommandExportTags
 						JsonObject obj = new JsonObject();
 						obj.addProperty("replace", false);
 						JsonArray array = new JsonArray();
-						blocks.forEach(block -> array.add(ForgeRegistries.BLOCKS.getKey(block).toString()));
+						blocks.forEach(block -> array.add(block.toString()));
 						obj.add("values", array);
 						Files.writeString(tagPath, GSON.toJson(obj), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 					}

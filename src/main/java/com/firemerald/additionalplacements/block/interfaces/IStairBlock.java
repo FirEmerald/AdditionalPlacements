@@ -18,11 +18,11 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -32,8 +32,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 {
@@ -208,7 +206,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	@OnlyIn(Dist.CLIENT)
+	@Environment(EnvType.CLIENT)
 	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial)
 	{
 		Matrix4f poseMat = pose.last().pose();
@@ -389,6 +387,6 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(MutableComponent.create(new TranslatableContents("tooltip.additionalplacements.vertical_placement")));
+		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 	}
 }

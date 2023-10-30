@@ -1,11 +1,13 @@
 package com.firemerald.additionalplacements.block;
 
+import com.firemerald.additionalplacements.block.interfaces.IAdditionalBeaconBeamBlock;
 import com.firemerald.additionalplacements.block.interfaces.IWeightedPressurePlateBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.phys.AABB;
 
@@ -13,7 +15,15 @@ public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressure
 {
 	public static AdditionalWeightedPressurePlateBlock of(WeightedPressurePlateBlock plate)
 	{
-		return new AdditionalWeightedPressurePlateBlock(plate);
+		return plate instanceof BeaconBeamBlock ? new AdditionalBeaconBeamWeightedPressurePlateBlock(plate) : new AdditionalWeightedPressurePlateBlock(plate);
+	}
+	
+	private static class AdditionalBeaconBeamWeightedPressurePlateBlock extends AdditionalWeightedPressurePlateBlock implements IAdditionalBeaconBeamBlock<WeightedPressurePlateBlock>
+	{
+		AdditionalBeaconBeamWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
+		{
+			super(plate);
+		}
 	}
 	
 	private AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
