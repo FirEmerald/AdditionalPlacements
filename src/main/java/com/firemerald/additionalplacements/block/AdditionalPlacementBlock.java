@@ -24,7 +24,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.*;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -49,7 +52,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
 	}
-	
+
+	@Override
 	public T getOtherBlock()
 	{
 		return parentBlock;
@@ -68,7 +72,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		copyPropsStatic = props;
 		return BlockBehaviour.Properties.copy(parentBlock);
 	}
-	
+
 	public boolean hasCustomColors()
 	{
 		return false;
@@ -260,7 +264,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		applyChanges(state, modelState, level, pos);
 		return res;
 	}
-	
+
 	public void applyChanges(BlockState oldState, BlockState modelState, Level level, BlockPos pos)
 	{
 		BlockState newState = level.getBlockState(pos);
@@ -282,7 +286,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 			}
 		}
 	}
-	
+
 	public static <V extends Comparable<V>> BlockState copy(Property<V> property, BlockState from, BlockState to)
 	{
 		return to.setValue(property, from.getValue(property));
@@ -313,15 +317,15 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		if (!hasTagsList.isEmpty() || !desiredTagsList.isEmpty()) return Triple.of(this, desiredTagsList, hasTagsList);
 		else return null;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public Set<TagKey<Block>> getDesiredTags()
 	{
 		return modifyTags(parentBlock.builtInRegistryHolder().tags());
 	}
-	
+
 	public abstract String getTagTypeName();
-	
+
 	public abstract String getTagTypeNamePlural();
 
 	public Set<TagKey<Block>> modifyTags(Stream<TagKey<Block>> tags)
@@ -378,13 +382,13 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	{
 		return this.getModelState(state).getFluidState();
 	}
-	
+
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, BlockGetter level, BlockPos pos)
 	{
 		return this.getModelState(state).propagatesSkylightDown(level, pos);
 	}
-	
+
 	@Override
 	public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos)
 	{

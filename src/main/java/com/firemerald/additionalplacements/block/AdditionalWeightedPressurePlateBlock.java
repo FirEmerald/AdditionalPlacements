@@ -17,7 +17,7 @@ public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressure
 	{
 		return plate instanceof BeaconBeamBlock ? new AdditionalBeaconBeamWeightedPressurePlateBlock(plate) : new AdditionalWeightedPressurePlateBlock(plate);
 	}
-	
+
 	private static class AdditionalBeaconBeamWeightedPressurePlateBlock extends AdditionalWeightedPressurePlateBlock implements IAdditionalBeaconBeamBlock<WeightedPressurePlateBlock>
 	{
 		AdditionalBeaconBeamWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
@@ -25,7 +25,7 @@ public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressure
 			super(plate);
 		}
 	}
-	
+
 	private AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
 	{
 		super(plate);
@@ -36,7 +36,7 @@ public class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressure
 	{
 		AABB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos);
 		int i = Math.min(level.getEntitiesOfClass(Entity.class, aabb).size(), parentBlock.maxWeight);
-		if (i > 0) return Mth.ceil(15 * (float) Math.min(parentBlock.maxWeight, i) / (float)parentBlock.maxWeight);
+		if (i > 0) return Mth.ceil(15 * (float) Math.min(parentBlock.maxWeight, i) / parentBlock.maxWeight);
 		else return 0;
 	}
 }

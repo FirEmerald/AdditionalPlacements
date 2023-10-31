@@ -64,6 +64,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 		return from;
 	}
 
+	@Override
 	@Environment(EnvType.CLIENT)
 	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand)
 	{

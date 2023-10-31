@@ -48,9 +48,9 @@ public class ClientModEvents implements ClientModInitializer
 			true,
 			PackSource.BUILT_IN
 			);
-	
+
 	private static boolean hasInit = false;
-	
+
 	public static void init(Minecraft client)
 	{
 		if (!hasInit)
@@ -76,7 +76,7 @@ public class ClientModEvents implements ClientModInitializer
     	ClientLifecycleEvents.CLIENT_STARTED.register(client -> CommonModEvents.init());
     	ClientLifecycleEvents.CLIENT_STARTED.register(ClientModEvents::init);
 	}
-	
+
 	public static void onItemTooltip(ItemStack stack, TooltipFlag context, List<Component> lines)
 	{
 		if (stack.getItem() instanceof BlockItem)
@@ -89,7 +89,7 @@ public class ClientModEvents implements ClientModInitializer
 			}
 		}
 	}
-	
+
 	public static boolean onHighlightBlock(WorldRenderContext context, @Nullable HitResult hitResult)
 	{
 		if (hitResult.getType() == HitResult.Type.BLOCK)

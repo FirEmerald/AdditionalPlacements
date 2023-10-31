@@ -128,8 +128,8 @@ public class VoxelShapes
 	STAIRS_TWIST_CLOCKWISE_WEST_NORTH = Shapes.or(PILLAR_EAST_DOWN, PILLAR_UP_SOUTH),
 	STAIRS_TWIST_COUNTER_CLOCKWISE_WEST_NORTH = Shapes.or(PILLAR_EAST_UP, PILLAR_DOWN_SOUTH);
 	//76
-			
-			
+
+
 	private static final VoxelShape[] SLABS_BY_SIDE = new VoxelShape[] {
 			SLAB_DOWN,
 			SLAB_UP,

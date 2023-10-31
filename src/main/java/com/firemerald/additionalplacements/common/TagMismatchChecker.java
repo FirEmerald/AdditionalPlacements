@@ -1,6 +1,8 @@
 package com.firemerald.additionalplacements.common;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.IntPredicate;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -38,7 +40,7 @@ public class TagMismatchChecker extends Thread
 							)
 					)
 			);
-	
+
 	public static void startChecker()
 	{
 		TagMismatchChecker old = thread;
@@ -48,12 +50,12 @@ public class TagMismatchChecker extends Thread
 		CommonModEvents.misMatchedTags = false;
 		thread.start();
 	}
-	
+
 	public static void onServerTickEnd(MinecraftServer server)
 	{
 		if (thread != null) thread.accept(server);
 	}
-	
+
 	public static void stopChecker()
 	{
 		if (thread != null)
@@ -63,15 +65,15 @@ public class TagMismatchChecker extends Thread
 			old.halted = true;
 		}
 	}
-	
+
 	private boolean halted = false;
 	private final List<Triple<Block, Collection<TagKey<Block>>, Collection<TagKey<Block>>>> blockMissingExtra = new LinkedList<>();
-	
+
 	private TagMismatchChecker()
 	{
 		super("Additional Placements Tag Mismatch Checker");
 	}
-	
+
 	@Override
 	public void run()
 	{
@@ -85,7 +87,7 @@ public class TagMismatchChecker extends Thread
 			}
 		}
 	}
-	
+
 	//this is only ever called on the server thread
 	public void accept(MinecraftServer server)
 	{
@@ -139,7 +141,7 @@ public class TagMismatchChecker extends Thread
 			}
 		}
 	}
-	
+
 	public static boolean canGenerateTags(Player player, IntPredicate hasPermission)
 	{
 		if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) return canGenerateTagsClient(player);
@@ -153,12 +155,12 @@ public class TagMismatchChecker extends Thread
 		Player clientPlayer = Minecraft.getInstance().player;
 		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
 	}
-	
+
 	public static boolean canGenerateTags(Player player)
 	{
 		return canGenerateTags(player, player::hasPermissions);
 	}
-	
+
 	public static boolean canGenerateTags(CommandSourceStack source)
 	{
 		return source.source instanceof RconConsoleSource || source.source instanceof MinecraftServer || (source.getEntity() instanceof Player && canGenerateTags((Player) source.getEntity(), source::hasPermission));

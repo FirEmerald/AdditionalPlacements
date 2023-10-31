@@ -49,7 +49,7 @@ public class MixinMappedRegistry
 			}
 		}
     }
-	
+
 	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceKey<?> key, Function<T, U> construct)
 	{
 		if (!((IPlacementBlock<?>) block).hasAdditionalStates())

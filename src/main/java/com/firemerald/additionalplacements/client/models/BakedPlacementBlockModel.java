@@ -61,7 +61,7 @@ public class BakedPlacementBlockModel implements BakedModel
 	{
 		return Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(MissingTextureAtlasSprite.getLocation());
 	}
-	
+
 	@Override
 	public ItemOverrides getOverrides()
 	{

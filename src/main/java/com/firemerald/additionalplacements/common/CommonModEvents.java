@@ -44,7 +44,7 @@ public class CommonModEvents implements ModInitializer
     	ServerLifecycleEvents.SERVER_STOPPING.register(CommonModEvents::onServerStopping);
     	ServerPlayConnectionEvents.JOIN.register(CommonModEvents::onPlayerLogin);
     }
-	
+
 	private static boolean hasInit = false;
 
 	public static void init() //TODO find better point to put this
@@ -96,7 +96,7 @@ public class CommonModEvents implements ModInitializer
 			hasInit = true;
 		}
 	}
-	
+
 	public static <T, U> void modifyMap(Supplier<BiMap<T, U>> forwardMemoized, Supplier<BiMap<U, T>> backwardMemoized, Function<BiMap<T, U>, BiMap<T, U>> modify, Field delegate, Field initialized, Field value) throws IllegalArgumentException, IllegalAccessException
 	{
 		@SuppressWarnings("unchecked")
@@ -150,13 +150,13 @@ public class CommonModEvents implements ModInitializer
 		created.forEach(pair -> Registry.register(Registry.BLOCK, pair.getLeft(), pair.getRight()));
 		AdditionalPlacementsMod.dynamicRegistration = true;
 	}
-	
+
 	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceLocation name, Function<T, U> construct, List<Pair<ResourceLocation, Block>> list)
 	{
 		if (!((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 			list.add(Pair.of(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), construct.apply(block)));
 	}
-    
+
 	public static boolean misMatchedTags = false;
 
 	public static void onRegisterCommands(CommandDispatcher<CommandSourceStack> dispatcher, boolean dedicated)
@@ -167,7 +167,7 @@ public class CommonModEvents implements ModInitializer
 	public static void onTagsUpdated(RegistryAccess registries, boolean client)
 	{
 		misMatchedTags = false;
-		if (AdditionalPlacementsMod.COMMON_CONFIG.checkTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.checkTags.get())
+		if (AdditionalPlacementsMod.COMMON_CONFIG.checkTags.get() && (!AdditionalPlacementsMod.serverSpec.isLoaded() || AdditionalPlacementsMod.SERVER_CONFIG.checkTags.get()))
 			TagMismatchChecker.startChecker(); //TODO halt on datapack reload
 	}
 
