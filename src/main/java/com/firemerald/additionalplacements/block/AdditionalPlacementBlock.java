@@ -42,7 +42,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		copyPropsStatic = null;
 		this.parentBlock = parentBlock;
 	}
-	
+
+	@Override
 	public T getOtherBlock()
 	{
 		return parentBlock;
@@ -61,7 +62,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		copyPropsStatic = props;
 		return Properties.copy(parentBlock);
 	}
-	
+
 	public boolean hasCustomColors()
 	{
 		return false;
@@ -254,7 +255,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		applyChanges(state, modelState, level, pos);
 		return res;
 	}
-	
+
 	public void applyChanges(BlockState oldState, BlockState modelState, World level, BlockPos pos)
 	{
 		BlockState newState = level.getBlockState(pos);
@@ -276,7 +277,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 			}
 		}
 	}
-	
+
 	public static <V extends Comparable<V>> BlockState copy(Property<V> property, BlockState from, BlockState to)
 	{
 		return to.setValue(property, from.getValue(property));
@@ -306,14 +307,14 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		if (!hasTagsList.isEmpty() || !desiredTagsList.isEmpty()) return Triple.of(this, desiredTagsList, hasTagsList);
 		else return null;
 	}
-	
+
 	public Set<ResourceLocation> getDesiredTags()
 	{
 		return modifyTags(parentBlock.getTags());
 	}
-	
+
 	public abstract String getTagTypeName();
-	
+
 	public abstract String getTagTypeNamePlural();
 
 	public Set<ResourceLocation> modifyTags(Set<ResourceLocation> tags)
@@ -370,19 +371,19 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	{
 		return this.getModelState(state).getFluidState();
 	}
-	
+
 	@Override
 	public boolean propagatesSkylightDown(BlockState state, IBlockReader level, BlockPos pos)
 	{
 		return this.getModelState(state).propagatesSkylightDown(level, pos);
 	}
-	
+
 	@Override
 	public float getShadeBrightness(BlockState state, IBlockReader level, BlockPos pos)
 	{
 		return this.getModelState(state).getShadeBrightness(level, pos);
 	}
-	
+
 	@Override
 	public float[] getBeaconColorMultiplier(BlockState state, IWorldReader level, BlockPos pos1, BlockPos pos2)
 	{

@@ -4,8 +4,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlockExtensions;
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
+import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlockExtensions;
 
 import net.minecraft.block.AbstractPressurePlateBlock;
 import net.minecraft.block.Block;
@@ -51,7 +51,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressur
 			new AxisAlignedBB(0, 0.125, 0.125, 0.25, 0.875, 0.875),
 			new AxisAlignedBB(0.75, 0.125, 0.125, 1, 0.875, 0.875)
 	};
-	
+
 	public final IBasePressurePlateBlockExtensions plateMethods;
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
@@ -121,14 +121,14 @@ public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressur
 		BlockPos blockpos = pos.relative(dir);
 		return canSupportRigidBlock(level, blockpos, dir.getOpposite()) || canSupportCenter(level, blockpos, dir.getOpposite());
 	}
-	
+
 	public static boolean canSupportRigidBlock(IBlockReader level, BlockPos pos, Direction dir)
 	{
 		return level.getBlockState(pos).isFaceSturdy(level, pos, dir, BlockVoxelShape.RIGID);
 	}
 
 	protected abstract int getSignalStrength(World level, BlockPos pos);
-	
+
 	@Override
 	public boolean isPossibleToRespawnInThis()
 	{
@@ -192,7 +192,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressur
 		level.updateNeighborsAt(pos, this);
 		level.updateNeighborsAt(pos.relative(state.getValue(PLACING)), this);
 	}
-	
+
 	@Override
 	public int getSignal(BlockState state, IBlockReader level, BlockPos pos, Direction dir)
 	{

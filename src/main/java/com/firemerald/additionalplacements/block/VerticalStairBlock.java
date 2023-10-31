@@ -48,7 +48,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlo
 	{
 		return new VerticalStairBlock(stairs);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private VerticalStairBlock(StairsBlock stairs)
 	{
@@ -130,7 +130,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairsBlo
     public static enum EnumShape implements IStringSerializable
     {
         STRAIGHT("straight", false, false, false, false),
-        
+
         OUTER_TWIST_CW("outer_twist_clockwise", false, false, false, false),
         OUTER_TWIST_CCW("outer_twist_counter_clockwise", false, false, false, false),
 

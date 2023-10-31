@@ -9,10 +9,10 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.StairStateHelper;
-import com.firemerald.additionalplacements.block.VerticalStairBlock;
 import com.firemerald.additionalplacements.block.StairStateHelper.EnumPlacing;
 import com.firemerald.additionalplacements.block.StairStateHelper.EnumShape;
 import com.firemerald.additionalplacements.block.StairStateHelper.PartialState;
+import com.firemerald.additionalplacements.block.VerticalStairBlock;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -46,7 +46,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		PartialState partial = StairStateHelper.getPartialState(placing, shape);
 		return partial.apply(partial.isHorizontal() ? getDefaultVanillaState(currentState) : getDefaultAdditionalState(currentState));
 	}
-	
+
 	public default EnumShape getOpposite(EnumShape shape)
 	{
 		switch (shape)
@@ -119,7 +119,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 					if (belowPlace != null)
 					{
 						if ((belowPlace.right == placing.top && belowPlace.front == placing.front) || (belowPlace.left == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_LEFT;
-						if ((belowPlace.left == placing.top && belowPlace.front == placing.front) || (belowPlace.right == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_TWIST_RIGHT; 
+						if ((belowPlace.left == placing.top && belowPlace.front == placing.front) || (belowPlace.right == placing.top && belowPlace.top == placing.front)) return EnumShape.OUTSIDE_TWIST_RIGHT;
 					}
 					return EnumShape.OUTSIDE_HORIZONTAL_LEFT;
 				}

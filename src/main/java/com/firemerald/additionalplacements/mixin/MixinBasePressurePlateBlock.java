@@ -18,7 +18,7 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 
 	@Shadow
 	protected abstract void playOffSound(IWorld pLevel, BlockPos pPos);
-	
+
 	@Shadow
 	protected abstract BlockState setSignalForState(BlockState pState, int pStrength);
 
@@ -39,7 +39,7 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 	{
 		playOffSound(pLevel, pPos);
 	}
-	
+
 	@Override
 	public BlockState setSignalForStatePublic(BlockState pState, int pStrength)
 	{

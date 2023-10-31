@@ -25,7 +25,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 	{
 		return new VerticalSlabBlock(slab);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private VerticalSlabBlock(SlabBlock slab)
 	{

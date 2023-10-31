@@ -4,14 +4,14 @@ public class StateModelDefinition
 {
 	public final String model;
 	public final int xRotation, yRotation;
-	
+
 	public StateModelDefinition(String model, int xRotation, int yRotation)
 	{
 		this.model = model;
 		this.xRotation = xRotation;
 		this.yRotation = yRotation;
 	}
-	
+
 	public StateModelDefinition(String model, int yRotation)
 	{
 		this(model, 0, yRotation);
@@ -21,13 +21,13 @@ public class StateModelDefinition
 	{
 		this(model, 0, 0);
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		return (model.hashCode() << 4) | (((yRotation / 90) & 3) << 2) | ((xRotation / 90) & 3);
 	}
-	
+
 	@Override
 	public boolean equals(Object o)
 	{

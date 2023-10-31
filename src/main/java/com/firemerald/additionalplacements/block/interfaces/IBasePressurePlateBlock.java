@@ -13,12 +13,14 @@ public interface IBasePressurePlateBlock<T extends Block> extends IFloorBlock<T>
 {
 	public static interface IVanillaBasePressurePlateBlock<T extends AdditionalBasePressurePlateBlock<?>> extends IBasePressurePlateBlock<T>, IVanillaBlock<T> {}
 
+	@Override
 	public default BlockState forPlacing(Direction dir, BlockState blockState)
 	{
     	if (dir == Direction.DOWN) return getDefaultVanillaState(blockState);
     	else return getDefaultAdditionalState(blockState).setValue(AdditionalBasePressurePlateBlock.PLACING, dir);
 	}
 
+	@Override
 	@Nullable
 	public default Direction getPlacing(BlockState blockState)
 	{

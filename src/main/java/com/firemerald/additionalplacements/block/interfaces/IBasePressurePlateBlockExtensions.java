@@ -7,12 +7,12 @@ import net.minecraft.world.IWorld;
 public interface IBasePressurePlateBlockExtensions
 {
 	public abstract void playOnSoundPublic(IWorld level, BlockPos pos);
-	
+
 	public abstract void playOffSoundPublic(IWorld level, BlockPos pos);
-	
+
 	public abstract int getSignalForStatePublic(BlockState state);
 
 	public abstract BlockState setSignalForStatePublic(BlockState state, int strength);
-	
+
 	public abstract int getPressedTimePublic();
 }

@@ -93,7 +93,7 @@ public class ConfigCommon
         			return o instanceof String;
         		});
 	}
-	
+
 	public boolean isValidForGeneration(ResourceLocation blockName)
 	{
 		return !blockBlacklist.get().contains(blockName.toString()) && (!modBlacklist.get().contains(blockName.getNamespace()) || blockWhitelist.get().contains(blockName.toString()));

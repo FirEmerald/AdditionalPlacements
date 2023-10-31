@@ -91,7 +91,7 @@ public class BlockstatesPackResources implements IResourcePack
 		}
 		else return false;
 	}
-	
+
 	public static ResourceLocation getBlockstateJson(Block block)
 	{
 		if (block instanceof VerticalSlabBlock) return SLAB_BLOCKSTATES;

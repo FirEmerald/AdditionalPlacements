@@ -7,19 +7,19 @@ public class ModelKey
 {
 	public final BlockState state;
 	public final Direction side;
-	
+
 	public ModelKey(BlockState state, Direction side)
 	{
 		this.state = state;
 		this.side = side;
 	}
-	
+
 	@Override
 	public int hashCode()
 	{
 		return (state.hashCode() << 3) | (side == null ? 7 : side.ordinal());
 	}
-	
+
 	@Override
 	public boolean equals(Object o)
 	{

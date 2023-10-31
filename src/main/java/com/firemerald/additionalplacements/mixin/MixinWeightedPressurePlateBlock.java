@@ -78,7 +78,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 	}
 
 	@Inject(at = @At("RETURN"), remap = false, cancellable = true, target = {
-			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockItemUseContext.class}), 
+			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockItemUseContext.class}),
 			@Desc(value = "func_196258_a", ret = BlockState.class, args = {BlockItemUseContext.class})
 	})
 	private void getStateForPlacement(BlockItemUseContext context, CallbackInfoReturnable<BlockState> ci)
@@ -95,7 +95,7 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 	}
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
-			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
+			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
 			@Desc(value = "func_185499_a", ret = BlockState.class, args = {BlockState.class, Rotation.class})
 	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added

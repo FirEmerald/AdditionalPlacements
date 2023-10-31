@@ -36,7 +36,7 @@ import net.minecraftforge.client.model.data.IModelData;
 public interface IPlacementBlock<T extends Block> extends IItemProvider
 {
 	public T getOtherBlock();
-	
+
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
 		return transform(blockState, rotation::rotate);
@@ -46,7 +46,7 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider
 	{
 		return transform(blockState, mirror::mirror);
 	}
-	
+
 	public BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
 
 	public BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState);

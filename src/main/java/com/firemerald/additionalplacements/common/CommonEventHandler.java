@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 public class CommonEventHandler
 {
 	public static boolean misMatchedTags = false;
-	
+
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event)
 	{
@@ -32,7 +32,7 @@ public class CommonEventHandler
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onRegisterCommands(RegisterCommandsEvent event)
 	{
@@ -46,7 +46,7 @@ public class CommonEventHandler
 		if (AdditionalPlacementsMod.COMMON_CONFIG.checkTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.checkTags.get())
 			TagMismatchChecker.startChecker(); //TODO halt on datapack reload
 	}
-	
+
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event)
 	{

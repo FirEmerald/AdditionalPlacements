@@ -65,6 +65,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 		return from;
 	}
 
+	@Override
 	@OnlyIn(Dist.CLIENT)
 	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)
 	{
@@ -87,7 +88,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 			default: return side;
 			}
 		};
-		case SOUTH: return side -> { 
+		case SOUTH: return side -> {
 			switch (side) {
 			case UP: return Direction.NORTH;
 			case DOWN: return Direction.SOUTH;

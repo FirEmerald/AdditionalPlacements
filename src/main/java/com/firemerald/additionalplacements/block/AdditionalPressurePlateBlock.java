@@ -17,7 +17,7 @@ public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlo
 	{
 		return new AdditionalPressurePlateBlock(plate);
 	}
-	
+
 	private AdditionalPressurePlateBlock(PressurePlateBlock plate)
 	{
 		super(plate);

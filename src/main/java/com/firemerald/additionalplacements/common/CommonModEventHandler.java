@@ -59,13 +59,13 @@ public class CommonModEventHandler
 		created.forEach(registry::register);
 		AdditionalPlacementsMod.dynamicRegistration = true;
 	}
-	
+
 	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceLocation name, Function<T, U> construct, List<Block> list)
 	{
 		if (!((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
 			list.add(construct.apply(block).setRegistryName(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()));
 	}
-	
+
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event)
 	{
@@ -74,9 +74,9 @@ public class CommonModEventHandler
 			event.getGenerator().addProvider(new ModelGenerator(event.getGenerator(), AdditionalPlacementsMod.MOD_ID, event.getExistingFileHelper()));
 		}
 	}
-	
+
 	public static boolean doubleslabsLoaded;
-	
+
 	@SubscribeEvent
 	public static void onFMLCommonSetup(FMLCommonSetupEvent event)
 	{
