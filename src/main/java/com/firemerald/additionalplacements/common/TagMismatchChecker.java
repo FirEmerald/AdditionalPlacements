@@ -1,6 +1,8 @@
 package com.firemerald.additionalplacements.common;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.IntPredicate;
 
@@ -14,8 +16,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ClickEvent.Action;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.rcon.RconConsoleSource;
 import net.minecraft.tags.TagKey;
@@ -32,13 +36,13 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 public class TagMismatchChecker extends Thread implements Consumer<ServerTickEvent>
 {
 	private static TagMismatchChecker thread = null;
-	public static final Component MESSAGE = 
+	public static final Component MESSAGE =
 			Component.translatable("msg.additionalplacements.mismatchedtags.0")
 			.append(Component.literal("/ap_tags_export").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(Action.RUN_COMMAND, "/ap_tags_export")).withColor(ChatFormatting.BLUE).withUnderlined(true)))
 			.append(Component.translatable("msg.additionalplacements.mismatchedtags.1")).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withUnderlined(false))
 			.append(Component.literal("/reload").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(Action.RUN_COMMAND, "/reload")).withColor(ChatFormatting.BLUE).withUnderlined(true)))
 			.append(Component.translatable("msg.additionalplacements.mismatchedtags.2")).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withUnderlined(false));
-	
+
 	public static void startChecker()
 	{
 		TagMismatchChecker old = thread;
@@ -48,7 +52,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 		CommonEventHandler.misMatchedTags = false;
 		thread.start();
 	}
-	
+
 	public static void stopChecker()
 	{
 		if (thread != null)
@@ -58,15 +62,15 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 			old.halted = true;
 		}
 	}
-	
+
 	private boolean halted = false;
 	private final List<Triple<Block, Collection<TagKey<Block>>, Collection<TagKey<Block>>>> blockMissingExtra = new LinkedList<>();
-	
+
 	private TagMismatchChecker()
 	{
 		super("Additional Placements Tag Mismatch Checker");
 	}
-	
+
 	@Override
 	public void run()
 	{
@@ -81,8 +85,9 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 		}
 		MinecraftForge.EVENT_BUS.addListener(this); //listen for next server tick
 	}
-	
+
 	//this is only ever called on the server thread
+	@Override
 	public void accept(ServerTickEvent event)
 	{
 		MinecraftForge.EVENT_BUS.unregister(this); //only listen once
@@ -136,7 +141,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 			}
 		}
 	}
-	
+
 	public static boolean canGenerateTags(Player player, IntPredicate hasPermission)
 	{
 		if (FMLLoader.getDist().isClient()) return canGenerateTagsClient(player);
@@ -150,12 +155,12 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 		Player clientPlayer = Minecraft.getInstance().player;
 		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
 	}
-	
+
 	public static boolean canGenerateTags(Player player)
 	{
 		return canGenerateTags(player, player::hasPermissions);
 	}
-	
+
 	public static boolean canGenerateTags(CommandSourceStack source)
 	{
 		return source.source instanceof RconConsoleSource || source.source instanceof MinecraftServer || (source.isPlayer() && canGenerateTags((Player) source.getEntity(), source::hasPermission));

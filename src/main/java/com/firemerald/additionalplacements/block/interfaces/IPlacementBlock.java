@@ -37,7 +37,7 @@ import net.minecraftforge.client.model.data.ModelData;
 public interface IPlacementBlock<T extends Block> extends ItemLike
 {
 	public T getOtherBlock();
-	
+
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
 		return transform(blockState, rotation::rotate);
@@ -47,7 +47,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	{
 		return transform(blockState, mirror::mirror);
 	}
-	
+
 	public BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
 
 	public BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState);
@@ -70,7 +70,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	public boolean isThis(BlockState blockState);
 
 	public static final float SQRT_2_INV = 0.70710678118654752440084436210485f;
-	
+
 	public static Quaternionf[] DIRECTION_TRANSFORMS = new Quaternionf[] {
 		new Quaternionf(SQRT_2_INV, 0, 0, SQRT_2_INV), //DOWN
 		new Quaternionf(-SQRT_2_INV, 0, 0, SQRT_2_INV), //UP

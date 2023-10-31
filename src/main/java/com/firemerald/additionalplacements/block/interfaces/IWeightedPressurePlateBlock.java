@@ -8,7 +8,7 @@ import net.minecraft.world.level.block.Block;
 public interface IWeightedPressurePlateBlock<T extends Block> extends IBasePressurePlateBlock<T>
 {
 	public static interface IVanillaWeightedPressurePlateBlock extends IVanillaBasePressurePlateBlock<AdditionalWeightedPressurePlateBlock>, IWeightedPressurePlateBlock<AdditionalWeightedPressurePlateBlock> {}
-	
+
     @Override
 	public default boolean disablePlacement()
 	{

@@ -14,7 +14,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(PressurePlateBlock.class)
@@ -75,7 +78,7 @@ public abstract class MixinPressurePlateBlock extends Block implements IVanillaP
 	}
 
 	@Inject(at = @At("RETURN"), remap = false, cancellable = true, target = {
-			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockPlaceContext.class}), 
+			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockPlaceContext.class}),
 			@Desc(value = "m_5573_", ret = BlockState.class, args = {BlockPlaceContext.class})
 	})
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
@@ -93,7 +96,7 @@ public abstract class MixinPressurePlateBlock extends Block implements IVanillaP
 	}
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
-			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
+			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
 			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
 	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)

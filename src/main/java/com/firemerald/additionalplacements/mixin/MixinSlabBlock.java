@@ -89,7 +89,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	}
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
-			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}), 
+			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
 			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
 			})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
