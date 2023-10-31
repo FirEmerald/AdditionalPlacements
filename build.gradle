@@ -7,7 +7,7 @@ version = project.mod_version
 group = project.maven_group
 
 base {
-	archivesName = project.archives_base_name
+	archivesName = project.archives_base_name + "-" + project.minecraft_version
 }
 
 repositories {
@@ -108,7 +108,7 @@ java {
 	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
 	// if it is present.
 	// If you remove this line, sources will not be generated.
-	withSourcesJar()
+	// withSourcesJar()
 
 	sourceCompatibility = JavaVersion.VERSION_17
 	targetCompatibility = JavaVersion.VERSION_17
@@ -116,7 +116,7 @@ java {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.base.archivesName.get()}"}
+		rename { "${it}_${project.archives_base_name}"}
 	}
 }
 
