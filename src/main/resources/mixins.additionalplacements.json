@@ -10,7 +10,7 @@
 		"MixinPressurePlateBlock",
 		"MixinSlabBlock",
 		"MixinStairBlock",
-		"MixinWeightedPressurePlateBlock",
+		"MixinWeightedPressurePlateBlock"
 	],
 	"client": [
 		"MixinModResourcePackCreator",
