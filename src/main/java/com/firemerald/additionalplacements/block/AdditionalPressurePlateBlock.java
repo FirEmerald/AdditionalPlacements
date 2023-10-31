@@ -19,7 +19,7 @@ public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlo
 	{
 		return plate instanceof BeaconBeamBlock ? new AdditionalBeaconBeamPressurePlateBlock(plate) : new AdditionalPressurePlateBlock(plate);
 	}
-	
+
 	private static class AdditionalBeaconBeamPressurePlateBlock extends AdditionalPressurePlateBlock implements IAdditionalBeaconBeamBlock<PressurePlateBlock>
 	{
 		AdditionalBeaconBeamPressurePlateBlock(PressurePlateBlock plate)
@@ -27,7 +27,7 @@ public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlo
 			super(plate);
 		}
 	}
-	
+
 	private AdditionalPressurePlateBlock(PressurePlateBlock plate)
 	{
 		super(plate);

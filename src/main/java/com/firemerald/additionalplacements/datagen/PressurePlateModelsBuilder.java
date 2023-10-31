@@ -31,7 +31,7 @@ public class PressurePlateModelsBuilder
 		setStateModelDefinitions(Direction.SOUTH, 270, 0);
 		setStateModelDefinitions(Direction.SOUTH, 270, 90);
 	}
-	
+
 	static void setStateModelDefinitions(Direction dir, int rotX, int rotY)
 	{
 		StateModelDefinition[] array = PRESSURE_PLATE_DEFINITIONS[dir.ordinal() - 1];

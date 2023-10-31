@@ -27,7 +27,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 	{
 		return slab instanceof BeaconBeamBlock ? new AdditionalBeaconBeamVerticalSlabBlock(slab) : new VerticalSlabBlock(slab);
 	}
-	
+
 	private static class AdditionalBeaconBeamVerticalSlabBlock extends VerticalSlabBlock implements IAdditionalBeaconBeamBlock<SlabBlock>
 	{
 		AdditionalBeaconBeamVerticalSlabBlock(SlabBlock slab)
@@ -35,7 +35,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 			super(slab);
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private VerticalSlabBlock(SlabBlock slab)
 	{

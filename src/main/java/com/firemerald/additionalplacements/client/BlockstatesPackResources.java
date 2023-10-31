@@ -2,7 +2,8 @@ package com.firemerald.additionalplacements.client;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.*;
+import java.util.Collections;
+import java.util.Set;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
@@ -62,13 +63,13 @@ public class BlockstatesPackResources implements PackResources
 			});
 		}
 	}
-	
+
 	public static IoSupplier<InputStream> getResourceFor(Block block)
 	{
 		ResourceLocation loc = getBlockstateJson(block);
 		return loc == null ? null : () -> Minecraft.getInstance().getResourceManager().getResource(loc).get().open();
 	}
-	
+
 	public static ResourceLocation getBlockstateJson(Block block)
 	{
 		if (block instanceof VerticalSlabBlock) return SLAB_BLOCKSTATES;

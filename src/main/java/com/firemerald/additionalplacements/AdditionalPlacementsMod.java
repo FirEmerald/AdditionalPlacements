@@ -1,12 +1,5 @@
 package com.firemerald.additionalplacements;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.file.Path;
-import java.util.Collection;
-import java.util.Map;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,13 +9,10 @@ import com.firemerald.additionalplacements.common.ConfigServer;
 import com.firemerald.additionalplacements.common.TagMismatchChecker;
 
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
-import fuzs.forgeconfigapiport.impl.core.CommonAbstractions;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.fml.config.ConfigTracker;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.config.ModConfig.Type;
 
 public class AdditionalPlacementsMod implements ModInitializer
 {
@@ -42,14 +32,14 @@ public class AdditionalPlacementsMod implements ModInitializer
         serverSpec = serverSpecPair.getRight();
         SERVER_CONFIG = serverSpecPair.getLeft();
     }
-    
+
     public static boolean dynamicRegistration = false;
 
-    public void onInitialize()
+    public AdditionalPlacementsMod()
     {
-    	ServerTickEvents.END_SERVER_TICK.register(TagMismatchChecker::onServerTickEnd);
     	ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.COMMON, commonSpec);
     	ForgeConfigRegistry.INSTANCE.register(MOD_ID, ModConfig.Type.SERVER, serverSpec);
+    	/*
 		try
 		{
 			LOGGER.info("Attempting to manually load Additional Placements config early.");
@@ -66,6 +56,12 @@ public class AdditionalPlacementsMod implements ModInitializer
 		{
 			LOGGER.error("Failed to load only Additional Placements config. Automatic block registrations settings will not be applied.", e);
 		}
-        //LOGGER.warn("During block registration you may recieve several reports of \"Potentially Dangerous alternative prefix `additionalplacements`\". Ignore these, they are intended.");
+		*/
+    }
+
+    @Override
+    public void onInitialize()
+    {
+    	ServerTickEvents.END_SERVER_TICK.register(TagMismatchChecker::onServerTickEnd);
     }
 }

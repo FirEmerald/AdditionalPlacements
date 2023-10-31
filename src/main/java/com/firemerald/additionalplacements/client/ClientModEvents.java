@@ -51,7 +51,7 @@ public class ClientModEvents implements ClientModInitializer
 			true,
 			PackSource.BUILT_IN
 			);
-	
+
 	@Override
 	public void onInitializeClient()
 	{
@@ -61,9 +61,9 @@ public class ClientModEvents implements ClientModInitializer
     	ClientLifecycleEvents.CLIENT_STARTED.register(ClientModEvents::init);
     	RegisterGeometryLoadersCallback.EVENT.register(loaders -> loaders.put(PlacementBlockModelLoader.ID, loader = new PlacementBlockModelLoader()));
 	}
-	
+
 	private static boolean hasInit = false;
-	
+
 	public static void init(Minecraft client)
 	{
 		if (!hasInit)
@@ -82,7 +82,7 @@ public class ClientModEvents implements ClientModInitializer
 			hasInit = true;
 		}
 	}
-	
+
 	public static void onItemTooltip(ItemStack stack, TooltipFlag context, List<Component> lines)
 	{
 		if (stack.getItem() instanceof BlockItem)
@@ -95,7 +95,7 @@ public class ClientModEvents implements ClientModInitializer
 			}
 		}
 	}
-	
+
 	public static boolean onHighlightBlock(WorldRenderContext context, @Nullable HitResult hitResult)
 	{
 		if (hitResult.getType() == HitResult.Type.BLOCK)

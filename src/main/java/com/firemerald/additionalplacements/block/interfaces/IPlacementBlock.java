@@ -36,7 +36,7 @@ import net.minecraft.world.phys.Vec3;
 public interface IPlacementBlock<T extends Block> extends ItemLike
 {
 	public T getOtherBlock();
-	
+
 	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
 		return transform(blockState, rotation::rotate);
@@ -46,7 +46,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	{
 		return transform(blockState, mirror::mirror);
 	}
-	
+
 	public BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
 
 	public BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState);
@@ -119,7 +119,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 
 	@Environment(EnvType.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
-	
+
 	public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
 	{
 		return disablePlacement();

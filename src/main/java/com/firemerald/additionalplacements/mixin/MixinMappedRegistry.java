@@ -26,7 +26,7 @@ public class MixinMappedRegistry
 	@Inject(method = "registerMapping(ILnet/minecraft/resources/ResourceKey;Ljava/lang/Object;Lcom/mojang/serialization/Lifecycle;)Lnet/minecraft/core/Holder$Reference;", at = @At("RETURN"))
     private void onRegisterMapping(int id, ResourceKey<?> key, Object value, Lifecycle lifecycle, CallbackInfoReturnable<Holder.Reference<?>> ci)
     {
-		if ((Object) this == BuiltInRegistries.BLOCK && AdditionalPlacementsMod.dynamicRegistration)
+		if (this == BuiltInRegistries.BLOCK && AdditionalPlacementsMod.dynamicRegistration)
 		{
 			if (value instanceof SlabBlock)
 			{
@@ -50,7 +50,7 @@ public class MixinMappedRegistry
 			}
 		}
     }
-	
+
 	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceKey<?> key, Function<T, U> construct)
 	{
 		if (!((IPlacementBlock<?>) block).hasAdditionalStates())

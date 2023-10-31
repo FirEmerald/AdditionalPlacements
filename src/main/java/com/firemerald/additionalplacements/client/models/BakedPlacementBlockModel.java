@@ -1,6 +1,9 @@
 package com.firemerald.additionalplacements.client.models;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -70,7 +73,7 @@ public class BakedPlacementBlockModel implements BakedModel
 	    if (state.getBlock() instanceof AdditionalPlacementBlock) return getModel.apply(((AdditionalPlacementBlock<?>) state.getBlock()).getModelState(state)).getParticleIcon();
 	    else return getParticleIcon();
 	}
-	
+
 	@Override
 	public ItemOverrides getOverrides()
 	{

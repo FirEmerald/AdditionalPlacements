@@ -1,6 +1,9 @@
 package com.firemerald.additionalplacements.common;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.IntPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -16,7 +19,7 @@ public class AdditionalPlacementsBlockTags
 {
 	private static final IntPredicate SEPERATOR = c -> { return c == '_' || c == ' ' || c == '/' || c == '.'; };
 	private static Map<String, Map<TagKey<Block>, TagKey<Block>>> remappedTags = new HashMap<>();
-	
+
 	public static Set<TagKey<Block>> remap(Stream<TagKey<Block>> tags, String typeName, String typeNamePlural)
 	{
 		Map<TagKey<Block>, TagKey<Block>> mapped = remappedTags.computeIfAbsent(typeName, key -> new HashMap<>());
@@ -32,15 +35,14 @@ public class AdditionalPlacementsBlockTags
 			else return remap(beginPlural, tag, typeNamePlural);
 		})).collect(Collectors.toSet());
 	}
-	
+
 	private static TagKey<Block> remap(int begin, TagKey<Block> tag, String typeName)
 	{
 		ResourceLocation loc = tag.location();
 		String path = loc.getPath();
-		if (begin > 0 //check char before
-				&& !SEPERATOR.test(path.charAt(begin - 1))) return tag;
-		if (begin + typeName.length() < path.length() //check char after
-				&& !SEPERATOR.test(path.charAt(begin + typeName.length()))) return tag;
+		if ((begin > 0 //check char before
+				&& !SEPERATOR.test(path.charAt(begin - 1))) || (begin + typeName.length() < path.length() //check char after
+				&& !SEPERATOR.test(path.charAt(begin + typeName.length())))) return tag;
 		return BlockTags.create(AdditionalPlacementsMod.MOD_ID + ":" + loc.getNamespace() + "/" + path.substring(0, begin) + "vertical_" + path.substring(begin));
 	}
 }
