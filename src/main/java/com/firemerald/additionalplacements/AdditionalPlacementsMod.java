@@ -20,7 +20,8 @@ public class AdditionalPlacementsMod implements ModInitializer
 	public static final String MOD_ID = "additionalplacements";
     public static final Logger LOGGER = LoggerFactory.getLogger("Additional Placements");
 
-    static final ForgeConfigSpec commonSpec, serverSpec;
+    static final ForgeConfigSpec commonSpec;
+	public static final ForgeConfigSpec serverSpec;
     public static final ConfigCommon COMMON_CONFIG;
     public static final ConfigServer SERVER_CONFIG;
     static {
@@ -31,14 +32,18 @@ public class AdditionalPlacementsMod implements ModInitializer
         serverSpec = serverSpecPair.getRight();
         SERVER_CONFIG = serverSpecPair.getLeft();
     }
-    
+
     public static boolean dynamicRegistration = false;
 
+    public AdditionalPlacementsMod()
+    {
+        ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.COMMON, commonSpec);
+        ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.SERVER, serverSpec);
+    }
+
+    @Override
     public void onInitialize()
     {
     	ServerTickEvents.END_SERVER_TICK.register(TagMismatchChecker::onServerTickEnd);
-        ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.COMMON, commonSpec);
-        ModLoadingContext.registerConfig(MOD_ID, ModConfig.Type.SERVER, serverSpec);
-        //LOGGER.warn("During block registration you may recieve several reports of \"Potentially Dangerous alternative prefix `additionalplacements`\". Ignore these, they are intended.");
     }
 }

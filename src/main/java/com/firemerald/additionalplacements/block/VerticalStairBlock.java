@@ -50,7 +50,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 	{
 		return stairs instanceof BeaconBeamBlock ? new AdditionalBeaconBeamVerticalStairBlock(stairs) : new VerticalStairBlock(stairs);
 	}
-	
+
 	private static class AdditionalBeaconBeamVerticalStairBlock extends VerticalStairBlock implements IAdditionalBeaconBeamBlock<StairBlock>
 	{
 		AdditionalBeaconBeamVerticalStairBlock(StairBlock stairs)
@@ -58,7 +58,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 			super(stairs);
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	private VerticalStairBlock(StairBlock stairs)
 	{
@@ -140,7 +140,7 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
     public static enum EnumShape implements StringRepresentable
     {
         STRAIGHT("straight", false, false, false, false),
-        
+
         OUTER_TWIST_CW("outer_twist_clockwise", false, false, false, false),
         OUTER_TWIST_CCW("outer_twist_counter_clockwise", false, false, false, false),
 
