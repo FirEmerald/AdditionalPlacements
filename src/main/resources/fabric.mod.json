@@ -33,6 +33,8 @@ Pressure plates can be placed on walls and ceilings.",
 	"mixins": [
 		"mixins.additionalplacements.json"
 	],
+    "accessWidener" : "additionalplacements.accesswidener",
+  
 	"depends": {
 		"fabricloader": ">=0.14.21",
 		"minecraft": "~1.20.1",
