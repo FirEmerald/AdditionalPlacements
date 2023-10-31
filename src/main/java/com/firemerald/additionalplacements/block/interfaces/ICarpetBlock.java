@@ -14,12 +14,14 @@ public interface ICarpetBlock<T extends Block> extends IFloorBlock<T>
 {
 	public static interface IVanillaCarpetBlock extends ICarpetBlock<AdditionalCarpetBlock>, IVanillaBlock<AdditionalCarpetBlock> {}
 
+	@Override
 	public default BlockState forPlacing(Direction dir, BlockState blockState)
 	{
     	if (dir == Direction.DOWN) return getDefaultVanillaState(blockState);
     	else return getDefaultAdditionalState(blockState).setValue(AdditionalCarpetBlock.PLACING, dir);
 	}
 
+	@Override
 	@Nullable
 	public default Direction getPlacing(BlockState blockState)
 	{

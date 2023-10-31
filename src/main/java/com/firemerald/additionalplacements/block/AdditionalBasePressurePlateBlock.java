@@ -51,7 +51,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 			new AABB(0, 0.125, 0.125, 0.25, 0.875, 0.875),
 			new AABB(0.75, 0.125, 0.125, 1, 0.875, 0.875)
 	};
-	
+
 	public final IBasePressurePlateBlockExtensions plateMethods;
 
 	@SuppressWarnings({ "deprecation", "unchecked" })
@@ -121,14 +121,14 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 		BlockPos blockpos = pos.relative(dir);
 		return canSupportRigidBlock(level, blockpos, dir.getOpposite()) || canSupportCenter(level, blockpos, dir.getOpposite());
 	}
-	
+
 	public static boolean canSupportRigidBlock(BlockGetter level, BlockPos pos, Direction dir)
 	{
 		return level.getBlockState(pos).isFaceSturdy(level, pos, dir, SupportType.RIGID);
 	}
 
 	protected abstract int getSignalStrength(Level level, BlockPos pos);
-	
+
 	@Override
 	public boolean isPossibleToRespawnInThis()
 	{
@@ -186,13 +186,13 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
-	
+
 	protected void updateNeighbours(Level level, BlockPos pos, BlockState state)
 	{
 		level.updateNeighborsAt(pos, this);
 		level.updateNeighborsAt(pos.relative(state.getValue(PLACING)), this);
 	}
-	
+
 	@Override
 	public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
 	{

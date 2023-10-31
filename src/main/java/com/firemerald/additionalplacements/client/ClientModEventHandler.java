@@ -59,7 +59,7 @@ public class ClientModEventHandler
     {
 		event.register(new AdditionalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
     }
-    
+
     @SubscribeEvent
     public static void init(FMLClientSetupEvent event)
     {

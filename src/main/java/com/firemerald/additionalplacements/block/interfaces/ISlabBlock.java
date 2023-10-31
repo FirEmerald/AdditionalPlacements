@@ -48,7 +48,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 				if (blockState.getBlock() instanceof SlabBlock)
 				{
 					if (
-							(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM && direction == Direction.UP) || 
+							(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM && direction == Direction.UP) ||
 							(blockState.getValue(SlabBlock.TYPE) == SlabType.TOP && direction == Direction.DOWN)) return true;
 					else return false;
 				}

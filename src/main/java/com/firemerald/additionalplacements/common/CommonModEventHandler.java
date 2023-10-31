@@ -70,7 +70,7 @@ public class CommonModEventHandler
 			AdditionalPlacementsMod.dynamicRegistration = true;
 		}
 	}
-	
+
 	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceLocation name, Function<T, U> construct, List<Pair<ResourceLocation, Block>> list)
 	{
 		if (!((IPlacementBlock<?>) block).hasAdditionalStates() && AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
@@ -123,7 +123,7 @@ public class CommonModEventHandler
 			AdditionalPlacementsMod.LOGGER.error("Failed to update WeatheringCopper and HoneycombItem maps, copper slabs and stairs will weather into vanilla states and cannot be waxed. Sorry.", e);
 		}
 	}
-	
+
 	public static <T, U> void modifyMap(Supplier<BiMap<T, U>> forwardMemoized, Supplier<BiMap<U, T>> backwardMemoized, Function<BiMap<T, U>, BiMap<T, U>> modify, Field delegate, Field initialized, Field value) throws IllegalArgumentException, IllegalAccessException
 	{
 		@SuppressWarnings("unchecked")
@@ -142,7 +142,7 @@ public class CommonModEventHandler
 		initialized.setBoolean(backwardMemoized, false);
 		value.set(backwardMemoized, null);
 	}
-	
+
 	@SubscribeEvent
 	public static void onGatherData(GatherDataEvent event)
 	{
@@ -151,9 +151,9 @@ public class CommonModEventHandler
 			event.getGenerator().addProvider(true, new ModelGenerator(event.getGenerator(), AdditionalPlacementsMod.MOD_ID, event.getExistingFileHelper()));
 		}
 	}
-	
+
 	public static boolean doubleslabsLoaded;
-	
+
 	@SubscribeEvent
 	public static void onFMLCommonSetup(FMLCommonSetupEvent event)
 	{

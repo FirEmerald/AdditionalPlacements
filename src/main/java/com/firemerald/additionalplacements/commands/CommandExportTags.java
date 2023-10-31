@@ -31,7 +31,7 @@ public class CommandExportTags
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	public static final String PACK_FOLDER_NAME = "additional_placements_generated_tags";
 	public static final ResourceLocation PACK_META_LOC = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "generated_datapack_meta.mcmeta");
-	
+
 	public static void optionalMakeDirectory(Path path) throws IOException
 	{
         if (!Files.exists(path)) Files.createDirectory(path);
@@ -41,7 +41,7 @@ public class CommandExportTags
         	Files.createDirectory(path);
         }
 	}
-	
+
 	public static void optionalMakeDirectories(Path path) throws IOException
 	{
         if (!Files.exists(path)) Files.createDirectories(path);
@@ -51,7 +51,7 @@ public class CommandExportTags
         	Files.createDirectory(path);
         }
 	}
-	
+
 	public static void emptyDirectory(Path path) throws IOException
 	{
 		Iterator<Path> it = Files.list(path).iterator();
@@ -62,7 +62,7 @@ public class CommandExportTags
 			Files.delete(file);
 		}
 	}
-	
+
 	public static void register(CommandDispatcher<CommandSourceStack> dispatch)
 	{
 		dispatch.register(Commands.literal("ap_tags_export").requires(TagMismatchChecker::canGenerateTags).executes(context -> {

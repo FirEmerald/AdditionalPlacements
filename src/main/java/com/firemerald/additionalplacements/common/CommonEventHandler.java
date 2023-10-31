@@ -22,7 +22,7 @@ import net.minecraftforge.registries.MissingMappingsEvent;
 public class CommonEventHandler
 {
 	public static boolean misMatchedTags = false;
-	
+
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event)
 	{
@@ -36,7 +36,7 @@ public class CommonEventHandler
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onRegisterCommands(RegisterCommandsEvent event)
 	{
@@ -77,7 +77,7 @@ public class CommonEventHandler
 			}
 		});
 	}
-	
+
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event)
 	{
