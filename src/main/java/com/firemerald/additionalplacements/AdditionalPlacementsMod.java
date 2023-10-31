@@ -41,7 +41,7 @@ public class AdditionalPlacementsMod
         serverSpec = serverSpecPair.getRight();
         SERVER_CONFIG = serverSpecPair.getLeft();
     }
-    
+
     public static boolean dynamicRegistration = false;
 
     public AdditionalPlacementsMod()

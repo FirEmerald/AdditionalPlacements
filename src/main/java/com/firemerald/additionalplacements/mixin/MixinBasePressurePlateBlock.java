@@ -7,7 +7,7 @@ import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBl
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(BasePressurePlateBlock.class)
@@ -18,7 +18,7 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 
 	@Shadow
 	protected abstract void playOffSound(LevelAccessor pLevel, BlockPos pPos);
-	
+
 	@Shadow
 	protected abstract BlockState setSignalForState(BlockState pState, int pStrength);
 
@@ -39,7 +39,7 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 	{
 		playOffSound(pLevel, pPos);
 	}
-	
+
 	@Override
 	public BlockState setSignalForStatePublic(BlockState pState, int pStrength)
 	{

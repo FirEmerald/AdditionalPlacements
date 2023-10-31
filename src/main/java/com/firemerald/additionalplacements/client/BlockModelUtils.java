@@ -94,12 +94,12 @@ public class BlockModelUtils
 		}
 		return size;
 	}
-	
+
 	public static float[] newVertex(int[] vertices, int vertexIndex)
 	{
 		return newVertex(vertices, vertexIndex, ZERO_POINT);
 	}
-	
+
 	public static float[] newVertex(int[] vertices, int vertexIndex, float[] origin)
 	{
 		return new float[] {
@@ -108,12 +108,12 @@ public class BlockModelUtils
 			Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]) - origin[2]
 		};
 	}
-	
+
 	public static float[] getVertex(int[] vertices, int vertexIndex, float[] des)
 	{
 		return getVertex(vertices, vertexIndex, ZERO_POINT, des);
 	}
-	
+
 	public static float[] getVertex(int[] vertices, int vertexIndex, float[] origin, float[] des)
 	{
 		des[0] = Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET]) - origin[0];
@@ -121,12 +121,12 @@ public class BlockModelUtils
 		des[2] = Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]) - origin[2];
 		return des;
 	}
-	
+
 	public static float getArea(float[] ab, float[] ac)
 	{
-		return .5f * Mth.sqrt( 
-				Mth.square(ab[0] * ac[1] - ab[1] * ac[0]) + 
-				Mth.square(ab[1] * ac[2] - ab[2] * ac[1]) + 
+		return .5f * Mth.sqrt(
+				Mth.square(ab[0] * ac[1] - ab[1] * ac[0]) +
+				Mth.square(ab[1] * ac[2] - ab[2] * ac[1]) +
 				Mth.square(ab[2] * ac[0] - ab[0] * ac[2])
 				);
 	}

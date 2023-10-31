@@ -48,7 +48,7 @@ public class MixinBlockCallbacks
 			}
 		}
     }
-	
+
 	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, Function<T, U> construct, IForgeRegistryInternal<Block> owner)
 	{
 		if (!((IPlacementBlock<?>) block).hasAdditionalStates())
