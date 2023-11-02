@@ -16,7 +16,7 @@ public class BakedParticleDeferredBlockModel extends BakedModelWrapper<BakedMode
 
 	public synchronized static BakedParticleDeferredBlockModel of(BakedModel model, TextureAtlasSprite particle)
 	{
-		return CACHE.computeIfAbsent(Pair.of(model, particle.getName()), k -> new BakedParticleDeferredBlockModel(model, particle));
+		return CACHE.computeIfAbsent(Pair.of(model, particle.atlasLocation()), k -> new BakedParticleDeferredBlockModel(model, particle));
 	}
 
 	public static void clearCache()

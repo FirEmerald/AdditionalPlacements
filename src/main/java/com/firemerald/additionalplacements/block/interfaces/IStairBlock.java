@@ -6,6 +6,8 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.StairStateHelper;
@@ -15,14 +17,10 @@ import com.firemerald.additionalplacements.block.StairStateHelper.PartialState;
 import com.firemerald.additionalplacements.block.VerticalStairBlock;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix3f;
-import com.mojang.math.Matrix4f;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -389,6 +387,6 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
     @Override
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		tooltip.add(MutableComponent.create(new TranslatableContents("tooltip.additionalplacements.vertical_placement")));
+		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 	}
 }
