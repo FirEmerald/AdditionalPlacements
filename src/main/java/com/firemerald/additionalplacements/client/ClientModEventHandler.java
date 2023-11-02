@@ -1,13 +1,19 @@
 package com.firemerald.additionalplacements.client;
 
+import java.util.List;
+
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.client.models.BakedParticleDeferredBlockModel;
 import com.firemerald.additionalplacements.client.models.PlacementBlockModelLoader;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.Pack.Info;
+import net.minecraft.server.packs.repository.Pack.ResourcesSupplier;
+import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -26,13 +32,28 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientModEventHandler
 {
+	//create(String p_252257_, Component p_248717_, boolean p_248811_, Pack.ResourcesSupplier p_248969_, Pack.Info p_251314_, Pack.Position p_252110_, boolean p_250237_, PackSource p_248524_) {
+	//public Info(Component description, PackCompatibility compatibility, FeatureFlagSet requestedFeatures, List<String> overlays)
 	public static final Pack GENERATED_RESOURCES_PACK = Pack.create(
 			"Additional Placements blockstate redirection pack",
 			Component.literal("title"),
 			true,
-			unknown -> new BlockstatesPackResources(),
-			new Pack.Info(Component.literal("description"), 9, 8, FeatureFlagSet.of(), true),
-			PackType.CLIENT_RESOURCES,
+			new ResourcesSupplier() { //TODO
+
+				@Override
+				public PackResources openPrimary(String p_298664_)
+				{
+					return new BlockstatesPackResources();
+				}
+
+				@Override
+				public PackResources openFull(String p_251717_, Info p_298253_)
+				{
+					return new BlockstatesPackResources();
+				}
+				
+			},
+			new Pack.Info(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of()),
 			Pack.Position.BOTTOM,
 			true,
 			PackSource.BUILT_IN
