@@ -69,12 +69,11 @@ public class BlockModelUtils
 				);
 	}
 
-	public static final short X_OFFSET = 0;
-	public static final short Y_OFFSET = 1;
-	public static final short Z_OFFSET = 2;
-	public static final short U_OFFSET = 4;
-	public static final short V_OFFSET = 5;
-	public static final int VERTEX_COUNT = DefaultVertexFormats.BLOCK.getVertexSize();
+	public static final int X_OFFSET = 0;
+	public static final int Y_OFFSET = 1;
+	public static final int Z_OFFSET = 2;
+	public static final int U_OFFSET = 4;
+	public static final int V_OFFSET = 5;
 	public static final int VERTEX_SIZE = DefaultVertexFormats.BLOCK.getIntegerSize();
 	public static final float[] ZERO_POINT = {0, 0, 0};
 
@@ -84,7 +83,7 @@ public class BlockModelUtils
 		float[] prev = new float[3];
 		float[] cur = newVertex(vertices, VERTEX_SIZE, first);
 		float size = 0;
-		for (int vertexIndex = VERTEX_SIZE * 2; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
+		for (int vertexIndex = VERTEX_SIZE * 2; vertexIndex < vertices.length; vertexIndex += VERTEX_SIZE)
 		{
 			float[] tmp = prev;
 			prev = cur;
@@ -133,7 +132,7 @@ public class BlockModelUtils
 	public static final int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite)
 	{
 		int[] updatedVertices = vertices.clone();
-		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
+		for (int vertexIndex = 0; vertexIndex < vertices.length; vertexIndex += VERTEX_SIZE)
 		{
 			updatedVertices[vertexIndex + U_OFFSET] = changeUVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + U_OFFSET]);
 			updatedVertices[vertexIndex + V_OFFSET] = changeVVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + V_OFFSET]);
