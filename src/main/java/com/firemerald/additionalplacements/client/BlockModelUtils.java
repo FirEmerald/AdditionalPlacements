@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -56,13 +55,15 @@ public class BlockModelUtils
 		return referredBakedQuads;
 	}
 
-	public static final BakedQuad getNewBakedQuad(BakedQuad jsonBakedQuad, TextureAtlasSprite newSprite, int newTintIndex, Direction orientation)
+	public static final BakedQuad getNewBakedQuad(BakedQuad jsonBakedQuad, TextureAtlasSprite newSprite, int newTintIndex, Direction orientation, int vertexSize, int uvOffset)
 	{
 		return new BakedQuad(
 				updateVertices(
 						jsonBakedQuad.getVertices(),
 						jsonBakedQuad.getSprite(),
-						newSprite
+						newSprite,
+						vertexSize,
+						uvOffset
 						),
 				newTintIndex,
 				orientation,
@@ -70,56 +71,49 @@ public class BlockModelUtils
 				jsonBakedQuad.isShade()
 				);
 	}
-
-	public static final short X_OFFSET = 0;
-	public static final short Y_OFFSET = 1;
-	public static final short Z_OFFSET = 2;
-	public static final short U_OFFSET = 4;
-	public static final short V_OFFSET = 5;
-	public static final int VERTEX_COUNT = DefaultVertexFormat.BLOCK.getVertexSize();
-	public static final int VERTEX_SIZE = DefaultVertexFormat.BLOCK.getIntegerSize();
+	
 	public static final float[] ZERO_POINT = {0, 0, 0};
 
-	public static final float getFaceSize(int[] vertices)
+	public static final float getFaceSize(int[] vertices, int vertexSize, int posOffset)
 	{
-		float[] first = newVertex(vertices, 0);
+		float[] first = newVertex(vertices, 0, posOffset);
 		float[] prev = new float[3];
-		float[] cur = newVertex(vertices, VERTEX_SIZE, first);
+		float[] cur = newVertex(vertices, vertexSize, first, posOffset);
 		float size = 0;
-		for (int vertexIndex = VERTEX_SIZE * 2; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
+		for (int vertexIndex = vertexSize * 2; vertexIndex < vertices.length; vertexIndex += vertexSize)
 		{
 			float[] tmp = prev;
 			prev = cur;
-			cur = getVertex(vertices, vertexIndex, first, tmp);
+			cur = getVertex(vertices, vertexIndex, first, posOffset, tmp);
 			size += getArea(prev, cur);
 		}
 		return size;
 	}
 
-	public static float[] newVertex(int[] vertices, int vertexIndex)
+	public static float[] newVertex(int[] vertices, int vertexIndex, int posOffset)
 	{
-		return newVertex(vertices, vertexIndex, ZERO_POINT);
+		return newVertex(vertices, vertexIndex, ZERO_POINT, posOffset);
 	}
 
-	public static float[] newVertex(int[] vertices, int vertexIndex, float[] origin)
+	public static float[] newVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset)
 	{
 		return new float[] {
-			Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET]) - origin[0],
-			Float.intBitsToFloat(vertices[vertexIndex + Y_OFFSET]) - origin[1],
-			Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]) - origin[2]
+			Float.intBitsToFloat(vertices[vertexIndex + posOffset]) - origin[0],
+			Float.intBitsToFloat(vertices[vertexIndex + posOffset + 1]) - origin[1],
+			Float.intBitsToFloat(vertices[vertexIndex + posOffset + 2]) - origin[2]
 		};
 	}
 
-	public static float[] getVertex(int[] vertices, int vertexIndex, float[] des)
+	public static float[] getVertex(int[] vertices, int vertexIndex, int posOffset, float[] des)
 	{
-		return getVertex(vertices, vertexIndex, ZERO_POINT, des);
+		return getVertex(vertices, vertexIndex, ZERO_POINT, posOffset, des);
 	}
 
-	public static float[] getVertex(int[] vertices, int vertexIndex, float[] origin, float[] des)
+	public static float[] getVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset, float[] des)
 	{
-		des[0] = Float.intBitsToFloat(vertices[vertexIndex + X_OFFSET]) - origin[0];
-		des[1] = Float.intBitsToFloat(vertices[vertexIndex + Y_OFFSET]) - origin[1];
-		des[2] = Float.intBitsToFloat(vertices[vertexIndex + Z_OFFSET]) - origin[2];
+		des[0] = Float.intBitsToFloat(vertices[vertexIndex + posOffset]) - origin[0];
+		des[1] = Float.intBitsToFloat(vertices[vertexIndex + posOffset + 1]) - origin[1];
+		des[2] = Float.intBitsToFloat(vertices[vertexIndex + posOffset + 2]) - origin[2];
 		return des;
 	}
 
@@ -132,29 +126,24 @@ public class BlockModelUtils
 				);
 	}
 
-	public static final int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite)
+	public static final int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertexSize, int uvOffset)
 	{
 		int[] updatedVertices = vertices.clone();
-		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
+		for (int vertexIndex = uvOffset; vertexIndex < vertices.length; vertexIndex += vertexSize)
 		{
-			updatedVertices[vertexIndex + U_OFFSET] = changeUVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + U_OFFSET]);
-			updatedVertices[vertexIndex + V_OFFSET] = changeVVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + V_OFFSET]);
+			updatedVertices[vertexIndex] = changeUVertexElementSprite(oldSprite, newSprite, vertices[vertexIndex]);
+			updatedVertices[vertexIndex + 1] = changeVVertexElementSprite(oldSprite, newSprite, vertices[vertexIndex + 1]);
 	    }
 		return updatedVertices;
 	}
 
 	private static final int changeUVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
 	{
-		return Float.floatToRawIntBits(newSprite.getU(getUV(Float.intBitsToFloat(vertex), oldSprite.getU0(), oldSprite.getU1())));
+		return Float.floatToRawIntBits(newSprite.getU(oldSprite.getUOffset(Float.intBitsToFloat(vertex))));
 	}
 
 	private static final int changeVVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
 	{
-		return Float.floatToRawIntBits(newSprite.getV(getUV(Float.intBitsToFloat(vertex), oldSprite.getV0(), oldSprite.getV1())));
-	}
-
-	private static final double getUV(float uv, float uv0, float uv1)
-	{
-		return (double) (uv - uv0) * 16.0F / (uv1 - uv0);
+		return Float.floatToRawIntBits(newSprite.getV(oldSprite.getVOffset(Float.intBitsToFloat(vertex))));
 	}
 }
