@@ -13,6 +13,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.client.BlockModelUtils;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.VertexFormat;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
@@ -107,6 +109,10 @@ public class BakedPlacementBlockModel implements IDynamicBakedModel
 	    		else transformSide = Function.identity();
 	    		ModelData modelData = BlockModelUtils.getModelData(modelState, extraData);
     			List<BakedQuad> bakedQuads = new ArrayList<>();
+    			VertexFormat format = renderType.format();
+    			int vertexSize = format.getIntegerSize();
+    			int posOffset = format.getOffset(format.getElements().indexOf(DefaultVertexFormat.ELEMENT_POSITION)) / 4;
+    			int uvOffset = format.getOffset(format.getElements().indexOf(DefaultVertexFormat.ELEMENT_UV)) / 4;
     			for (BakedQuad jsonBakedQuad : model.getQuads(state, side, rand, modelData, null)) //finds sprite-tint pair that occurs over the highest area in this direction and applies it to the quad
     			{
     				Direction orientation = jsonBakedQuad.getDirection();
@@ -120,12 +126,12 @@ public class BakedPlacementBlockModel implements IDynamicBakedModel
         				for (BakedQuad referredBakedQuad : BlockModelUtils.getBakedQuads(modelState, modelSide, rand, modelData, renderType))
         				{
         					Pair<TextureAtlasSprite, Integer> tex = Pair.of(referredBakedQuad.getSprite(), referredBakedQuad.getTintIndex());
-        					weights.put(tex, (weights.containsKey(tex) ? weights.get(tex) : 0) + BlockModelUtils.getFaceSize(referredBakedQuad.getVertices()));
+        					weights.put(tex, (weights.containsKey(tex) ? weights.get(tex) : 0) + BlockModelUtils.getFaceSize(referredBakedQuad.getVertices(), vertexSize, posOffset));
         				}
     					texture = weights.entrySet().stream().max((e1, e2) -> (int) Math.signum(e2.getValue() - e1.getValue())).map(Map.Entry::getKey).orElse(null);
     					PlacementBlockModelLoader.TEXTURE_CACHE.put(reorientedModelKey, texture);
     				}
-    				if (texture != null) bakedQuads.add(BlockModelUtils.getNewBakedQuad(jsonBakedQuad, texture.getLeft(), texture.getRight(), orientation));
+    				if (texture != null) bakedQuads.add(BlockModelUtils.getNewBakedQuad(jsonBakedQuad, texture.getLeft(), texture.getRight(), orientation, vertexSize, uvOffset));
     				else AdditionalPlacementsMod.LOGGER.warn(modelState + " has no texture for " + modelSide + ". No faces will be generated for " + orientation + ".");
     			}
     			bakedQuadsCache.put(modelKey, bakedQuads);
