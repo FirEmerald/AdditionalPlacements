@@ -70,12 +70,11 @@ public class BlockModelUtils
 				);
 	}
 
-	public static final short X_OFFSET = 0;
-	public static final short Y_OFFSET = 1;
-	public static final short Z_OFFSET = 2;
-	public static final short U_OFFSET = 4;
-	public static final short V_OFFSET = 5;
-	public static final int VERTEX_COUNT = DefaultVertexFormat.BLOCK.getVertexSize();
+	public static final int X_OFFSET = 0;
+	public static final int Y_OFFSET = 1;
+	public static final int Z_OFFSET = 2;
+	public static final int U_OFFSET = 4;
+	public static final int V_OFFSET = 5;
 	public static final int VERTEX_SIZE = DefaultVertexFormat.BLOCK.getIntegerSize();
 	public static final float[] ZERO_POINT = {0, 0, 0};
 
@@ -85,7 +84,7 @@ public class BlockModelUtils
 		float[] prev = new float[3];
 		float[] cur = newVertex(vertices, VERTEX_SIZE, first);
 		float size = 0;
-		for (int vertexIndex = VERTEX_SIZE * 2; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
+		for (int vertexIndex = VERTEX_SIZE * 2; vertexIndex < vertices.length; vertexIndex += VERTEX_SIZE)
 		{
 			float[] tmp = prev;
 			prev = cur;
@@ -134,7 +133,7 @@ public class BlockModelUtils
 	public static final int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite)
 	{
 		int[] updatedVertices = vertices.clone();
-		for (int vertexIndex = 0; vertexIndex < VERTEX_COUNT; vertexIndex += VERTEX_SIZE)
+		for (int vertexIndex = 0; vertexIndex < vertices.length; vertexIndex += VERTEX_SIZE)
 		{
 			updatedVertices[vertexIndex + U_OFFSET] = changeUVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + U_OFFSET]);
 			updatedVertices[vertexIndex + V_OFFSET] = changeVVertexElementSprite(oldSprite, newSprite, updatedVertices[vertexIndex + V_OFFSET]);
@@ -144,16 +143,11 @@ public class BlockModelUtils
 
 	private static final int changeUVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
 	{
-		return Float.floatToRawIntBits(newSprite.getU(getUV(Float.intBitsToFloat(vertex), oldSprite.getU0(), oldSprite.getU1())));
+		return Float.floatToRawIntBits(newSprite.getU(oldSprite.getUOffset(Float.intBitsToFloat(vertex))));
 	}
 
 	private static final int changeVVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
 	{
-		return Float.floatToRawIntBits(newSprite.getV(getUV(Float.intBitsToFloat(vertex), oldSprite.getV0(), oldSprite.getV1())));
-	}
-
-	private static final double getUV(float uv, float uv0, float uv1)
-	{
-		return (double) (uv - uv0) * 16.0F / (uv1 - uv0);
+		return Float.floatToRawIntBits(newSprite.getV(oldSprite.getVOffset(Float.intBitsToFloat(vertex))));
 	}
 }
