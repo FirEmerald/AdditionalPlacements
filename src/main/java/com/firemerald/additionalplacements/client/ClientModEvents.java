@@ -22,8 +22,11 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.server.packs.PackType;
+import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.Pack.Info;
+import net.minecraft.server.packs.repository.Pack.ResourcesSupplier;
+import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -44,9 +47,22 @@ public class ClientModEvents implements ClientModInitializer
 			"Additional Placements blockstate redirection pack",
 			Component.literal("title"),
 			true,
-			unknown -> new BlockstatesPackResources(),
-			new Pack.Info(Component.literal("description"), 9, FeatureFlagSet.of()),
-			PackType.CLIENT_RESOURCES,
+			new ResourcesSupplier() { //TODO
+
+				@Override
+				public PackResources openPrimary(String p_298664_)
+				{
+					return new BlockstatesPackResources();
+				}
+
+				@Override
+				public PackResources openFull(String p_251717_, Info p_298253_)
+				{
+					return new BlockstatesPackResources();
+				}
+				
+			},
+			new Pack.Info(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of()),
 			Pack.Position.BOTTOM,
 			true,
 			PackSource.BUILT_IN

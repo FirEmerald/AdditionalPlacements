@@ -3,7 +3,6 @@
 	"package": "com.firemerald.additionalplacements.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"mixins": [
-		"MixinStructureTransform",
 		"MixinBasePressurePlateBlock",
 		"MixinMappedRegistry",
 		"MixinCarpetBlock",
