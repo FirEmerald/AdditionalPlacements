@@ -23,6 +23,7 @@ public class ConfigCommon
 	public final BooleanValue disableAutomaticWeightedPressurePlatePlacement;
 	public final BooleanValue showTooltip;
 	public final BooleanValue checkTags, autoRebuildTags, logTagMismatch;
+	public final BooleanValue ap_toggle;
 	public final IntValue checkerPriority;
 	public final ConfigValue<List<String>> blockBlacklist;
 	public final ConfigValue<List<String>> modBlacklist;
@@ -74,6 +75,9 @@ public class ConfigCommon
         logTagMismatch = builder
         		.comment("Log missing or additional tags on generated blocks.")
         		.define("log_tag_mismatch", false);
+		ap_toggle = builder
+				.comment("Set default toggle mode for keybind (true = no additional placement; false = additional placement)")
+				.define("additional_placement_toggle", false);
         checkerPriority = builder
         		.comment("The thread priority of the mismatched tag checker. " + Thread.MIN_PRIORITY + " is lowest, " + Thread.MAX_PRIORITY + " is highest, " + Thread.NORM_PRIORITY + " is normal.")
         		.defineInRange("checker_priority", Thread.MIN_PRIORITY, Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);

@@ -3,8 +3,10 @@ package com.firemerald.additionalplacements.common;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.commands.CommandExportTags;
-
+import com.firemerald.additionalplacements.networking.Network;
+import com.firemerald.additionalplacements.networking.PacketSetAP;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -17,6 +19,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.MissingMappingsEvent;
+
+import static com.firemerald.additionalplacements.AdditionalPlacementsMod.AP_TOGGLE;
+import static com.firemerald.additionalplacements.AdditionalPlacementsMod.COMMON_CONFIG;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonEventHandler
@@ -82,6 +87,13 @@ public class CommonEventHandler
 	public static void onPlayerLogin(PlayerLoggedInEvent event)
 	{
 		if (misMatchedTags && !(AdditionalPlacementsMod.COMMON_CONFIG.autoRebuildTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.autoRebuildTags.get()) && TagMismatchChecker.canGenerateTags(event.getEntity())) event.getEntity().sendSystemMessage(TagMismatchChecker.MESSAGE);
+
+		if (event.getEntity() instanceof ServerPlayer player)
+		{
+			boolean b = COMMON_CONFIG.ap_toggle.get();
+			player.getPersistentData().putBoolean(AP_TOGGLE, b);
+			Network.sendToPlayer(new PacketSetAP(b, player), player);
+		}
 	}
 
 	@SubscribeEvent

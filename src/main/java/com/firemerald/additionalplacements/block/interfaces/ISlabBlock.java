@@ -36,9 +36,9 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
 	{
 		@Override
-		public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
+		public default boolean disablePlacement(BlockPos pos, Level level, Direction direction, Player player)
 		{
-			if (ISlabBlock.super.disablePlacement(pos, level, direction)) return true;
+			if (ISlabBlock.super.disablePlacement(pos, level, direction, player)) return true;
 			else if (CommonModEventHandler.doubleslabsLoaded)
 			{
 				//if (!DSConfig.COMMON.disableVerticalSlabPlacement.get()) return true;
@@ -65,6 +65,8 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 
 	public default boolean canBeReplacedImpl(BlockState state, BlockPlaceContext context)
 	{
+		if (disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) return false;
+
 		ItemStack itemstack = context.getItemInHand();
 		if (itemstack.is(this.asItem()))
 		{

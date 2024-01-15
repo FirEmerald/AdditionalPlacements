@@ -3,7 +3,8 @@ package com.firemerald.additionalplacements.client;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.client.models.BakedParticleDeferredBlockModel;
 import com.firemerald.additionalplacements.client.models.PlacementBlockModelLoader;
-
+import com.mojang.blaze3d.platform.InputConstants;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
@@ -14,8 +15,10 @@ import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.event.AddPackFindersEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -26,6 +29,21 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ClientModEventHandler
 {
+	static KeyMapping AP_KEY;
+
+	@SubscribeEvent
+	@OnlyIn(Dist.CLIENT)
+	public static void keyEVent(RegisterKeyMappingsEvent event)
+	{
+		AP_KEY = new KeyMapping(
+				"key.toggle_additional_placements",
+				InputConstants.Type.KEYSYM,
+				InputConstants.UNKNOWN.getValue(),
+				"key.categories.misc");
+
+		event.register(AP_KEY);
+	}
+
 	public static final Pack GENERATED_RESOURCES_PACK = Pack.create(
 			"Additional Placements blockstate redirection pack",
 			Component.literal("title"),
