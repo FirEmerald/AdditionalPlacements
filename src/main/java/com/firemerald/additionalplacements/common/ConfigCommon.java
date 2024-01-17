@@ -76,8 +76,10 @@ public class ConfigCommon
         		.comment("Log missing or additional tags on generated blocks.")
         		.define("log_tag_mismatch", false);
 		ap_toggle = builder
-				.comment("Set default toggle mode for keybind (true = no additional placement; false = additional placement)")
-				.define("additional_placement_toggle", false);
+				.comment("Default toggle mode for placement",
+						 "Set to true to have additional placements by default, use the keybind to toggle off/on",
+						 "Set to false to have vanilla placements by default, use the keybind to toggle additional placement on/off")
+				.define("default_placement_mode", true);
         checkerPriority = builder
         		.comment("The thread priority of the mismatched tag checker. " + Thread.MIN_PRIORITY + " is lowest, " + Thread.MAX_PRIORITY + " is highest, " + Thread.NORM_PRIORITY + " is normal.")
         		.defineInRange("checker_priority", Thread.MIN_PRIORITY, Thread.MIN_PRIORITY, Thread.MAX_PRIORITY);

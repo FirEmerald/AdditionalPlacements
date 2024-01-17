@@ -90,7 +90,7 @@ public class CommonEventHandler
 
 		if (event.getEntity() instanceof ServerPlayer player)
 		{
-			boolean b = COMMON_CONFIG.ap_toggle.get();
+			boolean b = !COMMON_CONFIG.ap_toggle.get();
 			player.getPersistentData().putBoolean(AP_TOGGLE, b);
 			Network.sendToPlayer(new PacketSetAP(b, player), player);
 		}
