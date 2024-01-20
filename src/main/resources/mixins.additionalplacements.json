@@ -11,7 +11,8 @@
 		"MixinPressurePlateBlock",
 		"MixinSlabBlock",
 		"MixinStairBlock",
-		"MixinWeightedPressurePlateBlock"
+		"MixinWeightedPressurePlateBlock",
+		"AccessorPressurePlate"
 	],
 	"client": [
 		"MixinBlockModelShaper"
