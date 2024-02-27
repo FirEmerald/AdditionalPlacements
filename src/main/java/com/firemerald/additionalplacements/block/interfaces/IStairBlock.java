@@ -3,8 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces;
 import java.util.List;
 import java.util.function.Function;
 
-import javax.annotation.Nullable;
-
+import org.jetbrains.annotations.Nullable;
 import org.apache.commons.lang3.tuple.Pair;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -242,7 +241,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
     @Override
-	public default boolean disablePlacement()
+	public default boolean disablePlacementInternal()
 	{
 		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
 	}

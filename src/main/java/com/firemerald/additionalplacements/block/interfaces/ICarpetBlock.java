@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
@@ -30,7 +30,7 @@ public interface ICarpetBlock<T extends Block> extends IFloorBlock<T>
 	}
 
     @Override
-	public default boolean disablePlacement()
+	public default boolean disablePlacementInternal()
 	{
 		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticCarpetPlacement.get();
 	}

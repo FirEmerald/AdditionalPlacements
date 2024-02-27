@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
 
