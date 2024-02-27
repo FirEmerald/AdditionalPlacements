@@ -9,7 +9,7 @@ public interface IWeightedPressurePlateBlock<T extends Block> extends IBasePress
 {
 	public static interface IVanillaWeightedPressurePlateBlock extends IVanillaBasePressurePlateBlock<AdditionalWeightedPressurePlateBlock>, IWeightedPressurePlateBlock<AdditionalWeightedPressurePlateBlock> {}
     @Override
-	public default boolean disablePlacement()
+	public default boolean disablePlacementInternal()
 	{
 		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticWeightedPressurePlatePlacement.get();
 	}
