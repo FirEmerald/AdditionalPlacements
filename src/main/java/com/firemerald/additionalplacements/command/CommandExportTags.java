@@ -63,7 +63,6 @@ public class CommandExportTags
 		}
 	}
 
-	@SuppressWarnings("resource")
 	public static void register(CommandDispatcher<CommandSource> dispatch)
 	{
 		dispatch.register(Commands.literal("ap_tags_export").requires(TagMismatchChecker::canGenerateTags).executes(context -> {

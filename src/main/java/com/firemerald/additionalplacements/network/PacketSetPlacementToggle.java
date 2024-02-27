@@ -13,17 +13,17 @@ import net.minecraftforge.fml.network.NetworkEvent;
 public class PacketSetPlacementToggle extends PacketServer
 {
 	private boolean state;
-	
+
 	public PacketSetPlacementToggle(boolean state)
 	{
 		this.state = state;
 	}
-	
+
 	public PacketSetPlacementToggle(PacketBuffer buf)
 	{
 		this.state = buf.readBoolean();
 	}
-	
+
 	@Override
 	public void write(PacketBuffer buf)
 	{
@@ -37,7 +37,7 @@ public class PacketSetPlacementToggle extends PacketServer
 		if (context.getDirection() == NetworkDirection.PLAY_TO_SERVER) ((IAPServerPlayer) context.getSender()).setPlacementEnabled(state);
 		else AdditionalPlacementsMod.LOGGER.error("Tried to handle PacketSetPlacementToggle with invalid direction " + context.getDirection());
 	}
-	
+
 	@Override
     public void sendToServer()
     {

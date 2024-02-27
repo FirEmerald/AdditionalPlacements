@@ -9,7 +9,7 @@ import net.minecraftforge.fml.network.PacketDistributor.PacketTarget;
 public abstract class APPacket
 {
 	public abstract void write(PacketBuffer buf);
-	
+
 	public abstract void handle(Supplier<NetworkEvent.Context> supplier);
 
     public void sendTo(PacketTarget target)

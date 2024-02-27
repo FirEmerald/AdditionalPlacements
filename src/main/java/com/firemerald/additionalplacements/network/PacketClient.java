@@ -8,7 +8,7 @@ public abstract class PacketClient extends APPacket
     {
     	APNetwork.sendToClient(this, player);
     }
-    
+
     public void sendToAllClients()
     {
     	APNetwork.sendToAllClients(this);

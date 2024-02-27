@@ -36,22 +36,22 @@ public class APNetwork
             .simpleChannel();
         registerServerPacket(PacketSetPlacementToggle.class, PacketSetPlacementToggle::new);
     }
-    
+
     public static <T extends PacketClient> void registerClientPacket(Class<T> clazz, Function<PacketBuffer, T> decoder)
     {
     	registerPacket(clazz, decoder, NetworkDirection.PLAY_TO_CLIENT);
     }
-    
+
     public static <T extends PacketServer> void registerServerPacket(Class<T> clazz, Function<PacketBuffer, T> decoder)
     {
     	registerPacket(clazz, decoder, NetworkDirection.PLAY_TO_SERVER);
     }
-    
+
     public static <T extends APPacket> void registerPacket(Class<T> clazz, Function<PacketBuffer, T> decoder, NetworkDirection direction)
     {
     	registerPacket(INSTANCE.messageBuilder(clazz, id(), direction), decoder);
     }
-    
+
     public static <T extends APPacket> void registerPacket(MessageBuilder<T> builder, Function<PacketBuffer, T> decoder)
     {
     	builder
