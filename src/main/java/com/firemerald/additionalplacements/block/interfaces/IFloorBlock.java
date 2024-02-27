@@ -53,6 +53,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 	public default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial) {}
 
     @Override
+	@OnlyIn(Dist.CLIENT)
 	public default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));

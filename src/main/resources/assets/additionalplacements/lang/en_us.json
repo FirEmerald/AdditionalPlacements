@@ -7,5 +7,9 @@
 	"msg.additionalplacements.generate.failure.definition": "Error generating datapack: failed to copy pack definition",
 	"msg.additionalplacements.generate.failure.tag": "Error generating datapack: failed to save tag %s",
 	"msg.additionalplacements.generate.failure.initialization": "Error generating datapack: failed to initialize datapack",
-	"msg.additionalplacements.generate.success": "Finished exporting tags"
+	"msg.additionalplacements.generate.success": "Finished exporting tags",
+	"key.categories.additionalplacements": "Additional Placements",
+	"key.additionalplacements.placement_toggle": "Toggle placement logic",
+	"msg.additionalplacements.placement_enable": "Additional Placements placement logic enabled",
+	"msg.additionalplacements.placement_disable": "Additional Placements placement logic disabled"
 }

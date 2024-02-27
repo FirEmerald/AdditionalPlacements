@@ -7,6 +7,7 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.common.IAPPlayer;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 
@@ -53,11 +54,13 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider
 
 	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos);
 
+	@OnlyIn(Dist.CLIENT)
 	public default void appendHoverTextImpl(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
-		if (AdditionalPlacementsMod.COMMON_CONFIG.showTooltip.get() && !disablePlacement()) addPlacementTooltip(stack, level, tooltip, flag);
+		if (AdditionalPlacementsMod.COMMON_CONFIG.showTooltip.get() && !disablePlacementInternal()) addPlacementTooltip(stack, level, tooltip, flag);
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag);
 
 	public boolean hasAdditionalStates();
@@ -68,20 +71,22 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider
 
 	public boolean isThis(BlockState blockState);
 
+	public static final float SQRT_2_INV = 0.70710678118654752440084436210485f;
+
 	public static Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {
-		new Quaternion(90, 0, 0, true), //DOWN
-		new Quaternion(-90, 0, 0, true), //UP
-		new Quaternion(0, 180, 0, true), //NORTH
-		Quaternion.ONE, //SOUTH
-		new Quaternion(0, -90, 0, true), //WEST
-		new Quaternion(0, 90, 0, true), //EAST
+			new Quaternion(SQRT_2_INV, 0, 0, SQRT_2_INV), //DOWN
+			new Quaternion(-SQRT_2_INV, 0, 0, SQRT_2_INV), //UP
+			new Quaternion(0, 1, 0, 0), //NORTH
+			new Quaternion(0, 0, 0, 1), //SOUTH
+			new Quaternion(0, -SQRT_2_INV, 0, SQRT_2_INV), //WEST
+			new Quaternion(0, SQRT_2_INV, 0, SQRT_2_INV), //EAST
 	};
 
 	@OnlyIn(Dist.CLIENT)
 	public default void renderHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, ActiveRenderInfo camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
-		if (disablePlacement(hit, player.level, result.getDirection())) return;
+		if (disablePlacement(hit, player.level, result.getDirection(), player)) return;
 		pose.pushPose();
 		double hitX = hit.getX();
 		double hitY = hit.getY();
@@ -118,12 +123,17 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider
 	@OnlyIn(Dist.CLIENT)
 	public void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial);
 
-	public default boolean disablePlacement(BlockPos pos, World world, Direction direction)
+	public abstract boolean disablePlacementInternal();
+
+	public default boolean disablePlacement(@Nullable PlayerEntity player)
 	{
-		return disablePlacement();
+		return (player instanceof IAPPlayer && !((IAPPlayer) player).isPlacementEnabled()) || disablePlacementInternal();
 	}
 
-	public abstract boolean disablePlacement();
+	public default boolean disablePlacement(BlockPos pos, World level, Direction direction, @Nullable PlayerEntity player)
+	{
+		return disablePlacement(player);
+	}
 
 	@OnlyIn(Dist.CLIENT)
 	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)

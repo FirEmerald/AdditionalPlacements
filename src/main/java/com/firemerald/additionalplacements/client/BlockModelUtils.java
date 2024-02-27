@@ -15,9 +15,12 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EmptyBlockReader;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 
+@OnlyIn(Dist.CLIENT)
 public class BlockModelUtils
 {
 	public static final ModelProperty<BlockState> MODEL_STATE = new ModelProperty<>();

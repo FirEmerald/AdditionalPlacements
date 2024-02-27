@@ -36,9 +36,9 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
 	{
 		@Override
-		public default boolean disablePlacement(BlockPos pos, World world, Direction direction)
+		public default boolean disablePlacement(BlockPos pos, World world, Direction direction, @Nullable PlayerEntity player)
 		{
-			if (ISlabBlock.super.disablePlacement(pos, world, direction)) return true;
+			if (ISlabBlock.super.disablePlacement(pos, world, direction, player)) return true;
 			else if (CommonModEventHandler.doubleslabsLoaded)
 			{
 				BlockState blockState = world.getBlockState(pos);
@@ -226,12 +226,13 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
     @Override
-	public default boolean disablePlacement()
+	public default boolean disablePlacementInternal()
 	{
 		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticSlabPlacement.get();
 	}
 
     @Override
+	@OnlyIn(Dist.CLIENT)
 	public default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
