@@ -11,10 +11,13 @@
 		"MixinPressurePlateBlock",
 		"MixinSlabBlock",
 		"MixinStairBlock",
-		"MixinWeightedPressurePlateBlock"
+		"MixinWeightedPressurePlateBlock",
+		"MixinPlayer",
+		"MixinServerPlayer"
 	],
 	"client": [
-		"MixinBlockModelShaper"
+		"MixinBlockModelShaper",
+		"MixinLocalPlayer"
 	],
 	"minVersion": "0.8"
 }

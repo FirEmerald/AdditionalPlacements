@@ -85,7 +85,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
-		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
+		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
@@ -128,7 +128,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Inject(method = "canBeReplaced", at = @At("HEAD"), cancellable = true)
 	private void canBeReplaced(BlockState state, BlockPlaceContext context, CallbackInfoReturnable<Boolean> ci)
 	{
-		if (this.hasAdditionalStates() && !this.disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) ci.setReturnValue(canBeReplacedImpl(state, context));
+		if (this.hasAdditionalStates() && !this.disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(canBeReplacedImpl(state, context));
 	}
 
 	@SuppressWarnings("deprecation")
