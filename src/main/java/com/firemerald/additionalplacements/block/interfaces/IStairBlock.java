@@ -242,7 +242,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
     @Override
-	public default boolean disablePlacement()
+	public default boolean disablePlacementInternal()
 	{
 		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
 	}
