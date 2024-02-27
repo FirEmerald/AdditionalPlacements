@@ -97,7 +97,7 @@ public class ClientModEvents implements ClientModInitializer
 
 	public static boolean onHighlightBlock(WorldRenderContext context, @Nullable HitResult hitResult)
 	{
-		if (hitResult.getType() == HitResult.Type.BLOCK)
+		if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK)
 		{
 			@SuppressWarnings("resource")
 			Player player = Minecraft.getInstance().player;
