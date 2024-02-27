@@ -30,7 +30,7 @@ public interface ICarpetBlock<T extends Block> extends IFloorBlock<T>
 	}
 
     @Override
-	public default boolean disablePlacement()
+	public default boolean disablePlacementInternal()
 	{
 		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticCarpetPlacement.get();
 	}
