@@ -243,7 +243,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
     @Override
-	public default boolean disablePlacement()
+	public default boolean disablePlacementInternal()
 	{
 		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticStairPlacement.get();
 	}
@@ -386,6 +386,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
     @Override
+	@OnlyIn(Dist.CLIENT)
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
 		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.vertical_placement"));

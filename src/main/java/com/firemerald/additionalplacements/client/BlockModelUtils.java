@@ -16,9 +16,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.model.data.IModelData;
 import net.minecraftforge.client.model.data.ModelProperty;
 
+@OnlyIn(Dist.CLIENT)
 public class BlockModelUtils
 {
 	public static final ModelProperty<BlockState> MODEL_STATE = new ModelProperty<>();

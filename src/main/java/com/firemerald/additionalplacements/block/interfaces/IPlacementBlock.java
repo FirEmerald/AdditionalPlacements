@@ -7,6 +7,7 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.common.IAPPlayer;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
@@ -54,11 +55,13 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 
 	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos);
 
+	@OnlyIn(Dist.CLIENT)
 	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		if (AdditionalPlacementsMod.COMMON_CONFIG.showTooltip.get() && !disablePlacement()) addPlacementTooltip(stack, level, tooltip, flag);
+		if (AdditionalPlacementsMod.COMMON_CONFIG.showTooltip.get() && !disablePlacementInternal()) addPlacementTooltip(stack, level, tooltip, flag);
 	}
 
+	@OnlyIn(Dist.CLIENT)
 	public void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag);
 
 	public boolean hasAdditionalStates();
@@ -82,7 +85,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
-		if (disablePlacement(hit, player.level, result.getDirection())) return;
+		if (disablePlacement(hit, player.level, result.getDirection(), player)) return;
 		pose.pushPose();
 		double hitX = hit.getX();
 		double hitY = hit.getY();
@@ -119,12 +122,17 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	@OnlyIn(Dist.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
 
-	public default boolean disablePlacement(BlockPos pos, Level level, Direction direction)
+	public abstract boolean disablePlacementInternal();
+
+	public default boolean disablePlacement(@Nullable Player player)
 	{
-		return disablePlacement();
+		return (player instanceof IAPPlayer && !((IAPPlayer) player).isPlacementEnabled()) || disablePlacementInternal();
 	}
 
-	public abstract boolean disablePlacement();
+	public default boolean disablePlacement(BlockPos pos, Level level, Direction direction, @Nullable Player player)
+	{
+		return disablePlacement(player);
+	}
 
 	@OnlyIn(Dist.CLIENT)
 	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)
