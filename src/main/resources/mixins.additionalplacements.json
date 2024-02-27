@@ -10,12 +10,15 @@
 		"MixinPressurePlateBlock",
 		"MixinSlabBlock",
 		"MixinStairBlock",
-		"MixinWeightedPressurePlateBlock"
+		"MixinWeightedPressurePlateBlock",
+		"MixinPlayer",
+		"MixinServerPlayer"
 	],
 	"client": [
 		"MixinModResourcePackCreator",
 		"MixinModelLoaderRegistry",
-		"MixinBlockModelShaper"
+		"MixinBlockModelShaper",
+		"MixinLocalPlayer"
 	],
 	"minVersion": "0.8"
 }

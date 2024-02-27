@@ -7,6 +7,8 @@ import java.util.Random;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -15,6 +17,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
+@Environment(EnvType.CLIENT)
 public class BlockModelUtils
 {
 	public static BlockState getModeledState(BlockState state)
