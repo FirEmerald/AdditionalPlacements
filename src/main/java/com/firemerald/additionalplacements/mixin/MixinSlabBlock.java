@@ -128,7 +128,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Inject(method = "canBeReplaced", at = @At("HEAD"), cancellable = true)
 	private void canBeReplaced(BlockState state, BlockPlaceContext context, CallbackInfoReturnable<Boolean> ci)
 	{
-		if (this.hasAdditionalStates()) ci.setReturnValue(canBeReplacedImpl(state, context));
+		if (this.hasAdditionalStates() && !this.disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace())) ci.setReturnValue(canBeReplacedImpl(state, context));
 	}
 
 	@SuppressWarnings("deprecation")
