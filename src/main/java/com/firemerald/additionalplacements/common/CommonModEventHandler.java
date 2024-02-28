@@ -108,7 +108,7 @@ public class CommonModEventHandler
 		HoneycombItem.WAXABLES = Suppliers.memoize(() -> addVariants(waxables.get()));
 		HoneycombItem.WAX_OFF_BY_BLOCK = Suppliers.memoize(() -> HoneycombItem.WAXABLES.get().inverse());
 	}
-	
+
 	public static BiMap<Block, Block> addVariants(Map<Block, Block> oldMap)
 	{
 		BiMap<Block, Block> newMap = HashBiMap.create(oldMap);

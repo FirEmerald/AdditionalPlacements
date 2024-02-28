@@ -9,7 +9,7 @@ import net.minecraftforge.network.PacketDistributor.PacketTarget;
 public abstract class APPacket
 {
 	public abstract void write(FriendlyByteBuf buf);
-	
+
 	public abstract void handle(Supplier<NetworkEvent.Context> supplier);
 
     public void sendTo(PacketTarget target)
