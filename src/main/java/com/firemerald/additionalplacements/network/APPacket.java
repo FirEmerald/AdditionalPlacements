@@ -7,9 +7,9 @@ import net.minecraft.resources.ResourceLocation;
 public abstract class APPacket
 {
 	public abstract ResourceLocation getID();
-	
+
 	public abstract void write(FriendlyByteBuf buf);
-	
+
 	public FriendlyByteBuf getBuf()
 	{
 		FriendlyByteBuf buf = PacketByteBufs.create();

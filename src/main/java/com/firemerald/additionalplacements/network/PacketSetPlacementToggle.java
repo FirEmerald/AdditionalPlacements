@@ -14,14 +14,14 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 public class PacketSetPlacementToggle extends PacketServer
 {
 	public static final ResourceLocation ID = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "set_placement_toggle");
-	
+
 	private boolean state;
-	
+
 	public PacketSetPlacementToggle(boolean state)
 	{
 		this.state = state;
 	}
-	
+
 	public PacketSetPlacementToggle(FriendlyByteBuf buf)
 	{
 		this.state = buf.readBoolean();
@@ -32,7 +32,7 @@ public class PacketSetPlacementToggle extends PacketServer
 	{
 		return ID;
 	}
-	
+
 	@Override
 	public void write(FriendlyByteBuf buf)
 	{
@@ -44,7 +44,7 @@ public class PacketSetPlacementToggle extends PacketServer
 	{
 		((IAPServerPlayer) player).setPlacementEnabled(state);
 	}
-	
+
 	@Override
     public void sendToServer()
     {
