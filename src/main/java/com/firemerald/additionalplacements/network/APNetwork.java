@@ -12,12 +12,12 @@ public class APNetwork
     {
         registerServerPacket(PacketSetPlacementToggle.TYPE);
     }
-    
+
     public static <T extends PacketClient> void registerClientPacket(PacketType<T> type)
     {
     	ClientPlayNetworking.registerGlobalReceiver(type, PacketClient::handle);
     }
-    
+
     public static <T extends PacketServer> void registerServerPacket(PacketType<T> type)
     {
     	ServerPlayNetworking.registerGlobalReceiver(type, PacketServer::handle);

@@ -8,7 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 public abstract class PacketClient implements FabricPacket
 {
 	public abstract void handle(LocalPlayer player, PacketSender responseSender);
-	
+
     public void sendToClient(ServerPlayer player)
     {
     	APNetwork.sendToClient(this, player);
