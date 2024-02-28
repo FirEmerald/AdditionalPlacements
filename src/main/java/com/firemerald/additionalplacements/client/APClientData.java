@@ -18,12 +18,12 @@ public class APClientData
 	private static boolean placementEnabled = true;
 	public static long placementKeyPressTime, lastSynchronizedTime;
 	public static boolean placementKeyDown = false;
-	
+
 	public static boolean placementEnabled()
 	{
 		return placementEnabled;
 	}
-	
+
 	public static void setPlacementEnabled(boolean state)
 	{
 		if (state != placementEnabled) togglePlacementEnabled();
@@ -45,7 +45,7 @@ public class APClientData
 			player.displayClientMessage(Component.translatable(placementEnabled ? "msg.additionalplacements.placement_enable" : "msg.additionalplacements.placement_disable"), true);
 		}
 	}
-	
+
 	public static void synchronizePlacementEnabled()
 	{
 		new PacketSetPlacementToggle(placementEnabled).sendToServer();

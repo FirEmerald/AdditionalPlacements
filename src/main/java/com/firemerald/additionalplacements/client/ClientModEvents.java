@@ -69,7 +69,7 @@ public class ClientModEvents implements ClientModInitializer
 				{
 					return new BlockstatesPackResources();
 				}
-				
+
 			},
 			new Pack.Info(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of()),
 			Pack.Position.BOTTOM,
@@ -144,7 +144,7 @@ public class ClientModEvents implements ClientModInitializer
 		}
 		return true;
 	}
-	
+
 	public static void onServerJoined(ClientPacketListener handler, PacketSender sender, Minecraft client)
 	{
 		APClientData.setPlacementEnabledAndSynchronize(AdditionalPlacementsMod.CLIENT_CONFIG.defaultPlacementLogicState.get());
@@ -159,7 +159,7 @@ public class ClientModEvents implements ClientModInitializer
 			APClientData.placementKeyPressTime = System.currentTimeMillis();
 			APClientData.placementKeyDown = true;
 		}
-		else if (APClientData.placementKeyDown && !APClientData.AP_PLACEMENT_KEY.isDown()) //released 
+		else if (APClientData.placementKeyDown && !APClientData.AP_PLACEMENT_KEY.isDown()) //released
 		{
 			APClientData.placementKeyDown = false;
 			if ((System.currentTimeMillis() - APClientData.placementKeyPressTime) > 500) //more than half-second press, toggle back
