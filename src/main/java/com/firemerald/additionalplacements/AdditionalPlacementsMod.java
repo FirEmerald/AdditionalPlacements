@@ -39,7 +39,7 @@ public class AdditionalPlacementsMod
     public static final ConfigCommon COMMON_CONFIG;
     public static final ConfigServer SERVER_CONFIG;
     public static final ConfigClient CLIENT_CONFIG;
-    
+
     static {
         final Pair<ConfigCommon, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(ConfigCommon::new);
         commonSpec = commonSpecPair.getRight();
