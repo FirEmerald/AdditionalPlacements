@@ -7,8 +7,10 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.*;
+import net.minecraftforge.network.NetworkDirection;
+import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.NetworkRegistry.ChannelBuilder;
+import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.PacketDistributor.PacketTarget;
 import net.minecraftforge.network.simple.SimpleChannel;
 import net.minecraftforge.network.simple.SimpleChannel.MessageBuilder;
@@ -34,22 +36,22 @@ public class APNetwork
             .simpleChannel();
         registerServerPacket(PacketSetPlacementToggle.class, PacketSetPlacementToggle::new);
     }
-    
+
     public static <T extends PacketClient> void registerClientPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
     {
     	registerPacket(clazz, decoder, NetworkDirection.PLAY_TO_CLIENT);
     }
-    
+
     public static <T extends PacketServer> void registerServerPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
     {
     	registerPacket(clazz, decoder, NetworkDirection.PLAY_TO_SERVER);
     }
-    
+
     public static <T extends APPacket> void registerPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder, NetworkDirection direction)
     {
     	registerPacket(INSTANCE.messageBuilder(clazz, id(), direction), decoder);
     }
-    
+
     public static <T extends APPacket> void registerPacket(MessageBuilder<T> builder, Function<FriendlyByteBuf, T> decoder)
     {
     	builder
