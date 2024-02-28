@@ -74,7 +74,7 @@ public class BlockModelUtils
 				jsonBakedQuad.isShade()
 				);
 	}
-	
+
 	public static final float[] ZERO_POINT = {0, 0, 0};
 
 	public static final float getFaceSize(int[] vertices, int vertexSize, int posOffset)

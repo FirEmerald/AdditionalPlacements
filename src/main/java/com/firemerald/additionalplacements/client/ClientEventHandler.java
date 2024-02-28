@@ -51,7 +51,7 @@ public class ClientEventHandler
 			APClientData.placementKeyPressTime = System.currentTimeMillis();
 			APClientData.placementKeyDown = true;
 		}
-		else if (APClientData.placementKeyDown && !APClientData.AP_PLACEMENT_KEY.isDown()) //released 
+		else if (APClientData.placementKeyDown && !APClientData.AP_PLACEMENT_KEY.isDown()) //released
 		{
 			APClientData.placementKeyDown = false;
 			if ((System.currentTimeMillis() - APClientData.placementKeyPressTime) > 500) //more than half-second press, toggle back
@@ -60,7 +60,7 @@ public class ClientEventHandler
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onPlayerLoggingIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
