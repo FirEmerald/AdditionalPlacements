@@ -82,7 +82,7 @@ public class CommonModEvents implements ModInitializer
 			hasInit = true;
 		}
 	}
-	
+
 	public static BiMap<Block, Block> addVariants(Map<Block, Block> oldMap)
 	{
 		BiMap<Block, Block> newMap = HashBiMap.create(oldMap);
@@ -120,7 +120,7 @@ public class CommonModEvents implements ModInitializer
 		}
 		delegate.set(backwardMemoized, (com.google.common.base.Supplier<BiMap<U, T>>) () -> forwardMemoized.get().inverse()); //replace with supplier that gets the inverse of the forward map
 	}
-	
+
 	public static void registerBlocks()
 	{
 		boolean generateSlabs = AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get();

@@ -19,12 +19,12 @@ public class APNetwork
     {
         registerServerPacket(PacketSetPlacementToggle.ID, PacketSetPlacementToggle::new);
     }
-    
+
     public static <T extends PacketClient> void registerClientPacket(ResourceLocation id, Function<FriendlyByteBuf, T> fromBuffer)
     {
     	ClientPlayNetworking.registerGlobalReceiver(id, (Minecraft client, ClientPacketListener handler, FriendlyByteBuf buf, PacketSender responseSender) -> fromBuffer.apply(buf).handle(client, handler, responseSender));
     }
-    
+
     public static <T extends PacketServer> void registerServerPacket(ResourceLocation id, Function<FriendlyByteBuf, T> fromBuffer)
     {
     	ServerPlayNetworking.registerGlobalReceiver(id, (MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, FriendlyByteBuf buf, PacketSender responseSender) -> fromBuffer.apply(buf).handle(server, player, handler, responseSender));
