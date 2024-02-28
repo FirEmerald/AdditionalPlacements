@@ -7,7 +7,7 @@ import net.minecraftforge.network.PacketDistributor.PacketTarget;
 public abstract class APPacket
 {
 	public abstract void write(FriendlyByteBuf buf);
-	
+
 	public abstract void handle(CustomPayloadEvent.Context context);
 
     public void sendTo(PacketTarget target)

@@ -121,7 +121,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 
 	@OnlyIn(Dist.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
-	
+
 	public boolean disablePlacementInternal();
 
 	public default boolean disablePlacement(@Nullable Player player)

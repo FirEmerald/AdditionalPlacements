@@ -54,7 +54,7 @@ public class ClientModEventHandler
 				{
 					return new BlockstatesPackResources();
 				}
-				
+
 			},
 			new Pack.Info(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of()),
 			Pack.Position.BOTTOM,
@@ -88,7 +88,7 @@ public class ClientModEventHandler
     {
 		event.register(new AdditionalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
     }
-    
+
     @SubscribeEvent
     public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event)
     {
