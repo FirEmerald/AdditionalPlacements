@@ -141,7 +141,7 @@ public class ClientModEvents implements ClientModInitializer
 		else if (APClientData.placementKeyDown && !APClientData.AP_PLACEMENT_KEY.isDown()) //released
 		{
 			APClientData.placementKeyDown = false;
-			if ((System.currentTimeMillis() - APClientData.placementKeyPressTime) > 500) //more than half-second press, toggle back
+			if ((System.currentTimeMillis() - APClientData.placementKeyPressTime) > AdditionalPlacementsMod.CLIENT_CONFIG.toggleQuickpressTime.get()) //more than half-second press, toggle back
 			{
 				APClientData.togglePlacementEnabled();
 			}
