@@ -8,7 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.BakedModelWrapper;
+import net.neoforged.neoforge.client.model.BakedModelWrapper;
 
 public class BakedParticleDeferredBlockModel extends BakedModelWrapper<BakedModel>
 {

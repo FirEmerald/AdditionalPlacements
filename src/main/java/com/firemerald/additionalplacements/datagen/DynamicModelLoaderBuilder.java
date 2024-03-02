@@ -7,15 +7,15 @@ import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
-import net.minecraftforge.client.model.generators.ModelBuilder;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
+import net.neoforged.neoforge.client.model.generators.ModelBuilder;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 
 public class DynamicModelLoaderBuilder<T extends ModelBuilder<T>> extends CustomLoaderBuilder<T>
 {
 	public DynamicModelLoaderBuilder(T parent, ExistingFileHelper existingFileHelper)
 	{
-		super(PlacementBlockModelLoader.ID, parent, existingFileHelper);
+		super(PlacementBlockModelLoader.ID, parent, existingFileHelper, false);
 	}
 
     private ResourceLocation model = null;

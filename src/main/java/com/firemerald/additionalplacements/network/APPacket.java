@@ -1,14 +1,12 @@
 package com.firemerald.additionalplacements.network;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.network.PacketDistributor.PacketTarget;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.neoforged.neoforge.network.PacketDistributor.PacketTarget;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
-public abstract class APPacket
+public abstract class APPacket implements CustomPacketPayload
 {
-	public abstract void write(FriendlyByteBuf buf);
-
-	public abstract void handle(CustomPayloadEvent.Context context);
+	public abstract void handle(PlayPayloadContext context);
 
     public void sendTo(PacketTarget target)
     {

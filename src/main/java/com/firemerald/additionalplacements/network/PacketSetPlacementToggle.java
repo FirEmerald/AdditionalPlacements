@@ -5,11 +5,13 @@ import com.firemerald.additionalplacements.client.APClientData;
 import com.firemerald.additionalplacements.common.IAPServerPlayer;
 
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.network.NetworkDirection;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.network.handling.PlayPayloadContext;
 
 public class PacketSetPlacementToggle extends PacketServer
 {
+	public static final ResourceLocation ID = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "set_placement_toggle");
+	
 	private boolean state;
 
 	public PacketSetPlacementToggle(boolean state)
@@ -23,16 +25,21 @@ public class PacketSetPlacementToggle extends PacketServer
 	}
 
 	@Override
+	public ResourceLocation id()
+	{
+		return ID;
+	}
+
+	@Override
 	public void write(FriendlyByteBuf buf)
 	{
 		buf.writeBoolean(state);
 	}
 
 	@Override
-	public void handle(CustomPayloadEvent.Context context)
+	public void handleServer(PlayPayloadContext context)
 	{
-		if (context.getDirection() == NetworkDirection.PLAY_TO_SERVER) ((IAPServerPlayer) context.getSender()).setPlacementEnabled(state);
-		else AdditionalPlacementsMod.LOGGER.error("Tried to handle PacketSetPlacementToggle with invalid direction " + context.getDirection());
+		((IAPServerPlayer) context.player().get()).setPlacementEnabled(state);
 	}
 
 	@Override

@@ -13,23 +13,25 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.datagen.ModelGenerator;
+import com.firemerald.additionalplacements.network.APNetwork;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.HoneycombItem;
 import net.minecraft.world.level.block.*;
-import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
 public class CommonModEventHandler
@@ -37,16 +39,15 @@ public class CommonModEventHandler
 	@SubscribeEvent
 	public static void onBlockRegistry(RegisterEvent event)
 	{
-		if (event.getForgeRegistry() != null && ForgeRegistries.BLOCKS.getRegistryKey().equals(event.getForgeRegistry().getRegistryKey()))
+		if (event.getRegistry() == BuiltInRegistries.BLOCK)
 		{
-			IForgeRegistry<Block> registry = event.getForgeRegistry();
 			boolean generateSlabs = AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get();
 			boolean generateStairs = AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get();
 			boolean generateCarpets = AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get();
 			boolean generatePressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get();
 			boolean generateWeightedPressurePlates = AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get();
 			List<Pair<ResourceLocation, Block>> created = new ArrayList<>();
-			registry.getEntries().forEach(entry -> {
+			BuiltInRegistries.BLOCK.entrySet().forEach(entry -> {
 				ResourceLocation name = entry.getKey().location();
 				Block block = entry.getValue();
 				if (block instanceof SlabBlock)
@@ -70,7 +71,7 @@ public class CommonModEventHandler
 					if (generateWeightedPressurePlates) tryAdd((WeightedPressurePlateBlock) block, name, AdditionalWeightedPressurePlateBlock::of, created);
 				}
 			});
-			created.forEach(pair -> registry.register(pair.getLeft(), pair.getRight()));
+			created.forEach(pair -> Registry.register(BuiltInRegistries.BLOCK, pair.getLeft(), pair.getRight()));
 			AdditionalPlacementsMod.dynamicRegistration = true;
 		}
 	}
@@ -172,4 +173,10 @@ public class CommonModEventHandler
 	{
 		doubleslabsLoaded = ModList.get().isLoaded("doubleslabs");
 	}
+	
+	@SubscribeEvent
+    public static void register(RegisterPayloadHandlerEvent event)
+    {
+		APNetwork.register(event);
+    }
 }

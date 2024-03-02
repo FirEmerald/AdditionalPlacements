@@ -5,16 +5,16 @@ import java.util.function.Function;
 
 import org.apache.http.util.Asserts;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockModelProvider;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockModelProvider;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
 public class ModelType<T extends Block>
 {
@@ -86,7 +86,7 @@ public class ModelType<T extends Block>
 				if (hasItem)
 				{
 					Item item = block.asItem();
-					if (item != null) stateProvider.itemModels().withExistingParent(ForgeRegistries.ITEMS.getKey(item).getPath(), modelProvider.modLoc(folder + models[0]));
+					if (item != null) stateProvider.itemModels().withExistingParent(BuiltInRegistries.ITEM.getKey(item).getPath(), modelProvider.modLoc(folder + models[0]));
 				}
 			}
 		}

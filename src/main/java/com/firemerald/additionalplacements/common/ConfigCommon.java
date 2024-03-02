@@ -4,10 +4,10 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.neoforged.neoforge.common.ModConfigSpec.IntValue;
 
 public class ConfigCommon
 {
@@ -29,7 +29,7 @@ public class ConfigCommon
 	public final ConfigValue<List<String>> blockWhitelist;
 
 	@SuppressWarnings("unchecked")
-	public ConfigCommon(ForgeConfigSpec.Builder builder)
+	public ConfigCommon(ModConfigSpec.Builder builder)
 	{
         builder.comment("Common settings").push("common");
         generateSlabs = builder

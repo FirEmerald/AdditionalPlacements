@@ -16,6 +16,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.network.chat.Component;
@@ -25,13 +26,12 @@ import net.minecraft.server.rcon.RconConsoleSource;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.TickEvent.ServerTickEvent;
-import net.minecraftforge.fml.loading.FMLLoader;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.TickEvent.ServerTickEvent;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class TagMismatchChecker extends Thread implements Consumer<ServerTickEvent>
 {
@@ -74,7 +74,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 	@Override
 	public void run()
 	{
-		for (Block block : ForgeRegistries.BLOCKS)
+		for (Block block : BuiltInRegistries.BLOCK)
 		{
 			if (halted) return;
 			if (block instanceof AdditionalPlacementBlock)
@@ -83,14 +83,14 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 				if (mismatch != null) blockMissingExtra.add(mismatch);
 			}
 		}
-		MinecraftForge.EVENT_BUS.addListener(this); //listen for next server tick
+		NeoForge.EVENT_BUS.addListener(this); //listen for next server tick
 	}
 
 	//this is only ever called on the server thread
 	@Override
 	public void accept(ServerTickEvent event)
 	{
-		MinecraftForge.EVENT_BUS.unregister(this); //only listen once
+		NeoForge.EVENT_BUS.unregister(this); //only listen once
 		if (!halted) //wasn't canceled
 		{
 			if (!blockMissingExtra.isEmpty())
@@ -106,7 +106,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 				{
 					AdditionalPlacementsMod.LOGGER.warn("====== BEGIN LIST ======");
 					blockMissingExtra.forEach(blockMissingExtra -> {
-						AdditionalPlacementsMod.LOGGER.warn("\t" + ForgeRegistries.BLOCKS.getKey(blockMissingExtra.getLeft()));
+						AdditionalPlacementsMod.LOGGER.warn("\t" + BuiltInRegistries.BLOCK.getKey(blockMissingExtra.getLeft()));
 						Collection<TagKey<Block>> missing = blockMissingExtra.getMiddle();
 						if (!missing.isEmpty())
 						{

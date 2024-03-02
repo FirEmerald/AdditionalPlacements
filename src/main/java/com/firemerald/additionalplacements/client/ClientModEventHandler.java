@@ -7,6 +7,7 @@ import com.firemerald.additionalplacements.client.models.BakedParticleDeferredBl
 import com.firemerald.additionalplacements.client.models.PlacementBlockModelLoader;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
@@ -19,17 +20,16 @@ import net.minecraft.server.packs.resources.ReloadableResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ModelEvent.RegisterGeometryLoaders;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
-import net.minecraftforge.event.AddPackFindersEvent;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.ModelEvent.RegisterGeometryLoaders;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 @OnlyIn(Dist.CLIENT)
@@ -56,7 +56,7 @@ public class ClientModEventHandler
 				}
 
 			},
-			new Pack.Info(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of()),
+			new Pack.Info(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of(), true),
 			Pack.Position.BOTTOM,
 			true,
 			PackSource.BUILT_IN
@@ -73,7 +73,7 @@ public class ClientModEventHandler
 	public static void onModelRegistryEvent(RegisterGeometryLoaders event)
 	{
 		loader = new PlacementBlockModelLoader();
-		event.register(PlacementBlockModelLoader.ID.getPath(), loader);
+		event.register(PlacementBlockModelLoader.ID, loader);
 	}
 
 	@SubscribeEvent
@@ -86,7 +86,7 @@ public class ClientModEventHandler
     @SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block event)
     {
-		event.register(new AdditionalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
+		event.register(new AdditionalBlockColor(), BuiltInRegistries.BLOCK.stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
     }
 
     @SubscribeEvent

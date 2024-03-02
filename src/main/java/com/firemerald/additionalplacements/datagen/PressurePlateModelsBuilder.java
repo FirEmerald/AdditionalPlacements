@@ -8,8 +8,8 @@ import com.firemerald.additionalplacements.block.AdditionalPressurePlateBlock;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 
 public class PressurePlateModelsBuilder
 {

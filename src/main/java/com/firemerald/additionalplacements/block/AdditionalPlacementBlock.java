@@ -320,7 +320,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@SuppressWarnings("deprecation")
 	public Set<TagKey<Block>> getDesiredTags()
 	{
-		return modifyTags(parentBlock.builtInRegistryHolder().getTagKeys());
+		return modifyTags(parentBlock.builtInRegistryHolder().tags());
 	}
 
 	public abstract String getTagTypeName();

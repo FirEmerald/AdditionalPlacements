@@ -1,15 +1,15 @@
 package com.firemerald.additionalplacements.client;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.LongValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec.LongValue;
 
 public class ConfigClient
 {
 	public final BooleanValue defaultPlacementLogicState;
 	public final LongValue toggleQuickpressTime;
 
-	public ConfigClient(ForgeConfigSpec.Builder builder)
+	public ConfigClient(ModConfigSpec.Builder builder)
 	{
         builder.comment("Client settings").push("client");
         defaultPlacementLogicState = builder

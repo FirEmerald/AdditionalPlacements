@@ -2,10 +2,9 @@
 	"required": true,
 	"package": "com.firemerald.additionalplacements.mixin",
 	"compatibilityLevel": "JAVA_17",
-	"refmap": "mixins.additionalplacements.refmap.json",
 	"mixins": [
 		"MixinBasePressurePlateBlock",
-		"MixinBlockCallbacks",
+		"MixinMappedRegistry",
 		"MixinCarpetBlock",
 		"MixinPressurePlateBlock",
 		"MixinSlabBlock",

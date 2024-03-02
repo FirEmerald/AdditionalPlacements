@@ -1,13 +1,13 @@
 package com.firemerald.additionalplacements.common;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 
 public class ConfigServer
 {
 	public final BooleanValue checkTags, autoRebuildTags, fakePlayerPlacement;
 
-	public ConfigServer(ForgeConfigSpec.Builder builder)
+	public ConfigServer(ModConfigSpec.Builder builder)
 	{
         builder.comment("World settings").push("server");
         checkTags = builder

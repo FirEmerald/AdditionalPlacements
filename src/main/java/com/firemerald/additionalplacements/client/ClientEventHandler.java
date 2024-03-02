@@ -9,14 +9,14 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RenderHighlightEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
+import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
+import net.neoforged.neoforge.event.TickEvent;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 @OnlyIn(Dist.CLIENT)
@@ -41,7 +41,6 @@ public class ClientEventHandler
 	}
 
 	@SuppressWarnings("resource")
-	@SubscribeEvent
 	public static void onInput(InputEvent event)
 	{
 		if (Minecraft.getInstance().player == null) return;
@@ -59,6 +58,24 @@ public class ClientEventHandler
 				APClientData.togglePlacementEnabled();
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public static void onKeyInput(InputEvent.Key event)
+	{
+		onInput(event);
+	}
+
+	@SubscribeEvent
+	public static void onKeyInput(InputEvent.MouseButton.Post event)
+	{
+		onInput(event);
+	}
+
+	@SubscribeEvent
+	public static void onKeyInput(InputEvent.MouseScrollingEvent event)
+	{
+		onInput(event);
 	}
 
 	@SubscribeEvent

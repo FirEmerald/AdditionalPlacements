@@ -4,19 +4,15 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.commands.CommandExportTags;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.TagsUpdatedEvent;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
-import net.minecraftforge.event.server.ServerStoppingEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.MissingMappingsEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class CommonEventHandler
@@ -49,33 +45,6 @@ public class CommonEventHandler
 		misMatchedTags = false;
 		if (AdditionalPlacementsMod.COMMON_CONFIG.checkTags.get() && (!AdditionalPlacementsMod.serverSpec.isLoaded() || AdditionalPlacementsMod.SERVER_CONFIG.checkTags.get()))
 			TagMismatchChecker.startChecker(); //TODO halt on datapack reload
-	}
-
-	@SubscribeEvent
-	public static void onMissingBlockMappings(MissingMappingsEvent event)
-	{
-		event.getMappings(ForgeRegistries.BLOCKS.getRegistryKey(), AdditionalPlacementsMod.OLD_ID).forEach(mapping -> {
-			String oldPath = mapping.getKey().getPath();
-			if (oldPath.indexOf('.') < 0) //remap original format
-			{
-				String newPath = "minecraft." + oldPath;
-				Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, newPath));
-				if (block != Blocks.AIR)
-				{
-					mapping.remap(block);
-					return;
-				}
-			}
-			else //remap old mod ID
-			{
-				Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, oldPath));
-				if (block != Blocks.AIR)
-				{
-					mapping.remap(block);
-					return;
-				}
-			}
-		});
 	}
 
 	@SubscribeEvent
