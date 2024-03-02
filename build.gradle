@@ -77,15 +77,15 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.20.1:2023.09.03@zip")
+        parchment("org.parchmentmc.data:parchment-1.20.2:2023.12.10@zip")
     }
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
-	modImplementation("net.fabricmc.fabric-api:fabric-models-v0:0.4.5+9386d8a7cb")
+	//modImplementation("net.fabricmc.fabric-api:fabric-models-v0:0.4.5+9386d8a7cb")
 	
 	//modApi("com.simibubi.create:create-fabric-1.20.1:0.5.1-d-build.1161+mc1.20.1")
-    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:9.0.0"
+    modApi "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:20.4.3"
    	modApi("io.github.fabricators_of_create.Porting-Lib:core:${project.porting_lib_version}")
    	modApi("io.github.fabricators_of_create.Porting-Lib:data:${project.porting_lib_version}")
    	modApi("io.github.fabricators_of_create.Porting-Lib:models:${project.porting_lib_version}")

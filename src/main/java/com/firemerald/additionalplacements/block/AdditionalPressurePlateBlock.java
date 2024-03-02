@@ -1,7 +1,5 @@
 package com.firemerald.additionalplacements.block;
 
-import java.util.List;
-
 import com.firemerald.additionalplacements.block.interfaces.IAdditionalBeaconBeamBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
 
@@ -9,9 +7,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.phys.AABB;
 
 public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock>
 {
@@ -36,20 +34,19 @@ public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlo
 	@Override
 	protected int getSignalStrength(Level level, BlockPos pos)
 	{
-		AABB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos);
-		List<? extends Entity> list;
-		switch (this.parentBlock.sensitivity)
-		{
+		Class<? extends Entity> oclass1;
+		switch (this.parentBlock.type.pressurePlateSensitivity()) {
 		case EVERYTHING:
-			list = level.getEntities(null, aabb);
+			oclass1 = Entity.class;
 			break;
 		case MOBS:
-			list = level.getEntitiesOfClass(LivingEntity.class, aabb);
+			oclass1 = LivingEntity.class;
 			break;
 		default:
-			return 0;
+			throw new IncompatibleClassChangeError();
 		}
-		if (!list.isEmpty()) for(Entity entity : list) if (!entity.isIgnoringBlockTriggers()) return 15;
-		return 0;
+
+		Class<? extends Entity> oclass = oclass1;
+		return BasePressurePlateBlock.getEntityCount(level, TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos), oclass) > 0 ? 15 : 0;
 	}
 }

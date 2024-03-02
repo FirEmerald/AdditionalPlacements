@@ -24,10 +24,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -70,7 +67,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 			props.remove(StairBlock.HALF);
 		}
 		copyPropsStatic = props;
-		return BlockBehaviour.Properties.copy(parentBlock);
+		return BlockBehaviour.Properties.ofFullCopy(parentBlock);
 	}
 
 	public boolean hasCustomColors()
@@ -139,7 +136,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state)
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state)
 	{
 		try
 		{
