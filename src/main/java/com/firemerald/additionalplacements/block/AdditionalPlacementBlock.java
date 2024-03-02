@@ -69,7 +69,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 			props.remove(StairBlock.HALF);
 		}
 		copyPropsStatic = props;
-		return BlockBehaviour.Properties.copy(parentBlock);
+		return BlockBehaviour.Properties.ofFullCopy(parentBlock);
 	}
 
 	public boolean hasCustomColors()
@@ -138,9 +138,16 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player)
+	public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player)
 	{
 		return parentBlock.getCloneItemStack(state, target, level, pos, player);
+	}
+
+	@Override
+	@Deprecated
+	public ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state)
+	{
+		return parentBlock.getCloneItemStack(level, pos, state);
 	}
 
 	@Override
