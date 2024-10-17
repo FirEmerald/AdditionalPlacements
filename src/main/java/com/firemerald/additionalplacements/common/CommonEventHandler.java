@@ -3,6 +3,8 @@ package com.firemerald.additionalplacements.common;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.commands.CommandExportTags;
+import com.firemerald.additionalplacements.config.APConfigs;
+import com.firemerald.additionalplacements.network.CheckDataConfigurationTask;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -12,6 +14,7 @@ import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.network.GatherLoginConfigurationTasksEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,7 +50,7 @@ public class CommonEventHandler
 	public static void onTagsUpdated(TagsUpdatedEvent event)
 	{
 		misMatchedTags = false;
-		if (AdditionalPlacementsMod.COMMON_CONFIG.checkTags.get() && (!AdditionalPlacementsMod.serverSpec.isLoaded() || AdditionalPlacementsMod.SERVER_CONFIG.checkTags.get()))
+		if (APConfigs.COMMON.checkTags.get() && (!APConfigs.SERVER_SPEC.isLoaded() || APConfigs.SERVER.checkTags.get()))
 			TagMismatchChecker.startChecker(); //TODO halt on datapack reload
 	}
 
@@ -81,12 +84,17 @@ public class CommonEventHandler
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event)
 	{
-		if (misMatchedTags && !(AdditionalPlacementsMod.COMMON_CONFIG.autoRebuildTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.autoRebuildTags.get()) && TagMismatchChecker.canGenerateTags(event.getEntity())) event.getEntity().sendSystemMessage(TagMismatchChecker.MESSAGE);
+		if (misMatchedTags && !(APConfigs.COMMON.autoRebuildTags.get() && APConfigs.SERVER.autoRebuildTags.get()) && TagMismatchChecker.canGenerateTags(event.getEntity())) event.getEntity().sendSystemMessage(TagMismatchChecker.MESSAGE);
 	}
 
 	@SubscribeEvent
 	public static void onServerStopping(ServerStoppingEvent event)
 	{
 		TagMismatchChecker.stopChecker();
+	}
+	
+	@SubscribeEvent
+	public static void onGetherLoginConfigurationTasks(GatherLoginConfigurationTasksEvent event) {
+		event.addTask(new CheckDataConfigurationTask());
 	}
 }
