@@ -45,7 +45,6 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(FACING, CompressedStairFacing.SOUTH_UP_EAST).setValue(allowedConnections.shapeProperty, CompressedStairShape.VERTICAL_STRAIGHT));
 		((IVanillaStairBlock) stairs).setOtherBlock(this);
 		this.allowedConnections = allowedConnections;
-		System.out.println(this.allowedConnections);
 	}
 
 	@Override
