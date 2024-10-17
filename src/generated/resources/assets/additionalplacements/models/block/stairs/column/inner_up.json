@@ -1,7 +1,0 @@
-{
-  "parent": "additionalplacements:block/stairs/base/inner_up",
-  "textures": {
-    "bottom": "#end",
-    "top": "#end"
-  }
-}

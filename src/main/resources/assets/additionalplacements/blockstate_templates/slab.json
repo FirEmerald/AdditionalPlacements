@@ -1,21 +1,30 @@
 {
   "variants": {
-    "facing=north": {
-      "model": "additionalplacements:block/slabs/dynamic/side",
-      "y": 180,
+    "axis=z,type=bottom": {
+      "model": "additionalplacements:block/slabs/dynamic/negative",
+      "y": 0,
       "uvlock": true
     },
-    "facing=south": {
-      "model": "additionalplacements:block/slabs/dynamic/side",
+    "axis=z,type=top": {
+      "model": "additionalplacements:block/slabs/dynamic/positive",
       "uvlock": true
     },
-    "facing=west": {
-      "model": "additionalplacements:block/slabs/dynamic/side",
-      "y": 90,
+    "axis=z,type=double": {
+      "model": "additionalplacements:block/slabs/dynamic/double",
       "uvlock": true
     },
-    "facing=east": {
-      "model": "additionalplacements:block/slabs/dynamic/side",
+    "axis=x,type=bottom": {
+      "model": "additionalplacements:block/slabs/dynamic/negative",
+      "y": 270,
+      "uvlock": true
+    },
+    "axis=x,type=top": {
+      "model": "additionalplacements:block/slabs/dynamic/positive",
+      "y": 270,
+      "uvlock": true
+    },
+    "axis=x,type=double": {
+      "model": "additionalplacements:block/slabs/dynamic/double",
       "y": 270,
       "uvlock": true
     }

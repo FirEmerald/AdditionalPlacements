@@ -10,10 +10,12 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
+import com.firemerald.additionalplacements.util.BlockRotation;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -37,18 +39,20 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock<T>
 {
-	private static Set<Property<?>> copyPropsStatic;
-	protected final T parentBlock;
+	private static List<Property<?>> copyPropsStatic = new ArrayList<>();;
+	public final T parentBlock;
 	private final Property<?>[] copyProps;
 
 	public AdditionalPlacementBlock(T parentBlock)
 	{
 		super(theHack(parentBlock));
 		this.copyProps = copyPropsStatic.toArray(Property[]::new);
-		copyPropsStatic = null;
+		copyPropsStatic.clear();
 		this.parentBlock = parentBlock;
 	}
 
@@ -60,15 +64,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	public static Properties theHack(Block parentBlock)
 	{
-		Set<Property<?>> props = new HashSet<>(parentBlock.defaultBlockState().getProperties());
-		if (parentBlock instanceof SlabBlock) props.remove(SlabBlock.TYPE);
-		else if (parentBlock instanceof StairBlock)
-		{
-			props.remove(StairBlock.FACING);
-			props.remove(StairBlock.SHAPE);
-			props.remove(StairBlock.HALF);
-		}
-		copyPropsStatic = props;
+		copyPropsStatic.addAll(parentBlock.defaultBlockState().getProperties());
 		return BlockBehaviour.Properties.ofFullCopy(parentBlock);
 	}
 
@@ -88,6 +84,10 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		for (Property prop : copyProps) to = to.setValue(prop, from.getValue(prop));
 		return to;
 	}
+	
+	protected boolean isValidProperty(Property<?> prop) {
+		return true;
+	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
@@ -95,14 +95,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		super.createBlockStateDefinition(builder);
 		Set<Property<?>> invalid = new HashSet<>();
 		copyPropsStatic.forEach(prop -> {
-			try
-			{
-				builder.add(prop);
-			}
-			catch (IllegalArgumentException e)
-			{
-				invalid.add(prop);
-			}
+			if (isValidProperty(prop)) builder.add(prop);
+			else invalid.add(prop);
 		});
 		copyPropsStatic.removeAll(invalid);
 	}
@@ -129,6 +123,13 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	{
 		return copyProperties(worldState, getModelState());
 	}
+
+	public BlockState getUnrotatedModelState(BlockState worldState)
+	{
+		return withUnrotatedPlacement(worldState, getModelState(worldState));
+	}
+	
+	public abstract BlockState withUnrotatedPlacement(BlockState worldState, BlockState modelState);
 
 	@Override
 	@Deprecated
@@ -407,4 +408,27 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	{
 		return this.getModelState(state).getBeaconColorMultiplier(level, pos1, pos2);
 	}
+	
+	public abstract boolean rotatesLogic(BlockState state);
+	
+	public abstract boolean rotatesTexture(BlockState state);
+	
+	public abstract boolean rotatesModel(BlockState state);
+	
+	public abstract BlockRotation getRotation(BlockState state);
+
+	
+	@Override
+	@Deprecated
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	{
+		if (rotatesModel(state))
+			return getRotation(state).applyBlockSpace(getUnrotatedModelState(state).getShape(level, pos, context));
+		else
+			return getShapeInternal(state, level, pos, context);
+	}
+
+	public abstract VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context);
+
+	public abstract ResourceLocation getDynamicBlockstateJson();
 }

@@ -1,15 +1,12 @@
 package com.firemerald.additionalplacements.mixin;
 
-import java.util.function.Function;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
-import com.firemerald.additionalplacements.block.*;
-import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
+import com.firemerald.additionalplacements.generation.Registration;
 import com.mojang.serialization.Lifecycle;
 
 import net.minecraft.core.Holder;
@@ -17,7 +14,6 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 
 @Mixin(MappedRegistry.class)
@@ -28,38 +24,7 @@ public class MixinMappedRegistry
     {
 		if (this == BuiltInRegistries.BLOCK && AdditionalPlacementsMod.dynamicRegistration)
 		{
-			if (value instanceof SlabBlock)
-			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateSlabs.get()) tryAdd((SlabBlock) value, key, VerticalSlabBlock::of);
-			}
-			else if (value instanceof StairBlock)
-			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateStairs.get()) tryAdd((StairBlock) value, key, VerticalStairBlock::of);
-			}
-			else if (value instanceof CarpetBlock)
-			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateCarpets.get()) tryAdd((CarpetBlock) value, key, AdditionalCarpetBlock::of);
-			}
-			else if (value instanceof PressurePlateBlock)
-			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generatePressurePlates.get()) tryAdd((PressurePlateBlock) value, key, AdditionalPressurePlateBlock::of);
-			}
-			else if (value instanceof WeightedPressurePlateBlock)
-			{
-				if (AdditionalPlacementsMod.COMMON_CONFIG.generateWeightedPressurePlates.get()) tryAdd((WeightedPressurePlateBlock) value, key, AdditionalWeightedPressurePlateBlock::of);
-			}
+			Registration.tryApply((Block) value, key.location(), (rl, block) -> Registry.register(BuiltInRegistries.BLOCK, rl, block));
 		}
     }
-
-	private static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryAdd(T block, ResourceKey<?> key, Function<T, U> construct)
-	{
-		if (!((IPlacementBlock<?>) block).hasAdditionalStates())
-		{
-			ResourceLocation name = key.location();
-			if (AdditionalPlacementsMod.COMMON_CONFIG.isValidForGeneration(name))
-			{
-				Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(AdditionalPlacementsMod.MOD_ID, name.getNamespace() + "." + name.getPath()), construct.apply(block));
-			}
-		}
-	}
 }

@@ -1,0 +1,4 @@
+{
+  "loader": "additionalplacements:placement_block_loader",
+  "model": "additionalplacements:block/stairs/base/top/twist_right"
+}

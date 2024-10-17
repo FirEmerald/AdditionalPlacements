@@ -1,8 +1,10 @@
 package com.firemerald.additionalplacements.block;
 
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
@@ -11,6 +13,8 @@ import net.minecraft.world.level.block.PressurePlateBlock;
 
 public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock>
 {
+	static final ResourceLocation PRESSURE_PLATE_BLOCKSTATES = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "blockstate_templates/pressure_plate.json");
+	
 	public static AdditionalPressurePlateBlock of(PressurePlateBlock plate)
 	{
 		return new AdditionalPressurePlateBlock(plate);
@@ -38,5 +42,10 @@ public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlo
 		
 		Class<? extends Entity> oclass = oclass1;
 		return BasePressurePlateBlock.getEntityCount(level, TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalBasePressurePlateBlock.PLACING).ordinal() - 1].move(pos), oclass) > 0 ? 15 : 0;
+	}
+
+	@Override
+	public ResourceLocation getDynamicBlockstateJson() {
+		return PRESSURE_PLATE_BLOCKSTATES;
 	}
 }

@@ -1,9 +1,11 @@
 package com.firemerald.additionalplacements.client;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
+import com.firemerald.additionalplacements.client.gui.screen.ConnectionErrorsScreen;
+import com.firemerald.additionalplacements.config.APConfigs;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.DisconnectedScreen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
@@ -11,11 +13,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
+import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.event.TickEvent;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -53,7 +57,7 @@ public class ClientEventHandler
 		else if (APClientData.placementKeyDown && !APClientData.AP_PLACEMENT_KEY.isDown()) //released
 		{
 			APClientData.placementKeyDown = false;
-			if ((System.currentTimeMillis() - APClientData.placementKeyPressTime) > AdditionalPlacementsMod.CLIENT_CONFIG.toggleQuickpressTime.get()) //more than half-second press, toggle back
+			if ((System.currentTimeMillis() - APClientData.placementKeyPressTime) > APConfigs.CLIENT.toggleQuickpressTime.get()) //more than half-second press, toggle back
 			{
 				APClientData.togglePlacementEnabled();
 			}
@@ -81,7 +85,7 @@ public class ClientEventHandler
 	@SubscribeEvent
 	public static void onPlayerLoggingIn(ClientPlayerNetworkEvent.LoggingIn event)
 	{
-		APClientData.setPlacementEnabledAndSynchronize(AdditionalPlacementsMod.CLIENT_CONFIG.defaultPlacementLogicState.get());
+		APClientData.setPlacementEnabledAndSynchronize(APConfigs.CLIENT.defaultPlacementLogicState.get());
 	}
 
 	@SuppressWarnings("resource")
@@ -96,5 +100,10 @@ public class ClientEventHandler
 				APClientData.synchronizePlacementEnabled();
 			}
 		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onScreenOpening(ScreenEvent.Opening event) {
+		if (event.getCurrentScreen() instanceof ConnectionErrorsScreen && event.getNewScreen() instanceof DisconnectedScreen) event.setCanceled(true);
 	}
 }

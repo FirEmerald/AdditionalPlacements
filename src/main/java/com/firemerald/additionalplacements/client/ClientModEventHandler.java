@@ -3,10 +3,8 @@ package com.firemerald.additionalplacements.client;
 import java.util.List;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
-import com.firemerald.additionalplacements.client.models.BakedParticleDeferredBlockModel;
 import com.firemerald.additionalplacements.client.models.PlacementBlockModelLoader;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackResources;
@@ -16,8 +14,6 @@ import net.minecraft.server.packs.repository.Pack.Info;
 import net.minecraft.server.packs.repository.Pack.ResourcesSupplier;
 import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.api.distmarker.Dist;
@@ -25,7 +21,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ModelEvent.RegisterGeometryLoaders;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
@@ -74,13 +69,6 @@ public class ClientModEventHandler
 	{
 		loader = new PlacementBlockModelLoader();
 		event.register(PlacementBlockModelLoader.ID, loader);
-	}
-
-	@SubscribeEvent
-	public static void onClientSetup(FMLClientSetupEvent event)
-	{
-		((ReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener(loader);
-    	((ReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener((ResourceManagerReloadListener) (resourceManager -> BakedParticleDeferredBlockModel.clearCache()));
 	}
 
     @SubscribeEvent(priority = EventPriority.LOWEST)

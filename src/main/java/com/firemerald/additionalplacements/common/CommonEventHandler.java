@@ -1,8 +1,8 @@
 package com.firemerald.additionalplacements.common;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.commands.CommandExportTags;
+import com.firemerald.additionalplacements.config.APConfigs;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
@@ -43,14 +43,14 @@ public class CommonEventHandler
 	public static void onTagsUpdated(TagsUpdatedEvent event)
 	{
 		misMatchedTags = false;
-		if (AdditionalPlacementsMod.COMMON_CONFIG.checkTags.get() && (!AdditionalPlacementsMod.serverSpec.isLoaded() || AdditionalPlacementsMod.SERVER_CONFIG.checkTags.get()))
+		if (APConfigs.COMMON.checkTags.get() && (!APConfigs.SERVER_SPEC.isLoaded() || APConfigs.SERVER.checkTags.get()))
 			TagMismatchChecker.startChecker(); //TODO halt on datapack reload
 	}
 
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event)
 	{
-		if (misMatchedTags && !(AdditionalPlacementsMod.COMMON_CONFIG.autoRebuildTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.autoRebuildTags.get()) && TagMismatchChecker.canGenerateTags(event.getEntity())) event.getEntity().sendSystemMessage(TagMismatchChecker.MESSAGE);
+		if (misMatchedTags && !(APConfigs.COMMON.autoRebuildTags.get() && APConfigs.SERVER.autoRebuildTags.get()) && TagMismatchChecker.canGenerateTags(event.getEntity())) event.getEntity().sendSystemMessage(TagMismatchChecker.MESSAGE);
 	}
 
 	@SubscribeEvent
