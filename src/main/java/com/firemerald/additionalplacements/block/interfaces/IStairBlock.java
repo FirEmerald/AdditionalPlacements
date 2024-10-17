@@ -19,6 +19,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +32,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -193,6 +195,52 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		return StairShape.STRAIGHT;
 	}
 
+	public static final float ARROW_OFFSET = -0.4375f;
+	public static final float ARROW_OUTER = 0.375f;
+	public static final float ARROW_INNER = 0.125f;
+	
+	@Override
+	@OnlyIn(Dist.CLIENT)
+	public default void renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial) {
+		ComplexFacing facing = getFacing(result.getDirection(), 
+				(float) (result.getLocation().x - result.getBlockPos().getX() - .5), 
+				(float) (result.getLocation().y - result.getBlockPos().getY() - .5), 
+				(float) (result.getLocation().z - result.getBlockPos().getZ() - .5));
+		//z is up
+		//y is forward
+		//x is right
+		pose.pushPose();
+		pose.mulPoseMatrix(new Matrix4f(
+				facing.right  .getStepX(), facing.right  .getStepY(), facing.right  .getStepZ(), 0,
+				facing.forward.getStepX(), facing.forward.getStepY(), facing.forward.getStepZ(), 0,
+				facing.up     .getStepX(), facing.up     .getStepY(), facing.up     .getStepZ(), 0,
+				0, 0, 0, 1
+				));
+		Matrix4f poseMat = pose.last().pose();
+		Matrix3f normMat = pose.last().normal();
+		vertexConsumer.vertex(poseMat,  0          ,  ARROW_OUTER, ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		vertexConsumer.vertex(poseMat,  ARROW_OUTER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		
+		vertexConsumer.vertex(poseMat,  ARROW_OUTER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		vertexConsumer.vertex(poseMat,  ARROW_INNER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+
+		vertexConsumer.vertex(poseMat,  ARROW_INNER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		vertexConsumer.vertex(poseMat,  ARROW_INNER, -ARROW_OUTER, ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+
+		vertexConsumer.vertex(poseMat,  ARROW_INNER, -ARROW_OUTER, ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		vertexConsumer.vertex(poseMat, -ARROW_INNER, -ARROW_OUTER, ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+
+		vertexConsumer.vertex(poseMat, -ARROW_INNER, -ARROW_OUTER, ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		vertexConsumer.vertex(poseMat, -ARROW_INNER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+
+		vertexConsumer.vertex(poseMat, -ARROW_INNER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		vertexConsumer.vertex(poseMat, -ARROW_OUTER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		
+		vertexConsumer.vertex(poseMat, -ARROW_OUTER,  0          , ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		vertexConsumer.vertex(poseMat,  0          ,  ARROW_OUTER, ARROW_OFFSET).color(1, 1, 1, 0.4f).normal(normMat, 0, 0, 1).endVertex();
+		pose.popPose();
+	}
+
 	static final float OUTER_EDGE = .5f;
 	static final float INNER_EDGE = .25f;
 
@@ -267,12 +315,26 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		return APGenerationTypes.STAIRS;
 	}
 
+	public default ComplexFacing getFacing(BlockHitResult hitResult)
+	{
+		return getFacing(hitResult.getDirection(), hitResult.getLocation(), hitResult.getBlockPos());
+	}
+
 	public default ComplexFacing getFacing(BlockPlaceContext context)
 	{
-		double hitX = context.getClickLocation().x - context.getClickedPos().getX() - .5;
-		double hitY = context.getClickLocation().y - context.getClickedPos().getY() - .5;
-		double hitZ = context.getClickLocation().z - context.getClickedPos().getZ() - .5;
-		Direction out = context.getClickedFace();
+		return getFacing(context.getClickedFace(), context.getClickLocation(), context.getClickedPos());
+	}
+
+	public default ComplexFacing getFacing(Direction out, Vec3 hitPos, Vec3i blockPos)
+	{
+		return getFacing(out, 
+				(float) (hitPos.x - blockPos.getX() - .5), 
+				(float) (hitPos.y - blockPos.getY() - .5), 
+				(float) (hitPos.z - blockPos.getZ() - .5));
+	}
+
+	public default ComplexFacing getFacing(Direction out, float hitX, float hitY, float hitZ)
+	{
 		switch (out.getAxis()) {
 		case X:
 			return getFacingFromSide((float) hitZ, (float) hitY, Direction.SOUTH, Direction.UP, out);
