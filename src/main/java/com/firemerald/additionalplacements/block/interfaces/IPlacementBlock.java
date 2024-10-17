@@ -115,11 +115,15 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 			}
 			Vec3 pos = camera.getPosition();
 			pose.translate(hitX - pos.x + .5, hitY - pos.y + .5, hitZ - pos.z + .5);
+			renderPlacementPreview(pose, vertexConsumer, player, result, partial);
 			pose.mulPose(DIRECTION_TRANSFORMS[result.getDirection().ordinal()]);
 			renderPlacementHighlight(pose, vertexConsumer, player, result, partial);
 			pose.popPose();
 		}
 	}
+
+	@OnlyIn(Dist.CLIENT)
+	public default void renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial) {}
 
 	@OnlyIn(Dist.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
