@@ -4,6 +4,7 @@ import java.util.function.Function;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 
+import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -30,15 +31,18 @@ public class APNetwork
             .named(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "network"))
             .networkProtocolVersion(1)
             .simpleChannel();
-        registerServerPacket(PacketSetPlacementToggle.class, PacketSetPlacementToggle::new);
+        registerServerPacket(SetPlacementTogglePacket.class, SetPlacementTogglePacket::new);
+        registerClientPacketAsync(CheckDataClientPacket.class, CheckDataClientPacket::new);
+        registerServerPacketAsync(CheckDataServerPacket.class, CheckDataServerPacket::new);
+        registerClientPacketAsync(ConfigurationCheckFailedPacket.class, ConfigurationCheckFailedPacket::new);
     }
 
-    public static <T extends PacketClient> void registerClientPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
+    public static <T extends ClientPacket> void registerClientPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
     {
     	registerPacket(clazz, decoder, NetworkDirection.PLAY_TO_CLIENT);
     }
 
-    public static <T extends PacketServer> void registerServerPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
+    public static <T extends ServerPacket> void registerServerPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
     {
     	registerPacket(clazz, decoder, NetworkDirection.PLAY_TO_SERVER);
     }
@@ -54,6 +58,30 @@ public class APNetwork
     	.decoder(decoder)
     	.encoder(APPacket::write)
     	.consumerMainThread(APPacket::handle)
+    	.add();
+    }
+
+    public static <T extends ClientPacket> void registerClientPacketAsync(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
+    {
+    	registerPacketAsync(clazz, decoder, NetworkDirection.PLAY_TO_CLIENT);
+    }
+
+    public static <T extends ServerPacket> void registerServerPacketAsync(Class<T> clazz, Function<FriendlyByteBuf, T> decoder)
+    {
+    	registerPacketAsync(clazz, decoder, NetworkDirection.PLAY_TO_SERVER);
+    }
+
+    public static <T extends APPacket> void registerPacketAsync(Class<T> clazz, Function<FriendlyByteBuf, T> decoder, NetworkDirection direction)
+    {
+    	registerPacketAsync(INSTANCE.messageBuilder(clazz, id(), direction), decoder);
+    }
+
+    public static <T extends APPacket> void registerPacketAsync(MessageBuilder<T> builder, Function<FriendlyByteBuf, T> decoder)
+    {
+    	builder
+    	.decoder(decoder)
+    	.encoder(APPacket::write)
+    	.consumerNetworkThread(APPacket::handle)
     	.add();
     }
 
@@ -75,5 +103,10 @@ public class APNetwork
     public static void sendTo(Object packet, PacketTarget target)
     {
     	INSTANCE.send(packet, target);
+    }
+
+    public static void send(Object packet, Connection connection)
+    {
+    	INSTANCE.send(packet, connection);
     }
 }

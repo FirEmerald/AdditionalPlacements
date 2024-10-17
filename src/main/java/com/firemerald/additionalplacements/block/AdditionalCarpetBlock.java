@@ -1,9 +1,11 @@
 package com.firemerald.additionalplacements.block;
 
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.ICarpetBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
@@ -11,14 +13,12 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock> implements ICarpetBlock<CarpetBlock>
+public class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetBlock> implements ICarpetBlock<CarpetBlock>
 {
-	public static final DirectionProperty PLACING = AdditionalBlockStateProperties.HORIZONTAL_OR_UP_FACING;
+	static final ResourceLocation CARPET_BLOCKSTATES = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "blockstate_templates/carpet.json");
 	public static final VoxelShape[] SHAPES = {
 			Block.box(0, 15, 0, 16, 16, 16),
 			Block.box(0, 0, 0, 16, 16, 1),
@@ -41,35 +41,9 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-	{
-		builder.add(PLACING);
-		super.createBlockStateDefinition(builder);
-	}
-
-	@Override
-	@Deprecated
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
 		return SHAPES[state.getValue(PLACING).ordinal() - 1];
-	}
-
-	@Override
-	public Direction getPlacing(BlockState blockState)
-	{
-		return blockState.getValue(PLACING);
-	}
-
-	@Override
-	public BlockState getDefaultVanillaState(BlockState currentState)
-	{
-		return currentState.is(parentBlock) ? currentState : copyProperties(currentState, parentBlock.defaultBlockState());
-	}
-
-	@Override
-	public BlockState getDefaultAdditionalState(BlockState currentState)
-	{
-		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
 
 	@Override
@@ -95,5 +69,10 @@ public class AdditionalCarpetBlock extends AdditionalPlacementBlock<CarpetBlock>
 	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
 	{
 		return !level.isEmptyBlock(pos.relative(state.getValue(PLACING)));
+	}
+
+	@Override
+	public ResourceLocation getDynamicBlockstateJson() {
+		return CARPET_BLOCKSTATES;
 	}
 }
