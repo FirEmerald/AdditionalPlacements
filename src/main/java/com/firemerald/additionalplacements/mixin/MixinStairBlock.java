@@ -1,7 +1,5 @@
 package com.firemerald.additionalplacements.mixin;
 
-import java.util.function.Supplier;
-
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.firemerald.additionalplacements.block.VerticalStairBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStairBlock.IVanillaStairBlock;
+import com.firemerald.additionalplacements.util.stairs.CompressedStairShape;
+import com.firemerald.additionalplacements.util.stairs.StairConnections;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,13 +19,14 @@ import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 @Mixin(StairBlock.class)
 public abstract class MixinStairBlock implements IVanillaStairBlock
 {
 	public VerticalStairBlock stairs;
-	@Shadow(remap = false)
-	private Supplier<BlockState> stateSupplier;
+	@Shadow
+	private BlockState baseState;
 
 	public StairBlock asStair()
 	{
@@ -71,7 +72,7 @@ public abstract class MixinStairBlock implements IVanillaStairBlock
 	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
-		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
+		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
 	@Inject(method = "rotate", at = @At("HEAD"), cancellable = true)
@@ -95,6 +96,16 @@ public abstract class MixinStairBlock implements IVanillaStairBlock
 	@Override
 	public BlockState getModelStateImpl()
 	{
-		return stateSupplier.get();
+		return baseState;
+	}
+
+	@Override
+	public StairConnections allowedConnections() {
+		return stairs.allowedConnections();
+	}
+
+	@Override
+	public EnumProperty<CompressedStairShape> shapeProperty() {
+		return stairs.shapeProperty();
 	}
 }

@@ -2,8 +2,8 @@ package com.firemerald.additionalplacements.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.common.IAPPlayer;
+import com.firemerald.additionalplacements.config.APConfigs;
 
 import net.minecraft.world.entity.player.Player;
 
@@ -13,6 +13,6 @@ public class MixinPlayer implements IAPPlayer
 	@Override
 	public boolean isPlacementEnabled()
 	{
-		return AdditionalPlacementsMod.SERVER_CONFIG.fakePlayerPlacement.get();
+		return APConfigs.SERVER.fakePlayerPlacement.get();
 	}
 }

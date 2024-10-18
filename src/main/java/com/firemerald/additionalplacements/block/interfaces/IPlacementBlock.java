@@ -7,8 +7,9 @@ import javax.annotation.Nullable;
 
 import org.joml.Quaternionf;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.common.IAPPlayer;
+import com.firemerald.additionalplacements.config.APConfigs;
+import com.firemerald.additionalplacements.generation.GenerationType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
@@ -57,7 +58,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 
 	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
-		if (AdditionalPlacementsMod.COMMON_CONFIG.showTooltip.get() && !disablePlacementInternal()) addPlacementTooltip(stack, level, tooltip, flag);
+		if (APConfigs.COMMON.showTooltip.get() && getGenerationType().placementEnabled()) addPlacementTooltip(stack, level, tooltip, flag);
 	}
 
 	public void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag);
@@ -85,53 +86,54 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
-		if (disablePlacement(hit, player.level(), result.getDirection(), player)) return;
-		pose.pushPose();
-		double hitX = hit.getX();
-		double hitY = hit.getY();
-		double hitZ = hit.getZ();
-		switch (result.getDirection())
-		{
-		case WEST:
-			hitX = result.getLocation().x - 1.005;
-			break;
-		case EAST:
-			hitX = result.getLocation().x + .005;
-			break;
-		case DOWN:
-			hitY = result.getLocation().y - 1.005;
-			break;
-		case UP:
-			hitY = result.getLocation().y + .005;
-			break;
-		case NORTH:
-			hitZ = result.getLocation().z - 1.005;
-			break;
-		case SOUTH:
-			hitZ = result.getLocation().z + .005;
-			break;
-		default:
+		if (enablePlacement(hit, player.level(), result.getDirection(), player)) {
+			pose.pushPose();
+			double hitX = hit.getX();
+			double hitY = hit.getY();
+			double hitZ = hit.getZ();
+			switch (result.getDirection())
+			{
+			case WEST:
+				hitX = result.getLocation().x - 1.005;
+				break;
+			case EAST:
+				hitX = result.getLocation().x + .005;
+				break;
+			case DOWN:
+				hitY = result.getLocation().y - 1.005;
+				break;
+			case UP:
+				hitY = result.getLocation().y + .005;
+				break;
+			case NORTH:
+				hitZ = result.getLocation().z - 1.005;
+				break;
+			case SOUTH:
+				hitZ = result.getLocation().z + .005;
+				break;
+			default:
+			}
+			Vec3 pos = camera.getPosition();
+			pose.translate(hitX - pos.x + .5, hitY - pos.y + .5, hitZ - pos.z + .5);
+			renderPlacementPreview(pose, vertexConsumer, player, result, partial);
+			pose.mulPose(DIRECTION_TRANSFORMS[result.getDirection().ordinal()]);
+			renderPlacementHighlight(pose, vertexConsumer, player, result, partial);
+			pose.popPose();
 		}
-		Vec3 pos = camera.getPosition();
-		pose.translate(hitX - pos.x + .5, hitY - pos.y + .5, hitZ - pos.z + .5);
-		pose.mulPose(DIRECTION_TRANSFORMS[result.getDirection().ordinal()]);
-		renderPlacementHighlight(pose, vertexConsumer, player, result, partial);
-		pose.popPose();
 	}
+
+	@OnlyIn(Dist.CLIENT)
+	public default void renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial) {}
 
 	@OnlyIn(Dist.CLIENT)
 	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial);
 
-	public abstract boolean disablePlacementInternal();
-
-	public default boolean disablePlacement(@Nullable Player player)
-	{
-		return (player instanceof IAPPlayer && !((IAPPlayer) player).isPlacementEnabled()) || disablePlacementInternal();
+	public default boolean enablePlacement(@Nullable Player player) {
+		return getGenerationType().placementEnabled() && (!(player instanceof IAPPlayer) || ((IAPPlayer) player).isPlacementEnabled());
 	}
 
-	public default boolean disablePlacement(BlockPos pos, Level level, Direction direction, @Nullable Player player)
-	{
-		return disablePlacement(player);
+	public default boolean enablePlacement(BlockPos hit, Level level, Direction direction, Player player) {
+		return enablePlacement(player);
 	}
 
 	@OnlyIn(Dist.CLIENT)
@@ -139,4 +141,6 @@ public interface IPlacementBlock<T extends Block> extends ItemLike
 	{
 		return Function.identity();
 	}
+	
+	public GenerationType<?, ?> getGenerationType();
 }
