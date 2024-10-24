@@ -1,8 +1,0 @@
-{
-  "parent": "additionalplacements:block/stairs/base/outer_up_ccw",
-  "textures": {
-    "bottom": "#all",
-    "side": "#all",
-    "top": "#all"
-  }
-}

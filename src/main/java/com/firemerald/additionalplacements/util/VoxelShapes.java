@@ -169,6 +169,10 @@ public class VoxelShapes
 		setCorner(Direction.EAST, Direction.DOWN, Direction.SOUTH, CORNER_EAST_DOWN_SOUTH);
 		setCorner(Direction.WEST, Direction.UP, Direction.SOUTH, CORNER_WEST_UP_SOUTH);
 		setCorner(Direction.EAST, Direction.UP, Direction.SOUTH, CORNER_EAST_UP_SOUTH);
+		setStairs();
+	}
+	
+	public static void setStairs() {
 		setStraightStairs(Direction.UP, Direction.SOUTH, STAIRS_UP_SOUTH);
 		setStraightStairs(Direction.UP, Direction.NORTH, STAIRS_UP_NORTH);
 		setStraightStairs(Direction.DOWN, Direction.SOUTH, STAIRS_DOWN_SOUTH);
@@ -349,6 +353,11 @@ public class VoxelShapes
 		return get(STRAIGHT_STAIRS_BY_FACING, face1, face2);
 	}
 
+	public static VoxelShape getStraightStairs(ComplexFacing facing)
+	{
+		return getStraightStairs(facing.forward, facing.up);
+	}
+
 	private static void setInnerStairs(Direction face1, Direction face2, Direction face3, VoxelShape shape)
 	{
 		set(INNER_STAIRS_BY_FACING, face1, face2, face3, shape);
@@ -357,6 +366,16 @@ public class VoxelShapes
 	public static VoxelShape getInnerStairs(Direction face1, Direction face2, Direction face3)
 	{
 		return get(INNER_STAIRS_BY_FACING, face1, face2, face3);
+	}
+
+	public static VoxelShape getLeftInnerStairs(ComplexFacing facing)
+	{
+		return getInnerStairs(facing.forward, facing.up, facing.left);
+	}
+
+	public static VoxelShape getRightInnerStairs(ComplexFacing facing)
+	{
+		return getInnerStairs(facing.forward, facing.up, facing.right);
 	}
 
 	private static void setOuterStairs(Direction face1, Direction face2, Direction face3, VoxelShape shape)
@@ -369,6 +388,16 @@ public class VoxelShapes
 		return get(OUTER_STAIRS_BY_FACING, face1, face2, face3);
 	}
 
+	public static VoxelShape getLeftOuterStairs(ComplexFacing facing)
+	{
+		return getOuterStairs(facing.forward, facing.up, facing.left);
+	}
+
+	public static VoxelShape getRightOuterStairs(ComplexFacing facing)
+	{
+		return getOuterStairs(facing.forward, facing.up, facing.right);
+	}
+
 	private static void setOuterFlatStairs(Direction top, Direction face1, Direction face2, VoxelShape shape)
 	{
 		set(OUTER_FLAT_STAIRS_BY_TOP_AND_FACING[getIndex(top)], top, face1, face2, shape);
@@ -377,6 +406,26 @@ public class VoxelShapes
 	public static VoxelShape getOuterFlatStairs(Direction top, Direction face1, Direction face2)
 	{
 		return get(OUTER_FLAT_STAIRS_BY_TOP_AND_FACING[getIndex(top)], top, face1, face2);
+	}
+
+	public static VoxelShape getLeftOuterBackFlatStairs(ComplexFacing facing)
+	{
+		return getOuterFlatStairs(facing.up, facing.forward, facing.left);
+	}
+
+	public static VoxelShape getRightOuterBackFlatStairs(ComplexFacing facing)
+	{
+		return getOuterFlatStairs(facing.up, facing.forward, facing.right);
+	}
+
+	public static VoxelShape getLeftOuterBottomFlatStairs(ComplexFacing facing)
+	{
+		return getOuterFlatStairs(facing.forward, facing.up, facing.left);
+	}
+
+	public static VoxelShape getRightOuterBottomFlatStairs(ComplexFacing facing)
+	{
+		return getOuterFlatStairs(facing.forward, facing.up, facing.right);
 	}
 
 	private static void setOuterTwistStairs(Direction top, Direction front, VoxelShape clockwise, VoxelShape counterClockwise)
@@ -388,5 +437,15 @@ public class VoxelShapes
 	public static VoxelShape getOuterTwistStairs(Direction top, Direction front, boolean clockwise)
 	{
 		return get(OUTER_TWIST_STAIRS_BY_FACING, top, front, clockwise ? 0 : 1);
+	}
+
+	public static VoxelShape getClockwiseTwistStairs(ComplexFacing facing)
+	{
+		return getOuterTwistStairs(facing.up, facing.forward, true);
+	}
+
+	public static VoxelShape getCounterClockwiseTwistStairs(ComplexFacing facing)
+	{
+		return getOuterTwistStairs(facing.up, facing.forward, false);
 	}
 }

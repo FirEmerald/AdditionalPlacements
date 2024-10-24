@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.client;
 
-import com.firemerald.additionalplacements.network.PacketSetPlacementToggle;
+import com.firemerald.additionalplacements.network.server.SetPlacementTogglePacket;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import net.minecraft.client.KeyMapping;
@@ -48,6 +48,6 @@ public class APClientData
 
 	public static void synchronizePlacementEnabled()
 	{
-		new PacketSetPlacementToggle(placementEnabled).sendToServer();
+		new SetPlacementTogglePacket(placementEnabled).sendToServer();
 	}
 }
