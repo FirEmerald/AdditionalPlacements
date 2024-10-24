@@ -174,11 +174,4 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	{
 		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.getSignalForStatePublic(state) : 0;
 	}
-
-	@Override
-	@Deprecated
-	public boolean isSignalSource(BlockState state)
-	{
-		return parentBlock.isSignalSource(state);
-	}
 }
