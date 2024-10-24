@@ -7,8 +7,12 @@ import org.apache.commons.lang3.tuple.Triple;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.client.gui.screen.ConnectionErrorsScreen;
 import com.firemerald.additionalplacements.util.MessageTree;
+import com.mojang.realmsclient.RealmsMainScreen;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -61,6 +65,17 @@ public class ConfigurationCheckFailedPacket extends ClientPacket
 			rootError.children.add(typeError);
 		});
 		rootError.output(AdditionalPlacementsMod.LOGGER::warn);
-		context.enqueueWork(() -> Minecraft.getInstance().forceSetScreen(new ConnectionErrorsScreen(rootError)));
+		context.enqueueWork(() -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			Screen desScreen = new TitleScreen();
+			if (!minecraft.isLocalServer()) {
+				if (minecraft.getCurrentServer().isRealm()) {
+					desScreen = new RealmsMainScreen(desScreen);
+				} else {
+					desScreen = new JoinMultiplayerScreen(desScreen);
+				}
+			}
+			minecraft.disconnect(new ConnectionErrorsScreen(rootError, desScreen));
+		});
 	}
 }
