@@ -35,6 +35,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.phys.BlockHitResult;
@@ -407,6 +408,20 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos1, BlockPos pos2)
 	{
 		return this.getModelState(state).getBeaconColorMultiplier(level, pos1, pos2);
+	}
+
+	@Override
+	@Deprecated
+	public boolean isSignalSource(BlockState state)
+	{
+		return parentBlock.isSignalSource(this.getModelState(state));
+	}
+
+	@Override
+	@Deprecated
+	public PushReaction getPistonPushReaction(BlockState state)
+	{
+		return parentBlock.getPistonPushReaction(this.getModelState(state));
 	}
 	
 	public abstract boolean rotatesLogic(BlockState state);
