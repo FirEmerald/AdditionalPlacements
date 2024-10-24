@@ -322,16 +322,16 @@ public enum BlockRotation
 	public void rotateUV(int[] oldData, int oldPos, int[] newData, int newPos, int rotateUV, TextureAtlasSprite tex) {
 		switch (rotateUV) {
 		case 1:
-			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU(1 - tex.getVOffset(Float.intBitsToFloat(oldData[oldPos + 1])))); //1-V
-			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV(    tex.getUOffset(Float.intBitsToFloat(oldData[oldPos + 0])))); //U
+			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU(16 - tex.getVOffset(Float.intBitsToFloat(oldData[oldPos + 1])))); //1-V
+			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV(     tex.getUOffset(Float.intBitsToFloat(oldData[oldPos + 0])))); //U
 			break;
 		case 2:
 			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU0() + tex.getU1() - Float.intBitsToFloat(oldData[oldPos + 0])); //quick 1-U
 			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV0() + tex.getV1() - Float.intBitsToFloat(oldData[oldPos + 1])); //quick 1-V
 			break;
 		case 3:
-			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU(    tex.getVOffset(Float.intBitsToFloat(oldData[oldPos + 1])))); //V
-			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV(1 - tex.getUOffset(Float.intBitsToFloat(oldData[oldPos + 0])))); //1-U
+			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU(     tex.getVOffset(Float.intBitsToFloat(oldData[oldPos + 1])))); //V
+			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV(16 - tex.getUOffset(Float.intBitsToFloat(oldData[oldPos + 0])))); //1-U
 			break;
 		}
 	}
