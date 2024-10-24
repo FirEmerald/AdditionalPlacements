@@ -1,8 +1,0 @@
-{
-  "parent": "additionalplacements:block/stairs/base/outer_down_cw",
-  "textures": {
-    "side": "#all",
-    "top": "#all",
-    "bottom": "#all"
-  }
-}

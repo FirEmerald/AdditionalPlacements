@@ -2,8 +2,9 @@ package com.firemerald.additionalplacements.block.interfaces;
 
 import javax.annotation.Nullable;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
+import com.firemerald.additionalplacements.generation.APGenerationTypes;
+import com.firemerald.additionalplacements.generation.GenerationType;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
@@ -29,9 +30,8 @@ public interface ICarpetBlock<T extends Block> extends IFloorBlock<T>
 		else return blockState.getValue(AdditionalCarpetBlock.PLACING);
 	}
 
-    @Override
-	public default boolean disablePlacementInternal()
-	{
-		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticCarpetPlacement.get();
+	@Override
+	public default GenerationType<?, ?> getGenerationType() {
+		return APGenerationTypes.CARPET;
 	}
 }

@@ -44,5 +44,4 @@ public class AdditionalPlacementsBlockTags
 				&& !SEPERATOR.test(path.charAt(begin - 1))) || (begin + typeName.length() < path.length() //check char after
 				&& !SEPERATOR.test(path.charAt(begin + typeName.length())))) return tag;
 		return BlockTags.create(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, loc.getNamespace() + "/" + path.substring(0, begin) + "vertical_" + path.substring(begin)));
-	}
-}
+	}}

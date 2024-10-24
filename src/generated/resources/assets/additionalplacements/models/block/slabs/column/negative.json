@@ -1,0 +1,7 @@
+{
+  "parent": "additionalplacements:block/slabs/base/negative",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}

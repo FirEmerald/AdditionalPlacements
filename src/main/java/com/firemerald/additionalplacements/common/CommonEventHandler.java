@@ -2,7 +2,8 @@ package com.firemerald.additionalplacements.common;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.firemerald.additionalplacements.command.CommandExportTags;
+import com.firemerald.additionalplacements.commands.CommandExportTags;
+import com.firemerald.additionalplacements.config.APConfigs;
 
 import net.minecraft.Util;
 import net.minecraft.resources.ResourceLocation;
@@ -33,7 +34,7 @@ public class CommonEventHandler
 			if (block instanceof IPlacementBlock)
 			{
 				IPlacementBlock<?> verticalBlock = ((IPlacementBlock<?>) block);
-				if (verticalBlock.hasAdditionalStates()) verticalBlock.appendHoverTextImpl(event.getItemStack(), event.getPlayer() == null ? null : event.getPlayer().getLevel(), event.getToolTip(), event.getFlags());
+				if (verticalBlock.hasAdditionalStates()) verticalBlock.appendHoverTextImpl(event.getItemStack(), event.getEntity() == null ? null : event.getEntity().getLevel(), event.getToolTip(), event.getFlags());
 			}
 		}
 	}
@@ -48,7 +49,7 @@ public class CommonEventHandler
 	public static void onTagsUpdated(TagsUpdatedEvent event)
 	{
 		misMatchedTags = false;
-		if (AdditionalPlacementsMod.COMMON_CONFIG.checkTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.checkTags.get())
+		if (APConfigs.COMMON.checkTags.get() && (!APConfigs.SERVER_SPEC.isLoaded() || APConfigs.SERVER.checkTags.get()))
 			TagMismatchChecker.startChecker(); //TODO halt on datapack reload
 	}
 
@@ -82,7 +83,7 @@ public class CommonEventHandler
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event)
 	{
-		if (misMatchedTags && !(AdditionalPlacementsMod.COMMON_CONFIG.autoRebuildTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.autoRebuildTags.get()) && TagMismatchChecker.canGenerateTags(event.getPlayer())) event.getPlayer().sendMessage(TagMismatchChecker.MESSAGE, Util.NIL_UUID);
+		if (misMatchedTags && !(APConfigs.COMMON.autoRebuildTags.get() && APConfigs.SERVER.autoRebuildTags.get()) && TagMismatchChecker.canGenerateTags(event.getPlayer())) event.getPlayer().sendMessage(TagMismatchChecker.MESSAGE, Util.NIL_UUID);
 	}
 
 	@SubscribeEvent

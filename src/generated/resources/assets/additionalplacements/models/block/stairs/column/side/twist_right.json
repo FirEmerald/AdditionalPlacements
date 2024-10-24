@@ -1,0 +1,7 @@
+{
+  "parent": "additionalplacements:block/stairs/base/side/twist_right",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}

@@ -14,6 +14,7 @@ import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ModelType<T extends Block>
 {
@@ -85,7 +86,7 @@ public class ModelType<T extends Block>
 				if (hasItem)
 				{
 					Item item = block.asItem();
-					if (item != null) stateProvider.itemModels().withExistingParent(item.getRegistryName().getPath(), modelProvider.modLoc(folder + models[0]));
+					if (item != null) stateProvider.itemModels().withExistingParent(ForgeRegistries.ITEMS.getKey(item).getPath(), modelProvider.modLoc(folder + models[0]));
 				}
 			}
 		}

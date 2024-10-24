@@ -53,7 +53,6 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial) {}
 
     @Override
-	@OnlyIn(Dist.CLIENT)
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
 		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.vertical_placement"));
@@ -66,7 +65,6 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 		return from;
 	}
 
-	@Override
 	@OnlyIn(Dist.CLIENT)
 	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)
 	{

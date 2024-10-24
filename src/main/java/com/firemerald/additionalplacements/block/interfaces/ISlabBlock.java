@@ -5,17 +5,19 @@ import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 import com.firemerald.additionalplacements.common.CommonModEventHandler;
+import com.firemerald.additionalplacements.generation.APGenerationTypes;
+import com.firemerald.additionalplacements.generation.GenerationType;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Matrix3f;
 import com.mojang.math.Matrix4f;
 
-import cjminecraft.doubleslabs.common.config.DSConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.world.entity.player.Player;
@@ -37,23 +39,29 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
 	{
 		@Override
-		public default boolean disablePlacement(BlockPos pos, Level level, Direction direction, @Nullable Player player)
+		public default boolean enablePlacement(BlockPos pos, Level level, Direction direction, @Nullable Player player)
 		{
-			if (ISlabBlock.super.disablePlacement(pos, level, direction, player)) return true;
-			else if (CommonModEventHandler.doubleslabsLoaded)
-			{
-				if (!DSConfig.SERVER.disableVerticalSlabPlacement.get()) return true;
-				BlockState blockState = level.getBlockState(pos);
-				if (blockState.getBlock() instanceof SlabBlock)
+			if (ISlabBlock.super.enablePlacement(pos, level, direction, player)) {
+				if (CommonModEventHandler.doubleslabsLoaded)
 				{
-					if (
-							(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM && direction == Direction.UP) ||
-							(blockState.getValue(SlabBlock.TYPE) == SlabType.TOP && direction == Direction.DOWN)) return true;
-					else return false;
+					//if (DSConfig.COMMON.disableVerticalSlabPlacement.get()) return true;
+					BlockState blockState = level.getBlockState(pos);
+					if (blockState.getBlock() instanceof SlabBlock) {
+						if (
+								(blockState.getValue(SlabBlock.TYPE) == SlabType.BOTTOM && direction == Direction.UP) ||
+								(blockState.getValue(SlabBlock.TYPE) == SlabType.TOP && direction == Direction.DOWN)
+								) return false;
+					}
 				}
-				else return false;
-			}
-			else return false;
+				return true;
+			} else return false;
+		}
+
+		@Override
+		public default Direction getPlacing(BlockState blockState)
+		{
+			SlabType type = blockState.getValue(SlabBlock.TYPE);
+			return type == SlabType.DOUBLE ? null : type == SlabType.TOP ? Direction.UP : Direction.DOWN;
 		}
 	}
 
@@ -89,27 +97,20 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	{
 		BlockPos blockPos = context.getClickedPos();
 		BlockState blockState = context.getLevel().getBlockState(blockPos);
-        if (isThis(blockState)) return getDefaultVanillaState(blockState).setValue(SlabBlock.TYPE, SlabType.DOUBLE);
+        if (isThis(blockState)) return blockState.setValue(SlabBlock.TYPE, SlabType.DOUBLE);
         else return forPlacing(getPlacingDirection(context), currentState);
 	}
 
 	public default BlockState forPlacing(Direction dir, BlockState blockState)
 	{
-    	if (dir == Direction.UP) return getDefaultVanillaState(blockState).setValue(SlabBlock.TYPE, SlabType.TOP);
-    	else if (dir == Direction.DOWN) return getDefaultVanillaState(blockState).setValue(SlabBlock.TYPE, SlabType.BOTTOM);
-    	else return getDefaultAdditionalState(blockState).setValue(VerticalSlabBlock.PLACING, dir);
+		return (dir.getAxis() == Axis.Y ? 
+				getDefaultVanillaState(blockState) : 
+				(getDefaultAdditionalState(blockState).setValue(VerticalSlabBlock.AXIS, dir.getAxis())))
+				.setValue(SlabBlock.TYPE, dir.getAxisDirection() == AxisDirection.POSITIVE ? SlabType.TOP : SlabType.BOTTOM);
 	}
 
 	@Nullable
-	public default Direction getPlacing(BlockState blockState)
-	{
-		if (blockState.getBlock() instanceof SlabBlock)
-		{
-			SlabType type = blockState.getValue(SlabBlock.TYPE);
-			return type == SlabType.BOTTOM ? Direction.DOWN : type == SlabType.TOP ? Direction.UP : null;
-		}
-		else return blockState.getValue(VerticalSlabBlock.PLACING);
-	}
+	public Direction getPlacing(BlockState blockState);
 
 	public default Direction getPlacingDirection(BlockPlaceContext context)
 	{
@@ -226,15 +227,13 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 		vertexConsumer.vertex(poseMat, -.5f, .5f, -.5f).color(0, 0, 0, 0.4f).normal(normMat, 0, 0, 1).endVertex();
 		vertexConsumer.vertex(poseMat, -.25f, .25f, -.5f).color(0, 0, 0, 0.4f).normal(normMat, 0, 0, 1).endVertex();
 	}
-
-    @Override
-	public default boolean disablePlacementInternal()
-	{
-		return AdditionalPlacementsMod.COMMON_CONFIG.disableAutomaticSlabPlacement.get();
+    
+	@Override
+	public default GenerationType<?, ?> getGenerationType() {
+		return APGenerationTypes.SLAB;
 	}
 
     @Override
-	@OnlyIn(Dist.CLIENT)
 	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
 		tooltip.add(new TranslatableComponent("tooltip.additionalplacements.vertical_placement"));

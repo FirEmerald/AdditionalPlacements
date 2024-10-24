@@ -13,7 +13,8 @@
 		"MixinStairBlock",
 		"MixinWeightedPressurePlateBlock",
 		"MixinPlayer",
-		"MixinServerPlayer"
+		"MixinServerPlayer",
+		"MixinChunkStorage"
 	],
 	"client": [
 		"MixinBlockModelShaper",

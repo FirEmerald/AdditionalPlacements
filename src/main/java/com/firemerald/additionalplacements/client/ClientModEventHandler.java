@@ -1,7 +1,6 @@
 package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
-import com.firemerald.additionalplacements.client.models.BakedParticleDeferredBlockModel;
 import com.firemerald.additionalplacements.client.models.PlacementBlockModelLoader;
 
 import net.minecraft.client.Minecraft;
@@ -11,8 +10,6 @@ import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
-import net.minecraft.server.packs.resources.ReloadableResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
@@ -43,6 +40,7 @@ public class ClientModEventHandler
 			PackSource.BUILT_IN,
 			true
 			);
+	private static PlacementBlockModelLoader loader;
 
 	@SubscribeEvent
 	public static void onAddPackFinders(AddPackFindersEvent event)
@@ -53,12 +51,12 @@ public class ClientModEventHandler
 	@SubscribeEvent
 	public static void onModelRegistryEvent(ModelRegistryEvent event)
 	{
-		ModelLoaderRegistry.registerLoader(PlacementBlockModelLoader.ID, new PlacementBlockModelLoader());
+		loader = new PlacementBlockModelLoader();
+		ModelLoaderRegistry.registerLoader(PlacementBlockModelLoader.ID, loader);
 	}
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void init(FMLClientSetupEvent event)
-    {
+    public static void init(FMLClientSetupEvent event) {
     	ForgeRegistries.BLOCKS.forEach(block -> {
     		if (block instanceof AdditionalPlacementBlock)
     		{
@@ -68,7 +66,6 @@ public class ClientModEventHandler
     		}
     	});
     	Minecraft.getInstance().getBlockColors().register(new AdditionalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
-    	((ReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener((ResourceManagerReloadListener) (resourceManager -> BakedParticleDeferredBlockModel.clearCache()));
     	ClientRegistry.registerKeyBinding(APClientData.AP_PLACEMENT_KEY);
     }
 }

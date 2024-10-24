@@ -36,5 +36,4 @@ public class PlacementBlockModel implements IModelGeometry<PlacementBlockModel>
 		if (model != null) return model.getMaterials(modelGetter, missingTextureErrors);
 		else return Collections.emptyList();
 	}
-
 }

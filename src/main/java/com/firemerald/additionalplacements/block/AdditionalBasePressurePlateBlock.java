@@ -20,17 +20,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SupportType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePlateBlock> extends AdditionalPlacementBlock<T> implements IBasePressurePlateBlock<T>
+public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePlateBlock> extends AdditionalFloorBlock<T> implements IBasePressurePlateBlock<T>
 {
-	public static final DirectionProperty PLACING = AdditionalBlockStateProperties.HORIZONTAL_OR_UP_FACING;
 	public static final VoxelShape[] AABBS = {
 			Block.box(1, 15, 1, 15, 16, 15),
 			Block.box(1, 1, 0, 15, 15, 1),
@@ -65,35 +61,9 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
-	{
-		builder.add(PLACING);
-		super.createBlockStateDefinition(builder);
-	}
-
-	@Override
-	@Deprecated
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext collisionContext)
+	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext collisionContext)
 	{
 		return plateMethods.getSignalForStatePublic(state) > 0 ? PRESSED_AABBS[state.getValue(PLACING).ordinal() - 1] : AABBS[state.getValue(PLACING).ordinal() - 1];
-	}
-
-	@Override
-	public Direction getPlacing(BlockState blockState)
-	{
-		return blockState.getValue(PLACING);
-	}
-
-	@Override
-	public BlockState getDefaultVanillaState(BlockState currentState)
-	{
-		return currentState.is(parentBlock) ? currentState : copyProperties(currentState, parentBlock.defaultBlockState());
-	}
-
-	@Override
-	public BlockState getDefaultAdditionalState(BlockState currentState)
-	{
-		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
 
 	@Override
@@ -179,12 +149,12 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
 	{
-		if (!isMoving && !state.is(oldState.getBlock()))
+		if (!isMoving && !state.is(newState.getBlock()))
 		{
-			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
-			super.onRemove(state, level, pos, oldState, isMoving);
+			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, newState);
+			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 
@@ -204,19 +174,5 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
 	{
 		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.getSignalForStatePublic(state) : 0;
-	}
-
-	@Override
-	@Deprecated
-	public boolean isSignalSource(BlockState state)
-	{
-		return parentBlock.isSignalSource(state);
-	}
-
-	@Override
-	@Deprecated
-	public PushReaction getPistonPushReaction(BlockState state)
-	{
-		return parentBlock.getPistonPushReaction(state);
 	}
 }

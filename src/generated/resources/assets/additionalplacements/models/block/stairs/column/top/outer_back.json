@@ -1,0 +1,7 @@
+{
+  "parent": "additionalplacements:block/stairs/base/top/outer_back",
+  "textures": {
+    "top": "#end",
+    "bottom": "#end"
+  }
+}

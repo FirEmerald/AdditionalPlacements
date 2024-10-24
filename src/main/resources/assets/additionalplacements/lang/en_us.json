@@ -1,5 +1,8 @@
 {
 	"tooltip.additionalplacements.vertical_placement": "Can be placed vertically",
+	"tooltip.additionalplacements.stair_connections.all_connections": "Allows mixed vertical-horizontal connections (relative to the placement)",
+	"tooltip.additionalplacements.stair_connections.no_mixed_connections": "Allows vertical connections (relative to the placement)",
+	"tooltip.additionalplacements.stair_connections.no_vertical_connections": "Does not allow vertical connections (relative to the placement)",
 	"tooltip.additionalplacements.ceiling_placement": "Can be placed on ceilings",
 	"msg.additionalplacements.mismatchedtags.0": "[Additional Placements] Found missing and/or extra tags on generated blocks. Use \"",
 	"msg.additionalplacements.mismatchedtags.1": "\" to generate the tags, then \"",
@@ -11,5 +14,17 @@
 	"key.categories.additionalplacements": "Additional Placements",
 	"key.additionalplacements.placement_toggle": "Toggle placement logic",
 	"msg.additionalplacements.placement_enable": "Additional Placements placement logic enabled",
-	"msg.additionalplacements.placement_disable": "Additional Placements placement logic disabled"
+	"msg.additionalplacements.placement_disable": "Additional Placements placement logic disabled",
+	"msg.additionalplacements.disconnected": "Additional Placements configuration conflict",
+	"msg.additionalplacements.errors.type": "The following generation types refused the connection:",
+	"msg.additionalplacements.errors.client": "Client-side refused:",
+	"msg.additionalplacements.errors.server": "Server-side refused:",
+	"msg.additionalplacements.stairs.data_not_found": "Stair connections configuration data not received from client",
+	"msg.additionalplacements.stairs.connections_type_not_found": "Unknown stair connections type %s",
+	"msg.additionalplacements.stairs.mismatched.header": "The following stair blocks have the wrong connections type. They need to be:",
+	"additionalplacements.stairs.connections_type.all_connections": "All connections allowed",
+	"additionalplacements.stairs.connections_type.no_mixed_connections": "No mixed connections allowed",
+	"additionalplacements.stairs.connections_type.no_vertical_connections": "No vertical connections allowed",
+	"msg.additionalplacements.stairs.mismatched.footer": "To connect to this server, correct the entries in config/additionalplacements-bootup.toml and relaunch the game.",
+	"msg.additionalplacements.local_world_notice": "Note: if you were attempting to load a local save, the world is still be active in the background. Please re-launch the game to fix this."
 }
