@@ -1,4 +1,4 @@
-package com.firemerald.additionalplacements.network;
+package com.firemerald.additionalplacements.network.server;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.firemerald.additionalplacements.generation.Registration;
+import com.firemerald.additionalplacements.network.client.ConfigurationCheckFailedPacket;
 import com.firemerald.additionalplacements.util.MessageTree;
 
 import net.minecraft.nbt.CompoundTag;
@@ -15,7 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
-public class CheckDataServerPacket extends ServerPacket
+public class CheckDataServerPacket extends ServerLoginPacket
 {
 	private final Map<ResourceLocation, Pair<CompoundTag, List<MessageTree>>> serverData;
 	
@@ -51,8 +52,8 @@ public class CheckDataServerPacket extends ServerPacket
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void handleServer(NetworkEvent.Context context)
-	{
+	public void handle(NetworkEvent.Context context) {
+		context.setPacketHandled(true);
 		List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors = new ArrayList<>();
 		Registration.forEach((id, type) -> {
 			Pair<CompoundTag, List<MessageTree>> clientData = this.serverData.get(id);

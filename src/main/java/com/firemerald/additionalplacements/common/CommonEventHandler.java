@@ -4,10 +4,8 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.commands.CommandExportTags;
 import com.firemerald.additionalplacements.config.APConfigs;
-import com.firemerald.additionalplacements.network.CheckDataClientPacket;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -91,10 +89,5 @@ public class CommonEventHandler
 	public static void onServerStopping(ServerStoppingEvent event)
 	{
 		TagMismatchChecker.stopChecker();
-	}
-	
-	@SubscribeEvent
-	public static void onPlayerLoggedInEvent(PlayerLoggedInEvent event) {
-		new CheckDataClientPacket().sendToClient((ServerPlayer) event.getEntity());
 	}
 }

@@ -1,4 +1,4 @@
-package com.firemerald.additionalplacements.network;
+package com.firemerald.additionalplacements.network.server;
 
 import com.firemerald.additionalplacements.client.APClientData;
 import com.firemerald.additionalplacements.common.IAPServerPlayer;
@@ -6,7 +6,7 @@ import com.firemerald.additionalplacements.common.IAPServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 
-public class SetPlacementTogglePacket extends ServerPacket
+public class SetPlacementTogglePacket extends ServerPlayPacket
 {
 	private boolean state;
 
@@ -27,7 +27,7 @@ public class SetPlacementTogglePacket extends ServerPacket
 	}
 
 	@Override
-	public void handleServer(NetworkEvent.Context context)
+	public void handle(NetworkEvent.Context context)
 	{
 		((IAPServerPlayer) context.getSender()).setPlacementEnabled(state);
 	}

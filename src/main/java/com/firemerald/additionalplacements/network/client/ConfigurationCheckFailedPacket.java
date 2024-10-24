@@ -1,4 +1,4 @@
-package com.firemerald.additionalplacements.network;
+package com.firemerald.additionalplacements.network.client;
 
 import java.util.List;
 
@@ -7,14 +7,18 @@ import org.apache.commons.lang3.tuple.Triple;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.client.gui.screen.ConnectionErrorsScreen;
 import com.firemerald.additionalplacements.util.MessageTree;
+import com.mojang.realmsclient.RealmsMainScreen;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.network.NetworkEvent;
 
-public class ConfigurationCheckFailedPacket extends ClientPacket
+public class ConfigurationCheckFailedPacket extends ClientLoginPacket
 {
 	private final List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors;
 	
@@ -43,8 +47,9 @@ public class ConfigurationCheckFailedPacket extends ClientPacket
 	}
 
 	@Override
-	public void handleClient(NetworkEvent.Context context)
+	public void handle(NetworkEvent.Context context)
 	{
+		context.setPacketHandled(true);
 		MessageTree rootError = new MessageTree(Component.translatable("msg.additionalplacements.errors.type"));
 		compiledErrors.forEach(data -> {
 			MessageTree typeError = new MessageTree(Component.literal(data.getLeft().toString())); //TODO friendly name?
@@ -61,6 +66,20 @@ public class ConfigurationCheckFailedPacket extends ClientPacket
 			rootError.children.add(typeError);
 		});
 		rootError.output(AdditionalPlacementsMod.LOGGER::warn);
-		context.enqueueWork(() -> Minecraft.getInstance().forceSetScreen(new ConnectionErrorsScreen(rootError)));
+		//TODO move disconnect to a point that works?
+		context.enqueueWork(() -> {
+			Minecraft minecraft = Minecraft.getInstance();
+			Screen desScreen = new TitleScreen();
+			boolean wasSinglePlayer;
+			if (!minecraft.isLocalServer()) {
+				wasSinglePlayer = false;
+				if (minecraft.isConnectedToRealms()) {
+					desScreen = new RealmsMainScreen(desScreen);
+				} else {
+					desScreen = new JoinMultiplayerScreen(desScreen);
+				}
+			} else wasSinglePlayer = true;
+			minecraft.clearLevel(new ConnectionErrorsScreen(rootError, desScreen, wasSinglePlayer));
+		});
 	}
 }

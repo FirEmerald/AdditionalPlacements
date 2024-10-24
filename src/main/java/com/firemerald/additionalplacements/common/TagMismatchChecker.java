@@ -154,7 +154,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 	public static boolean canGenerateTagsClient(Player player)
 	{
 		Player clientPlayer = Minecraft.getInstance().player;
-		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
+		return clientPlayer == null || player.getGameProfile().equals(clientPlayer.getGameProfile());
 	}
 
 	public static boolean canGenerateTags(Player player)

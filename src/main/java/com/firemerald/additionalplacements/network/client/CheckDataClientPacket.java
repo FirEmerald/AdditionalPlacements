@@ -1,16 +1,16 @@
-package com.firemerald.additionalplacements.network;
+package com.firemerald.additionalplacements.network.client;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.firemerald.additionalplacements.generation.Registration;
+import com.firemerald.additionalplacements.network.server.CheckDataServerPacket;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraftforge.network.NetworkEvent.Context;
 
-public class CheckDataClientPacket extends ClientPacket
+public class CheckDataClientPacket extends ClientLoginPacket
 {
 	private final Map<ResourceLocation, CompoundTag> data;
 	
@@ -34,8 +34,8 @@ public class CheckDataClientPacket extends ClientPacket
 	}
 
 	@Override
-	public void handleClient(NetworkEvent.Context context)
-	{
+	public void handle(Context context) {
+		context.setPacketHandled(true);
 		new CheckDataServerPacket(data).reply(context);
 	}
 }

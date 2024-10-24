@@ -25,5 +25,6 @@
 	"additionalplacements.stairs.connections_type.all_connections": "All connections allowed",
 	"additionalplacements.stairs.connections_type.no_mixed_connections": "No mixed connections allowed",
 	"additionalplacements.stairs.connections_type.no_vertical_connections": "No vertical connections allowed",
-	"msg.additionalplacements.stairs.mismatched.footer": "To connect to this server, correct the entries in config/additionalplacements-bootup.toml and relaunch the game."
+	"msg.additionalplacements.stairs.mismatched.footer": "To connect to this server, correct the entries in config/additionalplacements-bootup.toml and relaunch the game.",
+	"msg.additionalplacements.local_world_notice": "Note: if you were attempting to load a local save, the world is still be active in the background. Please re-launch the game to fix this."
 }
