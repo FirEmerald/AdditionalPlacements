@@ -85,14 +85,14 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Inject(method = "getStateForPlacement", at = @At("RETURN"), cancellable = true)
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
-		if (this.hasAdditionalStates() && !disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
+		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
 			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
 			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
-	})
-	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
+			})
+	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(rotateImpl(blockState, rotation));
 	}
@@ -100,17 +100,18 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Override
 	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
-	public BlockState rotate(BlockState blockState, Rotation rotation) //this adds the method if it does not exist
+	public BlockState rotate(BlockState blockState, Rotation rotation)
 	{
 		if (this.hasAdditionalStates()) return rotateImpl(blockState, rotation);
 		else return super.rotate(blockState, rotation);
 	}
 
+
 	@Inject(at = @At("HEAD"), remap = false, cancellable = true, target = {
 			@Desc(value = "mirror", ret = BlockState.class, args = {BlockState.class, Mirror.class}),
 			@Desc(value = "m_6943_", ret = BlockState.class, args = {BlockState.class, Mirror.class})
 	})
-	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci) //this injects into an existing method if it has already been added
+	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(mirrorImpl(blockState, mirror));
 	}
@@ -118,7 +119,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Override
 	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
-	public BlockState mirror(BlockState blockState, Mirror mirror) //this adds the method if it does not exist
+	public BlockState mirror(BlockState blockState, Mirror mirror)
 	{
 		if (this.hasAdditionalStates()) return mirrorImpl(blockState, mirror);
 		else return super.mirror(blockState, mirror);
@@ -127,7 +128,7 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Inject(method = "canBeReplaced", at = @At("HEAD"), cancellable = true)
 	private void canBeReplaced(BlockState state, BlockPlaceContext context, CallbackInfoReturnable<Boolean> ci)
 	{
-		if (this.hasAdditionalStates() && !this.disablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(canBeReplacedImpl(state, context));
+		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(canBeReplacedImpl(state, context));
 	}
 
 	@SuppressWarnings("deprecation")

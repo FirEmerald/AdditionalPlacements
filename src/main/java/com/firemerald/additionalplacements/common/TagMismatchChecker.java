@@ -10,6 +10,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
+import com.firemerald.additionalplacements.config.APConfigs;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
@@ -48,7 +49,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 		TagMismatchChecker old = thread;
 		thread = new TagMismatchChecker();
 		if (old != null) old.halted = true;
-		thread.setPriority(AdditionalPlacementsMod.COMMON_CONFIG.checkerPriority.get());
+		thread.setPriority(APConfigs.COMMON.checkerPriority.get());
 		CommonEventHandler.misMatchedTags = false;
 		thread.start();
 	}
@@ -96,13 +97,13 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 			if (!blockMissingExtra.isEmpty())
 			{
 				CommonEventHandler.misMatchedTags = true;
-				boolean autoRebuild = AdditionalPlacementsMod.COMMON_CONFIG.autoRebuildTags.get() && AdditionalPlacementsMod.SERVER_CONFIG.autoRebuildTags.get();
+				boolean autoRebuild = APConfigs.COMMON.autoRebuildTags.get() && APConfigs.SERVER.autoRebuildTags.get();
 				MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
 				if (!autoRebuild) server.getPlayerList().getPlayers().forEach(player -> {
 					if (canGenerateTags(player)) player.sendSystemMessage(MESSAGE);
 				});
 				AdditionalPlacementsMod.LOGGER.warn("Found missing and/or extra tags on generated blocks. Use \"/ap_tags_export\" to generate the tags, then \"/reload\" to re-load them (or re-load the world if that fails).");
-				if (AdditionalPlacementsMod.COMMON_CONFIG.logTagMismatch.get())
+				if (APConfigs.COMMON.logTagMismatch.get())
 				{
 					AdditionalPlacementsMod.LOGGER.warn("====== BEGIN LIST ======");
 					blockMissingExtra.forEach(blockMissingExtra -> {
@@ -135,7 +136,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 					}
 					catch (CommandSyntaxException e)
 					{
-						AdditionalPlacementsMod.LOGGER.error("Unexpected error whilst automatically rebuilding tags", e);
+						AdditionalPlacementsMod.LOGGER.error("Unexpected message whilst automatically rebuilding tags", e);
 					}
 				}
 			}
@@ -153,7 +154,7 @@ public class TagMismatchChecker extends Thread implements Consumer<ServerTickEve
 	public static boolean canGenerateTagsClient(Player player)
 	{
 		Player clientPlayer = Minecraft.getInstance().player;
-		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
+		return clientPlayer == null || player.getGameProfile().equals(clientPlayer.getGameProfile());
 	}
 
 	public static boolean canGenerateTags(Player player)

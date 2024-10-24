@@ -1,74 +1,73 @@
 package com.firemerald.additionalplacements.block;
 
+import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStairBlock;
-import com.firemerald.additionalplacements.util.VoxelShapes;
+import com.firemerald.additionalplacements.util.*;
+import com.firemerald.additionalplacements.util.stairs.CompressedStairFacing;
+import com.firemerald.additionalplacements.util.stairs.CompressedStairShape;
+import com.firemerald.additionalplacements.util.stairs.StairConnections;
+import com.firemerald.additionalplacements.util.stairs.StairShape;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.util.StringRepresentable;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.Half;
+import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBlock> implements IStairBlock<StairBlock>
+public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBlock> implements IStairBlock<StairBlock>, ISimpleRotationBlock
 {
-	public static final EnumProperty<EnumPlacing> PLACING = EnumProperty.create("placing", EnumPlacing.class);
-	public static final EnumProperty<EnumShape> SHAPE = EnumProperty.create("shape", EnumShape.class);
-	public static final VoxelShape[][] SHAPE_CACHE = new VoxelShape[4][23];
+	public static final EnumProperty<CompressedStairFacing> FACING = EnumProperty.create("facing", CompressedStairFacing.class, CompressedStairFacing.ALL_FACINGS);
 
-	static
+	private static StairConnections staticAllowedConnections;
+	
+	public static VerticalStairBlock of(StairBlock stairs, StairConnections allowedConnections)
 	{
-		for (EnumPlacing placing : EnumPlacing.values())
-		{
-			VoxelShape[] shapes = SHAPE_CACHE[placing.ordinal()];
-			shapes[EnumShape.STRAIGHT.ordinal()] = VoxelShapes.getStraightStairs(placing.clockWiseFront, placing.counterClockWiseFront);
-			shapes[EnumShape.INNER_UP.ordinal()] = VoxelShapes.getInnerStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.UP);
-			shapes[EnumShape.OUTER_UP_FROM_CW.ordinal()] = shapes[EnumShape.OUTER_UP_FROM_CCW.ordinal()] = shapes[EnumShape.OUTER_UP.ordinal()] = VoxelShapes.getOuterStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.UP);
-			shapes[EnumShape.OUTER_FLAT_UP_CW.ordinal()] = shapes[EnumShape.OUTER_FLAT_UP_FROM_CW.ordinal()] = VoxelShapes.getOuterFlatStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.UP);
-			shapes[EnumShape.OUTER_FLAT_UP_CCW.ordinal()] = shapes[EnumShape.OUTER_FLAT_UP_FROM_CCW.ordinal()] = VoxelShapes.getOuterFlatStairs(placing.counterClockWiseFront, placing.clockWiseFront, Direction.UP);
-			shapes[EnumShape.INNER_DOWN.ordinal()] = VoxelShapes.getInnerStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.DOWN);
-			shapes[EnumShape.OUTER_DOWN_FROM_CW.ordinal()] = shapes[EnumShape.OUTER_DOWN_FROM_CCW.ordinal()] = shapes[EnumShape.OUTER_DOWN.ordinal()] = VoxelShapes.getOuterStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.DOWN);
-			shapes[EnumShape.OUTER_FLAT_DOWN_CW.ordinal()] = shapes[EnumShape.OUTER_FLAT_DOWN_FROM_CW.ordinal()] = VoxelShapes.getOuterFlatStairs(placing.clockWiseFront, placing.counterClockWiseFront, Direction.DOWN);
-			shapes[EnumShape.OUTER_FLAT_DOWN_CCW.ordinal()] = shapes[EnumShape.OUTER_FLAT_DOWN_FROM_CCW.ordinal()] = VoxelShapes.getOuterFlatStairs(placing.counterClockWiseFront, placing.clockWiseFront, Direction.DOWN);
-			shapes[EnumShape.OUTER_TWIST_CW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, placing.counterClockWiseFront, true);
-			shapes[EnumShape.OUTER_TWIST_CCW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, placing.counterClockWiseFront, false);
-			shapes[EnumShape.OUTER_TWIST_UP_CW.ordinal()]  = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, Direction.UP, true);
-			shapes[EnumShape.OUTER_TWIST_UP_CCW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.counterClockWiseFront, Direction.UP, false);
-			shapes[EnumShape.OUTER_TWIST_DOWN_CW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.clockWiseFront, Direction.DOWN, true);
-			shapes[EnumShape.OUTER_TWIST_DOWN_CCW.ordinal()] = VoxelShapes.getOuterTwistStairs(placing.counterClockWiseFront, Direction.DOWN, false);
-		}
+		staticAllowedConnections = allowedConnections;
+		VerticalStairBlock ret = new VerticalStairBlock(stairs, allowedConnections);
+		staticAllowedConnections = null;
+		return ret;
 	}
-
-	public static VerticalStairBlock of(StairBlock stairs)
-	{
-		return new VerticalStairBlock(stairs);
-	}
+	
+	public final StairConnections allowedConnections;
+	public boolean rotateLogic = false, rotateModel = false, rotateTex = false;
 
 	@SuppressWarnings("deprecation")
-	private VerticalStairBlock(StairBlock stairs)
+	private VerticalStairBlock(StairBlock stairs, StairConnections allowedConnections)
 	{
 		super(stairs);
-		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(PLACING, EnumPlacing.NORTH_EAST).setValue(SHAPE, EnumShape.STRAIGHT));
+		this.registerDefaultState(copyProperties(getModelState(), this.stateDefinition.any()).setValue(FACING, CompressedStairFacing.SOUTH_UP_EAST).setValue(allowedConnections.shapeProperty, CompressedStairShape.VERTICAL_STRAIGHT));
 		((IVanillaStairBlock) stairs).setOtherBlock(this);
+		this.allowedConnections = allowedConnections;
+	}
+
+	@Override
+	public EnumProperty<CompressedStairShape> shapeProperty() {
+		return allowedConnections.shapeProperty;
+	}
+
+	@Override
+	protected boolean isValidProperty(Property<?> prop) {
+		return prop != StairBlock.FACING && prop != StairBlock.HALF && prop != StairBlock.SHAPE;
 	}
 
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder)
 	{
-		builder.add(PLACING, SHAPE);
+		builder.add(FACING, staticAllowedConnections.shapeProperty);
 		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
-	@Deprecated
-	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
+	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
-		return SHAPE_CACHE[state.getValue(PLACING).ordinal()][state.getValue(SHAPE).ordinal()];
+		return state.getValue(allowedConnections.shapeProperty).getVoxelShape(state.getValue(FACING));
 	}
 
 	@Override
@@ -95,99 +94,66 @@ public class VerticalStairBlock extends AdditionalPlacementLiquidBlock<StairBloc
 		return "stairs";
 	}
 
-    public static enum EnumPlacing implements StringRepresentable
-    {
-    	NORTH_EAST("north_east", Direction.NORTH, Direction.EAST),
-    	EAST_SOUTH("east_south", Direction.EAST, Direction.SOUTH),
-    	SOUTH_WEST("south_west", Direction.SOUTH, Direction.WEST),
-    	WEST_NORTH("west_north", Direction.WEST, Direction.NORTH);
+	@Override
+	public BlockState withUnrotatedPlacement(BlockState worldState, BlockState modelState) {
+		CompressedStairFacing compressedFacing = worldState.getValue(FACING);
+		CompressedStairShape compressedShape = worldState.getValue(allowedConnections.shapeProperty);
+		ComplexFacing facing = compressedShape.facingType.fromCompressedFacing(compressedFacing);
+		StairShape shape = compressedShape.shape;
+		return modelState
+				.setValue(StairBlock.FACING, facing.vanillaStairsFacing)
+				.setValue(StairBlock.HALF, facing.vanillaStairsHalf)
+				.setValue(StairBlock.SHAPE, facing.vanillaStairsHalf == Half.TOP ? shape.vanillaTopShape : shape.vanillaBottomShape);
+	}
+	
+	public boolean canRotate(BlockState state) {
+		CompressedStairFacing compressedFacing = state.getValue(FACING);
+		CompressedStairShape compressedShape = state.getValue(allowedConnections.shapeProperty);
+		ComplexFacing facing = compressedShape.facingType.fromCompressedFacing(compressedFacing);
+		StairShape shape = compressedShape.shape;
+		return (facing.vanillaStairsHalf == Half.TOP ? shape.vanillaTopShape : shape.vanillaBottomShape) != null;
+	}
 
-        private final String name;
-        public final Direction counterClockWiseFront, clockWiseFront, counterClockWiseBack, clockWiseBack;
+	@Override
+	public boolean rotatesLogic(BlockState state) {
+		return rotateLogic && canRotate(state);
+	}
 
-        private EnumPlacing(String name, Direction counterClockWise, Direction clockWise)
-        {
-            this.name = name;
-            this.counterClockWiseFront = counterClockWise;
-            this.clockWiseFront = clockWise;
-            this.counterClockWiseBack = counterClockWise.getOpposite();
-            this.clockWiseBack = clockWise.getOpposite();
-        }
+	@Override
+	public boolean rotatesTexture(BlockState state) {
+		return rotateTex && canRotate(state);
+	}
 
-        @Override
-		public String toString()
-        {
-            return this.name;
-        }
+	@Override
+	public boolean rotatesModel(BlockState state) {
+		return rotateModel && canRotate(state);
+	}
 
-        @Override
-		public String getSerializedName()
-        {
-            return this.name;
-        }
-    }
+	@Override
+	public BlockRotation getRotation(BlockState state) {
+		CompressedStairFacing compressedFacing = state.getValue(FACING);
+		CompressedStairShape compressedShape = state.getValue(allowedConnections.shapeProperty);
+		return compressedShape.facingType.fromCompressedFacing(compressedFacing).stairsModelRotation;
+	}
 
-    public static enum EnumShape implements StringRepresentable
-    {
-        STRAIGHT("straight", false, false, false, false),
+	@Override
+	public void setLogicRotation(boolean useLogicRotation) {
+		this.rotateLogic = useLogicRotation;
+	}
 
-        OUTER_TWIST_CW("outer_twist_clockwise", false, false, false, false),
-        OUTER_TWIST_CCW("outer_twist_counter_clockwise", false, false, false, false),
+	@Override
+	public void setModelRotation(boolean useTexRotation, boolean useModelRotation) {
+		this.rotateTex = useTexRotation;
+		this.rotateModel = useModelRotation;
+	}
 
+	@Override
+	public StairConnections allowedConnections() {
+		return this.allowedConnections;
+	}
 
-        INNER_UP("inner_up", true, false, false, false),
-
-        OUTER_UP("outer_up", true, false, false, false),
-        OUTER_UP_FROM_CW("outer_up_from_clockwise", true, false, true, false),
-        OUTER_UP_FROM_CCW("outer_up_from_counter_clockwise", true, false, false, true),
-
-        OUTER_FLAT_UP_CW("outer_flat_up_clockwise", true, false, false, false),
-        OUTER_FLAT_UP_FROM_CW("outer_flat_up_from_clockwise", true, false, true, false),
-
-        OUTER_FLAT_UP_CCW("outer_flat_up_counter_clockwise", true, false, false, false),
-        OUTER_FLAT_UP_FROM_CCW("outer_flat_up_from_counter_clockwise", true, false, false, true),
-
-        OUTER_TWIST_UP_CW("outer_twist_up_clockwise", true, false, true, false),
-        OUTER_TWIST_UP_CCW("outer_twist_up_counter_clockwise", true, false, false, true),
-
-
-        INNER_DOWN("inner_down", false, true, false, false),
-
-        OUTER_DOWN("outer_down", false, true, false, false),
-        OUTER_DOWN_FROM_CW("outer_down_from_clockwise", false, true, true, false),
-        OUTER_DOWN_FROM_CCW("outer_down_from_counter_clockwise", false, true, false, true),
-
-        OUTER_FLAT_DOWN_CW("outer_flat_down_clockwise", false, true, false, false),
-        OUTER_FLAT_DOWN_FROM_CW("outer_flat_down_from_clockwise", false, true, true, false),
-
-        OUTER_FLAT_DOWN_CCW("outer_flat_down_counter_clockwise", false, true, false, false),
-        OUTER_FLAT_DOWN_FROM_CCW("outer_flat_down_from_counter_clockwise", false, true, false, true),
-
-        OUTER_TWIST_DOWN_CW("outer_twist_down_clockwise", false, true, true, false),
-        OUTER_TWIST_DOWN_CCW("outer_twist_down_counter_clockwise", false, true, false, true);
-
-        private final String name;
-        public final boolean isUp, isDown, isClockwise, isCounterClockwise;
-
-        private EnumShape(String name, boolean isUp, boolean isDown, boolean isClockwise, boolean isCounterClockwise)
-        {
-            this.name = name;
-            this.isUp = isUp;
-            this.isDown = isDown;
-            this.isClockwise = isClockwise;
-            this.isCounterClockwise = isCounterClockwise;
-        }
-
-        @Override
-		public String toString()
-        {
-            return this.name;
-        }
-
-        @Override
-		public String getSerializedName()
-        {
-            return this.name;
-        }
-    }
+	@Override
+	public ResourceLocation getDynamicBlockstateJson() {
+		return allowedConnections.dynamicBlockstateJson;
+	}
 }

@@ -1,0 +1,7 @@
+{
+  "parent": "additionalplacements:block/slabs/base/double",
+  "textures": {
+    "bottom": "#end",
+    "top": "#end"
+  }
+}

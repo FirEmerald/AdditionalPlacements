@@ -1,7 +1,0 @@
-{
-  "parent": "additionalplacements:block/stairs/base/outer_twist_down_ccw",
-  "textures": {
-    "bottom": "#end",
-    "top": "#end"
-  }
-}
