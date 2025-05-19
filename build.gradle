@@ -1,13 +1,13 @@
 plugins {
-	id 'fabric-loom' version '1.8-SNAPSHOT'
+	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
 version = project.mod_version
-group = project.maven_group
+group = project.mod_group_id
 
 base {
-	archivesName = project.archives_base_name + "-" + project.minecraft_version
+	archivesName = "[${project.minecraft_version}-Fabric] ${project.mod_name}"
 }
 
 repositories {
@@ -16,24 +16,23 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
-     maven {
-         name = 'ParchmentMC'
-         url = 'https://maven.parchmentmc.org'
-     }
     maven {
-        name = "Fuzs Mod Resources"
-        url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
     }
-	maven { url = "https://maven.shedaniel.me/" } // Cloth Config, REI
-	maven { url = "https://dvs1.progwml6.com/files/maven/" } // JEI
-	maven { url = "https://maven.parchmentmc.org" } // Parchment mappings
-	maven { url = "https://maven.quiltmc.org/repository/release" } // Quilt Mappings
-	maven { url = "https://api.modrinth.com/maven" } // LazyDFU
-	maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
-	maven { url = "https://mvn.devos.one/releases/" }
-	maven { url = "https://mvn.devos.one/snapshots/" } // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
-	maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
+	maven { url = "https://mvn.devos.one/releases" } // Porting Lib releases
+	maven { url = "https://mvn.devos.one/snapshots" } // Create and several dependencies
 	maven { url = "https://maven.tterrag.com/" } // Flywheel
+	maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
+	maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven" } // Forge Config API Port
+	maven { // Fabric ASM for Porting Lib
+		url = "https://jitpack.io/"
+		content { includeGroupAndSubgroups("com.github") }
+	}
+	maven { url = "https://maven.shedaniel.me" } // Cloth Config, REI
+	maven { url = "https://maven.blamejared.com" } // JEI
+	maven { url = "https://maven.terraformersmc.com/releases" } // Mod Menu, EMI
+    maven { url = "https://maven.createmod.net" } // Ponder
     maven { //curse maven
         url "https://cursemaven.com"
         content {
@@ -42,40 +41,17 @@ repositories {
     }
 }
 
-loom {
-    //splitEnvironmentSourceSets()
-
-	//mods {
-	//	"additionalplacements" {
-	//		sourceSet sourceSets.main
-	//		sourceSet sourceSets.client
-	//	}
-	//}
-	accessWidenerPath = file("src/main/resources/additionalplacements.accesswidener")
-	runs {
-        // This adds a new gradle task that runs the datagen API: "gradlew runDatagen"
-        datagen {
-            inherit client
-            name "Data Generation"
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
-            vmArg "-Dporting_lib.datagen.existing_resources=${file("src/main/resources")}"
-            vmArg "-Dfabric-api.datagen.modid=${modid}"
- 
-            runDir "build/datagen"
-        }
-    }
-
+configurations.configureEach {
+	resolutionStrategy {
+		// make sure the desired version of loader is used. Sometimes old versions are pulled in transitively.
+		force("net.fabricmc:fabric-loader:${project.loader_version}")
+	}
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs += [
-                    'src/main/generated'
-            ]
-        }
-    }
+fabricApi {
+	configureDataGeneration {
+		client = true
+	}
 }
 
 dependencies {
@@ -83,25 +59,25 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.21:2024.07.28@zip")
+        parchment("org.parchmentmc.data:parchment-${project.parchment_version}@zip")
     }
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-	//modApi("com.simibubi.create:create-fabric-1.20.1:0.5.1-d-build.1161+mc1.20.1")
-    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:21.0.8"
-   	modCompileOnly("io.github.fabricators_of_create.Porting-Lib:core:${project.porting_lib_version}")
-   	modCompileOnly("io.github.fabricators_of_create.Porting-Lib:data:${project.porting_lib_version}")
-   	modCompileOnly("io.github.fabricators_of_create.Porting-Lib:models:${project.porting_lib_version}")
-	modApi("curse.maven:continuity-531351:5425853") //Continuity
+    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.config_port_version}"
+	modCompileOnly "com.simibubi.create:create-fabric-${project.create_mc_version}:${project.create_version}"
+	modCompileOnly "io.github.fabricators_of_create.Porting-Lib:core:${project.porting_lib_version}"
+	modCompileOnly "io.github.fabricators_of_create.Porting-Lib:data:${project.porting_lib_version}"
+	modCompileOnly "io.github.fabricators_of_create.Porting-Lib:models:${project.porting_lib_version}"
+	modApi "curse.maven:continuity-531351:${project.continuity_file}" //Continuity
 }
 
 processResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand "version": inputs.properties.version
 	}
 }
 
@@ -119,16 +95,23 @@ java {
 	targetCompatibility = JavaVersion.VERSION_21
 }
 
+loom {
+	accessWidenerPath = file("src/main/resources/additionalplacements.accesswidener")
+}
+
 jar {
+	inputs.property "archivesName", project.base.archivesName
+
 	from("LICENSE") {
-		rename { "${it}_${project.archives_base_name}"}
+		rename { "${it}_${inputs.properties.archivesName}"}
 	}
 }
 
 // configure the maven publication
 publishing {
 	publications {
-		mavenJava(MavenPublication) {
+		create("mavenJava", MavenPublication) {
+			artifactId = "${project.mod_id}-fabric-${project.minecraft_version}"
 			from components.java
 		}
 	}
