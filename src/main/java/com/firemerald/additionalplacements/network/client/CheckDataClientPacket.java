@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.network.client;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.generation.Registration;
@@ -30,7 +31,7 @@ public class CheckDataClientPacket extends ClientPacket<ConfigurationPayloadCont
 
 	public CheckDataClientPacket(FriendlyByteBuf buf)
 	{
-		data = buf.readMap(FriendlyByteBuf::readResourceLocation, FriendlyByteBuf::readNbt);
+		data = buf.readMap(FriendlyByteBuf::readResourceLocation, (FriendlyByteBuf.Reader<CompoundTag>) FriendlyByteBuf::readNbt);
 	}
 
 	@Override
