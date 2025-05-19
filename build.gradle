@@ -1,14 +1,14 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
-
-archivesBaseName = project.archives_base_name + "-" + project.minecraft_version
 version = project.mod_version
-group = project.maven_group
+group = project.mod_group_id
+
+base {
+	archivesName = "[${project.minecraft_version}-Fabric] ${project.mod_name}"
+}
 
 repositories {
 	// Add repositories to retrieve artifacts from in here.
@@ -16,10 +16,10 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
-     maven {
-         name = 'ParchmentMC'
-         url = 'https://maven.parchmentmc.org'
-     }
+    maven {
+        name = 'ParchmentMC'
+        url = 'https://maven.parchmentmc.org'
+    }
     maven {
         name = "Fuzs Mod Resources"
         url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/"
@@ -31,7 +31,6 @@ repositories {
 	maven { url = "https://api.modrinth.com/maven" } // LazyDFU
 	maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
 	maven { url = "https://mvn.devos.one/snapshots/" } // Create, Porting Lib, Forge Tags, Milk Lib, Registrate
-	maven { url = "https://cursemaven.com" } // Forge Config API Port
 	maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
 	maven { url = "https://jitpack.io/" } // Mixin Extras, Fabric ASM
 	maven { url = "https://maven.tterrag.com/" } // Flywheel
@@ -43,39 +42,38 @@ repositories {
     }
 }
 
+fabricApi {
+	configureDataGeneration {
+		client = true
+	}
+}
+
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings loom.layered() {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-1.19.2:2022.11.27@zip")
+        parchment("org.parchmentmc.data:parchment-${project.parchment_version}@zip")
     }
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation("net.fabricmc.fabric-api:fabric-api:${project.fabric_version}")
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	
-    modImplementation "net.minecraftforge:forgeconfigapiport-fabric:4.2.11"
-	modApi("com.simibubi.create:create-fabric-1.19.2:0.5.1-c-build.1160+mc1.19.2")
-	modApi("io.github.fabricators_of_create.Porting-Lib:Porting-Lib:${project.porting_lib_version}")
-   	//modApi("io.github.fabricators_of_create.Porting-Lib:core:${project.porting_lib_version}")
-   	//modApi("io.github.fabricators_of_create.Porting-Lib:data:${project.porting_lib_version}")
-   	//modApi("io.github.fabricators_of_create.Porting-Lib:model_generators:${project.porting_lib_version}")
-   	//modApi("io.github.fabricators_of_create.Porting-Lib:model_materials:${project.porting_lib_version}")
-   	//modApi("io.github.fabricators_of_create.Porting-Lib:utility:${project.porting_lib_version}")
-	 modApi "curse.maven:continuity-531351:4441032" //Continuity
+    modImplementation "net.minecraftforge:forgeconfigapiport-fabric:${project.config_port_version}"
+	modApi "com.simibubi.create:create-fabric-${project.create_mc_version}:${project.create_version}"
+	modApi "io.github.fabricators_of_create.Porting-Lib:Porting-Lib:${project.porting_lib_version}"
+	modApi "curse.maven:continuity-531351:${project.continuity_file}" //Continuity
 }
 
 processResources {
 	inputs.property "version", project.version
 
 	filesMatching("fabric.mod.json") {
-		expand "version": project.version
+		expand "version": inputs.properties.version
 	}
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
 	it.options.release = 17
 }
 
@@ -84,46 +82,28 @@ java {
 	// if it is present.
 	// If you remove this line, sources will not be generated.
 	// withSourcesJar()
-}
 
-sourceSets {
-    main {
-        resources {
-            srcDirs += [
-                    'src/main/generated'
-            ]
-        }
-    }
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 loom {
 	accessWidenerPath = file("src/main/resources/additionalplacements.accesswidener")
-	runs {
-        // This adds a new gradle task that runs the datagen API: "gradlew runDatagen"
-        datagen {
-            inherit client
-            name "Data Generation"
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file("src/main/generated")}"
-            vmArg "-Dporting_lib.datagen.existing_resources=${file("src/main/resources")}"
-            vmArg "-Dfabric-api.datagen.modid=${modid}"
- 
-            runDir "build/datagen"
-        }
-    }
-	
 }
 
 jar {
+	inputs.property "archivesName", project.base.archivesName
+
 	from("LICENSE") {
-		rename { "${it}_${project.archives_base_name}"}
+		rename { "${it}_${inputs.properties.archivesName}"}
 	}
 }
 
 // configure the maven publication
 publishing {
 	publications {
-		mavenJava(MavenPublication) {
+		create("mavenJava", MavenPublication) {
+			artifactId = "${project.mod_id}-fabric-${project.minecraft_version}"
 			from components.java
 		}
 	}
