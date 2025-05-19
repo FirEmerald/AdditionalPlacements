@@ -10,9 +10,13 @@ displayName="${mod_name}"
 #updateJSONURL="https://change.me.example.invalid/updates.json"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/additional-placements"
 logoFile="additionalplacements.png"
-credits="FirEmerald"
+credits=""
 authors="${mod_authors}"
 description='''${mod_description}'''
+[[mixins]]
+config="mixins.${mod_id}.json"
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
     modId="neoforge"
     type="required"
@@ -25,7 +29,4 @@ description='''${mod_description}'''
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
-[[accessTransformers]]
-file="META-INF/accesstransformer.cfg"
-[[mixins]]
-config="mixins.${mod_id}.json"
+	
