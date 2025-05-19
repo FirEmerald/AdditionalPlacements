@@ -1,27 +1,26 @@
 modLoader="javafml"
-loaderVersion="[40,)"
-license="MIT License"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
 issueTrackerURL="https://github.com/FirEmerald/AdditionalPlacements/issues"
 [[mods]]
-modId="additionalplacements"
-version="${file.jarVersion}"
-displayName="Additional Placements"
-# A URL to query for updates for this mod. See the JSON update specification https://mcforge.readthedocs.io/en/latest/gettingstarted/autoupdate/
-#updateJSONURL="https://change.me.example.invalid/updates.json" #optional
-displayURL="https://www.curseforge.com/minecraft/mc-mods/additional-placements" #optional
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+# A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
+#updateJSONURL="https://change.me.example.invalid/updates.json"
+displayURL="https://www.curseforge.com/minecraft/mc-mods/additional-placements"
 logoFile="additionalplacements.png"
-credits="FirEmerald"
-authors="FirEmerald"
-description='''
-Adds additional placements for blocks:
-Slabs can be placed vertically.
-Stairs can be placed vertically.
-Carpets can be placed on walls and ceilings.
-Pressure plates can be placed on walls and ceilings.
-'''
-[[dependencies.additionalplacements]]
+authors="${mod_authors}"
+description='''${mod_description}'''
+[[dependencies.${mod_id}]]
+    modId="forge"
+    mandatory=true
+    versionRange="${forge_version_range}"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.${mod_id}]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18.2,1.19)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
