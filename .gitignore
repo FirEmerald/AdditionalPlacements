@@ -26,9 +26,6 @@ forge*changelog.txt
 CREDITS.txt
 LICENSE.txt
 README.txt
-gradle/*
-gradlew
-gradlew.bat
 changelog.txt
 build.bat
 .factorypath
