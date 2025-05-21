@@ -3,11 +3,7 @@
 	"id": "additionalplacements",
 	"version": "${version}",
 	"name": "Additional Placements",
-	"description": "Adds additional placements for blocks:
-Slabs can be placed vertically.
-Stairs can be placed vertically.
-Carpets can be placed on walls and ceilings.
-Pressure plates can be placed on walls and ceilings.",
+	"description": "Adds additional placements for blocks:\nSlabs can be placed vertically.\nStairs can be placed vertically.\nCarpets can be placed on walls and ceilings.\nPressure plates can be placed on walls and ceilings.",
 	"authors": [
 		"FirEmerald"
 	],

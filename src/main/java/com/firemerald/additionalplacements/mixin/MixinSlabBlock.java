@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -28,9 +27,9 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 		super(properties);
 	}
 
-	public VerticalSlabBlock slab;
+	private VerticalSlabBlock slab;
 
-	public SlabBlock asSlab()
+	private SlabBlock asSlab()
 	{
 		return (SlabBlock) (Object) this;
 	}
@@ -56,12 +55,11 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	@Override
 	public Direction getPlacing(BlockState blockState)
 	{
-		switch (blockState.getValue(SlabBlock.TYPE))
-		{
-		case TOP: return Direction.UP;
-		case BOTTOM: return Direction.DOWN;
-		default: return null;
-		}
+        return switch (blockState.getValue(SlabBlock.TYPE)) {
+            case TOP -> Direction.UP;
+            case BOTTOM -> Direction.DOWN;
+            default -> null;
+        };
 	}
 
 	@Override
@@ -88,10 +86,10 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
-			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
-			})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			 "rotate(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Rotation;)Lnet/minecraft/world/level/block/state/BlockState;",
+			"m_6843_(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Rotation;)Lnet/minecraft/world/level/block/state/BlockState;"
+	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(rotateImpl(blockState, rotation));
@@ -107,9 +105,9 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	}
 
 
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "mirror", ret = BlockState.class, args = {BlockState.class, Mirror.class}),
-			@Desc(value = "m_6943_", ret = BlockState.class, args = {BlockState.class, Mirror.class})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			 "mirror(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Mirror;)Lnet/minecraft/world/level/block/state/BlockState;",
+			"m_6943_(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Mirror;)Lnet/minecraft/world/level/block/state/BlockState;"
 	})
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
 	{
