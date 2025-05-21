@@ -22,7 +22,7 @@ public class ClientModEventHandler
     @SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block event)
     {
-		event.register(new AdditionalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof AdditionalPlacementBlock placement && !placement.hasCustomColors()).toArray(Block[]::new));
+		event.register(new AdditionalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof AdditionalPlacementBlock<?> placement && !placement.hasCustomColors()).toArray(Block[]::new));
     }
 
     @SubscribeEvent
@@ -33,8 +33,6 @@ public class ClientModEventHandler
 
     @SubscribeEvent
     public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
-    	event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> {
-    		BakedPlacementModel.clearCache();
-    	});
+    	event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> BakedPlacementModel.clearCache());
     }
 }

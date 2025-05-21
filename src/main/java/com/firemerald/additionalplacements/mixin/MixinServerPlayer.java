@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 @Mixin(ServerPlayer.class)
 public class MixinServerPlayer implements IAPServerPlayer
 {
-	public boolean placementEnabled = APConfigs.server().fakePlayerPlacement.get();
+	private boolean placementEnabled = APConfigs.server().fakePlayerPlacement.get();
 
 	@Override
 	public boolean isPlacementEnabled()
