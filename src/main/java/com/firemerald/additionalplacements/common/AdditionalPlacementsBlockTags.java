@@ -17,8 +17,8 @@ import net.minecraft.world.level.block.Block;
 
 public class AdditionalPlacementsBlockTags
 {
-	private static final IntPredicate SEPERATOR = c -> { return c == '_' || c == ' ' || c == '/' || c == '.'; };
-	private static Map<String, Map<TagKey<Block>, TagKey<Block>>> remappedTags = new HashMap<>();
+	private static final IntPredicate SEPERATOR = c -> c == '_' || c == ' ' || c == '/' || c == '.';
+	private static final Map<String, Map<TagKey<Block>, TagKey<Block>>> remappedTags = new HashMap<>();
 
 	public static Set<TagKey<Block>> remap(Stream<TagKey<Block>> tags, String typeName, String typeNamePlural)
 	{

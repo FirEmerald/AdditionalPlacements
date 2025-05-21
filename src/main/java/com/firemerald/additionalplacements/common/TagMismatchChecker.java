@@ -106,18 +106,18 @@ public class TagMismatchChecker extends Thread
 				{
 					AdditionalPlacementsMod.LOGGER.warn("====== BEGIN LIST ======");
 					blockMissingExtra.forEach(blockMissingExtra -> {
-						AdditionalPlacementsMod.LOGGER.warn("\t" + ForgeRegistries.BLOCKS.getKey(blockMissingExtra.getLeft()));
+                        AdditionalPlacementsMod.LOGGER.warn("\t{}", ForgeRegistries.BLOCKS.getKey(blockMissingExtra.getLeft()));
 						Collection<TagKey<Block>> missing = blockMissingExtra.getMiddle();
 						if (!missing.isEmpty())
 						{
 							AdditionalPlacementsMod.LOGGER.warn("\t\tmissing");
-							missing.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t" + tag.location()));
+							missing.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t{}", tag.location()));
 						}
 						Collection<TagKey<Block>> extra = blockMissingExtra.getRight();
 						if (!extra.isEmpty())
 						{
 							AdditionalPlacementsMod.LOGGER.warn("\t\textra");
-							extra.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t" + tag.location()));
+							extra.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t{}", tag.location()));
 						}
 					});
 					AdditionalPlacementsMod.LOGGER.warn("====== END LIST ======");
@@ -149,7 +149,6 @@ public class TagMismatchChecker extends Thread
 		else return hasPermission.test(2);
 	}
 
-	@SuppressWarnings("resource")
 	@OnlyIn(Dist.CLIENT)
 	public static boolean canGenerateTagsClient(Player player)
 	{

@@ -36,40 +36,40 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationControl
 {
-	public T getOtherBlock();
+	T getOtherBlock();
 
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
 		return transform(blockState, rotation::rotate);
 	}
 
-	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
+	default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
 	{
 		return transform(blockState, mirror::mirror);
 	}
 
-	public BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
+	BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
 
-	public BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState);
+	BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState);
 
-	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos);
+	BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos);
 
-	public default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
+	default void appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
 		if (APConfigs.common().showTooltip.get() && getGenerationType().placementEnabled()) addPlacementTooltip(stack, level, tooltip, flag);
 	}
 
-	public void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag);
+	void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag);
 
-	public boolean hasAdditionalStates();
+	boolean hasAdditionalStates();
 
-	public BlockState getDefaultAdditionalState(BlockState currentState);
+	BlockState getDefaultAdditionalState(BlockState currentState);
 
-	public BlockState getDefaultVanillaState(BlockState currentState);
+	BlockState getDefaultVanillaState(BlockState currentState);
 
-	public boolean isThis(BlockState blockState);
+	boolean isThis(BlockState blockState);
 
-	public static Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {
+	Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {
 		Quaternion.fromXYZDegrees(new Vector3f(90, 0, 0)), //DOWN
 		Quaternion.fromXYZDegrees(new Vector3f(-90, 0, 0)), //UP
 		Quaternion.fromXYZDegrees(new Vector3f(0, 180, 0)), //NORTH
@@ -79,7 +79,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationC
 	};
 
 	@OnlyIn(Dist.CLIENT)
-	public default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
+    default void renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
 		if (enablePlacement(hit, player.getLevel(), result.getDirection(), player)) {
@@ -121,27 +121,27 @@ public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationC
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {}
+    default void renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {}
 
 	@OnlyIn(Dist.CLIENT)
-	public void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a);
+    void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a);
 
-	public default boolean enablePlacement(@Nullable Player player) {
+	default boolean enablePlacement(@Nullable Player player) {
 		return getGenerationType().placementEnabled() && (!(player instanceof IAPPlayer) || ((IAPPlayer) player).isPlacementEnabled());
 	}
 
-	public default boolean enablePlacement(BlockPos hit, Level level, Direction direction, Player player) {
+	default boolean enablePlacement(BlockPos hit, Level level, Direction direction, Player player) {
 		return enablePlacement(player);
 	}
 
-	public GenerationType<?, ?> getGenerationType();
+	GenerationType<?, ?> getGenerationType();
 
 	@Override
-	public default boolean generateAdditionalStates() {
+    default boolean generateAdditionalStates() {
 		return true;
 	}
 
-	public default boolean canGenerateAdditionalStates() {
+	default boolean canGenerateAdditionalStates() {
 		return generateAdditionalStates() && !hasAdditionalStates();
 	}
 }
