@@ -43,13 +43,13 @@ public class MixinModelBakery {
 		return null;
 	}
 
-	@Inject(method = "<init>", at = @At("RETURN"))
+	@Inject(method = "<init>(Lnet/minecraft/client/color/block/BlockColors;Lnet/minecraft/util/profiling/ProfilerFiller;Ljava/util/Map;Ljava/util/Map;)V", at = @At("RETURN"))
 	public void init(BlockColors blockColors, ProfilerFiller profilerFiller, Map<ResourceLocation, BlockModel> modelResources, Map<ResourceLocation, List<ModelBakery.LoadedJson>> blockStateResources, CallbackInfo cli) {
 		UnbakedPlacementModel.clearCache();
 	}
 
 	@ModifyVariable(
-			method = "method_21604",
+			method = "method_21604(Ljava/util/Map;Lnet/minecraft/resources/ResourceLocation;Lcom/mojang/datafixers/util/Pair;Ljava/util/Map;Lnet/minecraft/client/resources/model/ModelResourceLocation;Lnet/minecraft/world/level/block/state/BlockState;)V",
 			at = @At("STORE"),
 			index = 7
 			)
@@ -62,10 +62,9 @@ public class MixinModelBakery {
 			ModelResourceLocation currentModelLocation,
 			BlockState ourState) {
 		if (modelPair == null) { //replace only states which do not already have a model
-			if (ourState != null && ourState.getBlock() instanceof AdditionalPlacementBlock) {
-				AdditionalPlacementBlock<?> block = (AdditionalPlacementBlock<?>) ourState.getBlock();
+			if (ourState != null && ourState.getBlock() instanceof AdditionalPlacementBlock<?> block) {
 
-				BlockState theirState = block.getModelState(ourState);
+                BlockState theirState = block.getModelState(ourState);
 				StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
 				ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
 				ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());

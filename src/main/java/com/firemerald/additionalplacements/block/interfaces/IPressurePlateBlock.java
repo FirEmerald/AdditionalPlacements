@@ -8,10 +8,10 @@ import net.minecraft.world.level.block.Block;
 
 public interface IPressurePlateBlock<T extends Block> extends IBasePressurePlateBlock<T>
 {
-	public static interface IVanillaPressurePlateBlock extends IVanillaBasePressurePlateBlock<AdditionalPressurePlateBlock>, IPressurePlateBlock<AdditionalPressurePlateBlock> {}
+	interface IVanillaPressurePlateBlock extends IVanillaBasePressurePlateBlock<AdditionalPressurePlateBlock>, IPressurePlateBlock<AdditionalPressurePlateBlock> {}
 
 	@Override
-	public default GenerationType<?, ?> getGenerationType() {
+    default GenerationType<?, ?> getGenerationType() {
 		return APGenerationTypes.pressurePlate();
 	}
 }
