@@ -156,7 +156,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends AbstractPressur
 	{
 		if (!isMoving && !state.is(newState.getBlock()))
 		{
-			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, newState);
+			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
 			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
