@@ -81,11 +81,9 @@ public class CommonModEventHandler
 			Function<BiMap<Block, Block>, BiMap<Block, Block>> withAdditionalStates = oldMap -> {
 				BiMap<Block, Block> newMap = HashBiMap.create(oldMap);
 				oldMap.forEach((b1, b2) -> {
-					if (b1 instanceof IPlacementBlock && b2 instanceof IPlacementBlock)
+					if (b1 instanceof IPlacementBlock<?> p1 && b2 instanceof IPlacementBlock<?> p2)
 					{
-						IPlacementBlock<?> p1 = (IPlacementBlock<?>) b1;
-						IPlacementBlock<?> p2 = (IPlacementBlock<?>) b2;
-						if (p1.hasAdditionalStates() && p2.hasAdditionalStates()) newMap.put(p1.getOtherBlock(), p2.getOtherBlock());
+                        if (p1.hasAdditionalStates() && p2.hasAdditionalStates()) newMap.put(p1.getOtherBlock(), p2.getOtherBlock());
 					}
 				});
 				return newMap;
@@ -112,11 +110,9 @@ public class CommonModEventHandler
 	{
 		BiMap<Block, Block> newMap = HashBiMap.create(oldMap);
 		oldMap.forEach((b1, b2) -> {
-			if (b1 instanceof IPlacementBlock && b2 instanceof IPlacementBlock)
+			if (b1 instanceof IPlacementBlock<?> p1 && b2 instanceof IPlacementBlock<?> p2)
 			{
-				IPlacementBlock<?> p1 = (IPlacementBlock<?>) b1;
-				IPlacementBlock<?> p2 = (IPlacementBlock<?>) b2;
-				if (p1.hasAdditionalStates() && p2.hasAdditionalStates()) newMap.put(p1.getOtherBlock(), p2.getOtherBlock());
+                if (p1.hasAdditionalStates() && p2.hasAdditionalStates()) newMap.put(p1.getOtherBlock(), p2.getOtherBlock());
 			}
 		});
 		return newMap;

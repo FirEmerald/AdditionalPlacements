@@ -18,7 +18,8 @@ public abstract class APPacket
 
 	public void handle(CustomPayloadEvent.Context context) {
 		if (context.getDirection() == getDirection()) handleInternal(context);
-		else AdditionalPlacementsMod.LOGGER.error("Tried to handle " + getClass() + " with invalid direction " + context.getDirection());
+		else
+            AdditionalPlacementsMod.LOGGER.error("Tried to handle {} with invalid direction {}", getClass(), context.getDirection());
 	}
 
     public void sendTo(PacketTarget target)

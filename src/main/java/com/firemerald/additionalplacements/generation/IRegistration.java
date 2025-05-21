@@ -8,5 +8,5 @@ import net.minecraft.world.level.block.Block;
 
 @FunctionalInterface
 public interface IRegistration {
-	public <T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>> V registerType(Class<T> clazz, ResourceLocation name, String description, BuilderBase<T, U, V, ?> builder);
+	<T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>> V registerType(Class<T> clazz, ResourceLocation name, String description, BuilderBase<T, U, V, ?> builder);
 }

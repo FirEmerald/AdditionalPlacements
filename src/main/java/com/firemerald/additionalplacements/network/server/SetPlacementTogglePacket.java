@@ -8,7 +8,7 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 
 public class SetPlacementTogglePacket extends ServerPlayPacket
 {
-	private boolean state;
+	private final boolean state;
 
 	public SetPlacementTogglePacket(boolean state)
 	{
