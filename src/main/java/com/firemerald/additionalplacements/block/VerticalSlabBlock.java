@@ -33,7 +33,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock> implements ISlabBlock<SlabBlock>, ISimpleRotationBlock, IStateFixer
@@ -72,12 +71,11 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 	@Override
 	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
 	{
-		switch (state.getValue(SlabBlock.TYPE)) {
-		case DOUBLE: return VoxelShapes.BLOCK;
-		case TOP: return state.getValue(AXIS) == Axis.Z ? VoxelShapes.SLAB_SOUTH : VoxelShapes.SLAB_EAST;
-		case BOTTOM: return state.getValue(AXIS) == Axis.Z ? VoxelShapes.SLAB_NORTH : VoxelShapes.SLAB_WEST;
-		default: return Shapes.empty();
-		}
+        return switch (state.getValue(SlabBlock.TYPE)) {
+            case DOUBLE -> VoxelShapes.BLOCK;
+            case TOP -> state.getValue(AXIS) == Axis.Z ? VoxelShapes.SLAB_SOUTH : VoxelShapes.SLAB_EAST;
+            case BOTTOM -> state.getValue(AXIS) == Axis.Z ? VoxelShapes.SLAB_NORTH : VoxelShapes.SLAB_WEST;
+        };
 	}
 
 	@Override
@@ -180,7 +178,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 				if (IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_FACING) && !(
 						IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_AXIS) &&
 						IStateFixer.contains(properties, BlockStateProperties.SLAB_TYPE))) {
-					AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V1 slab block state: " + properties);
+                    AdditionalPlacementsMod.LOGGER.debug("{} Fixing V1 slab block state: {}", this, properties);
 					Direction facing = IStateFixer.getProperty(properties, BlockStateProperties.HORIZONTAL_FACING);
 					if (facing != null) {
 						IStateFixer.setProperty(properties, AXIS, facing.getAxis());
@@ -188,7 +186,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 						IStateFixer.remove(properties, BlockStateProperties.HORIZONTAL_FACING);
 					}
 				} else if (IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_AXIS)) {
-					AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V2 slab block state: " + properties);
+                    AdditionalPlacementsMod.LOGGER.debug("{} Fixing V2 slab block state: {}", this, properties);
 					IStateFixer.renameProperty(properties, BlockStateProperties.HORIZONTAL_AXIS, AXIS);
 				}
 			}

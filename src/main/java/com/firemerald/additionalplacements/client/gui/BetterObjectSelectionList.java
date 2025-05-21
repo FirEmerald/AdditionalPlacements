@@ -50,7 +50,7 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 		/**
 		 * Updates the narration output with the current narration information.
 		 *
-		 * @param pNarrationElementOutput the output to update with narration
+		 * @param narrationElementOutput the output to update with narration
 		 *                                information.
 		 */
 		@Override
