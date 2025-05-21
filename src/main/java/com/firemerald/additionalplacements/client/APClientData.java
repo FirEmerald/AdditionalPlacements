@@ -36,7 +36,6 @@ public class APClientData
 		setPlacementEnabledAndSynchronize(!placementEnabled, APConfigs.client().togglePlacementLogicStateMessage.get());
 	}
 
-	@SuppressWarnings("resource")
 	public static void setPlacementEnabledAndSynchronize(boolean state, boolean showMessage)
 	{
 		placementEnabled = state;

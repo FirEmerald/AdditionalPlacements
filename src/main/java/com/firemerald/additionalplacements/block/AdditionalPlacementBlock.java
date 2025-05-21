@@ -40,14 +40,14 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock<T>
 {
-	private static List<Property<?>> copyPropsStatic = new ArrayList<>();
+	private static final List<Property<?>> copyPropsStatic = new ArrayList<>();
 	public final T parentBlock;
 	private final Property<?>[] copyProps;
 
 	public AdditionalPlacementBlock(T parentBlock)
 	{
 		super(theHack(parentBlock));
-		this.copyProps = copyPropsStatic.toArray(new Property[copyPropsStatic.size()]);
+		this.copyProps = copyPropsStatic.toArray(Property[]::new);
 		copyPropsStatic.clear();
 		this.parentBlock = parentBlock;
 	}

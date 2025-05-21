@@ -8,10 +8,10 @@ import net.minecraft.block.Block;
 
 public interface IWeightedPressurePlateBlock<T extends Block> extends IBasePressurePlateBlock<T>
 {
-	public static interface IVanillaWeightedPressurePlateBlock extends IVanillaBasePressurePlateBlock<AdditionalWeightedPressurePlateBlock>, IWeightedPressurePlateBlock<AdditionalWeightedPressurePlateBlock> {}
+	interface IVanillaWeightedPressurePlateBlock extends IVanillaBasePressurePlateBlock<AdditionalWeightedPressurePlateBlock>, IWeightedPressurePlateBlock<AdditionalWeightedPressurePlateBlock> {}
 
 	@Override
-	public default GenerationType<?, ?> getGenerationType() {
+    default GenerationType<?, ?> getGenerationType() {
 		return APGenerationTypes.weightedPressurePlate();
 	}
 }

@@ -33,8 +33,8 @@ public class MessageTree {
 	}
 
 	@FunctionalInterface
-	public static interface Action {
-		public void apply(ITextComponent message, int level);
+	public interface Action {
+		void apply(ITextComponent message, int level);
 	}
 
 	public void forEach(Action action, int level) {

@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -14,7 +13,7 @@ import net.minecraft.block.BlockState;
 @Mixin(StructureTransform.class)
 public class MixinStructureTransform
 {
-	@Inject(target = @Desc(value = "apply", owner = StructureTransform.class, ret = BlockState.class, args = {BlockState.class}), at = @At("HEAD"), cancellable = true)
+	@Inject(method = "apply(Lnet/minecraft/block/BlockState;)Lnet/minecraft/block/BlockState;", at = @At("HEAD"), cancellable = true, remap = false)
 	public void apply(BlockState state, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (state.getBlock() instanceof IPlacementBlock)

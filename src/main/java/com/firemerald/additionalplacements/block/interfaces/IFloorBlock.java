@@ -27,47 +27,47 @@ import net.minecraftforge.client.model.data.IModelData;
 public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 {
 	@Override
-	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
+    default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Direction placing = getPlacing(blockState);
 		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState)
+    default BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState)
 	{
 		return forPlacing(getPlacingDirection(context), currentState);
 	}
 
-	public abstract BlockState forPlacing(Direction dir, BlockState blockState);
+	BlockState forPlacing(Direction dir, BlockState blockState);
 
-	public abstract Direction getPlacing(BlockState blockState);
+	Direction getPlacing(BlockState blockState);
 
-	public default Direction getPlacingDirection(BlockItemUseContext context)
+	default Direction getPlacingDirection(BlockItemUseContext context)
 	{
 		return context.getClickedFace().getOpposite();
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a) {}
+    default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a) {}
 
     @Override
 	@OnlyIn(Dist.CLIENT)
-	public default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
+    default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
 		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.ceiling_placement"));
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public default Direction transformModelDirection(Direction from)
+    default Direction transformModelDirection(Direction from)
 	{
 		return from;
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)
+    default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, IModelData extraData)
 	{
 		switch (getPlacing(state)) {
 		case UP:

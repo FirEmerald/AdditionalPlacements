@@ -19,6 +19,6 @@ public class Unwrapper {
 	}
 	
 	private static Optional<IBakedModel> unwrapSingle(IBakedModel model) {
-		return UNWRAPPERS.stream().map(uw -> uw.apply(model)).filter(bm -> bm != null).findFirst();
+		return UNWRAPPERS.stream().map(uw -> uw.apply(model)).filter(Objects::nonNull).findFirst();
 	}
 }

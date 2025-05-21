@@ -170,7 +170,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 				if (IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_FACING) && !(
 						IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_AXIS) &&
 						IStateFixer.contains(properties, BlockStateProperties.SLAB_TYPE))) {
-					AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V1 slab block state: " + properties);
+                    AdditionalPlacementsMod.LOGGER.debug("{} Fixing V1 slab block state: {}", this, properties);
 					Direction facing = IStateFixer.getProperty(properties, BlockStateProperties.HORIZONTAL_FACING);
 					if (facing != null) {
 						IStateFixer.setProperty(properties, AXIS, facing.getAxis());
@@ -178,7 +178,7 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 						IStateFixer.remove(properties, BlockStateProperties.HORIZONTAL_FACING);
 					}
 				} else if (IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_AXIS)) {
-					AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V2 slab block state: " + properties);
+                    AdditionalPlacementsMod.LOGGER.debug("{} Fixing V2 slab block state: {}", this, properties);
 					IStateFixer.renameProperty(properties, BlockStateProperties.HORIZONTAL_AXIS, AXIS);
 				}
 			}

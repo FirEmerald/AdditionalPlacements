@@ -36,7 +36,7 @@ public enum V1StairPlacing implements IStringSerializable {
     public final Direction counterClockWiseFront, clockWiseFront, counterClockWiseBack, clockWiseBack;
     public final ComplexFacing equivalent, cwTop, ccwTop, cwBottom, ccwBottom;
 
-    private V1StairPlacing(String name, Direction counterClockWise, Direction clockWise, ComplexFacing equivalent, ComplexFacing cwTop, ComplexFacing ccwTop, ComplexFacing cwBottom, ComplexFacing ccwBottom)
+    V1StairPlacing(String name, Direction counterClockWise, Direction clockWise, ComplexFacing equivalent, ComplexFacing cwTop, ComplexFacing ccwTop, ComplexFacing cwBottom, ComplexFacing ccwBottom)
     {
         this.name = name;
         this.counterClockWiseFront = counterClockWise;

@@ -47,13 +47,13 @@ public class MixinModelBakery {
 		return null;
 	}
 
-	@Inject(method = "processLoading", at = @At("RETURN"), remap = false)
+	@Inject(method = "processLoading(Lnet/minecraft/profiler/IProfiler;I)V", at = @At("RETURN"), remap = false)
 	public void processLoading(IProfiler profiler, int maxMipmapLevel, CallbackInfo cli) {
 		UnbakedPlacementModel.clearCache();
 	}
 
 	@Redirect(
-			method = "loadModel",
+			method = "loadModel(Lnet/minecraft/util/ResourceLocation;)V",
 			at = @At(value = "INVOKE", target = "org/apache/logging/log4j/Logger.warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"),
 			slice = @Slice(
 					from = @At(value = "CONSTANT", args = {"stringValue=Exception loading blockstate definition: {}: {}"}),
@@ -70,9 +70,13 @@ public class MixinModelBakery {
 	}
 
 	@ModifyVariable(
-			method = {"lambda$loadModel$25", "m_119331_"},
+			method = {
+					"lambda$loadModel$25(Ljava/util/Map;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/datafixers/util/Pair;Ljava/util/HashMap;Lnet/minecraft/client/renderer/model/ModelResourceLocation;Lnet/minecraft/block/BlockState;)V",
+					          "m_119331_(Ljava/util/Map;Lnet/minecraft/util/ResourceLocation;Lcom/mojang/datafixers/util/Pair;Ljava/util/HashMap;Lnet/minecraft/client/renderer/model/ModelResourceLocation;Lnet/minecraft/block/BlockState;)V"
+			},
 			at = @At("STORE"),
-			index = 7
+			index = 7,
+			remap = false
 			)
 	private Pair<IUnbakedModel, Supplier<ModelBakery.ModelListWrapper>> loadModelLambda(
 			Pair<IUnbakedModel, Supplier<ModelBakery.ModelListWrapper>> modelPair,

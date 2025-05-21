@@ -40,16 +40,16 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 {
-	public static interface IVanillaStairBlock extends IStairBlock<AdditionalStairBlock>, IVanillaBlock<AdditionalStairBlock>
+	interface IVanillaStairBlock extends IStairBlock<AdditionalStairBlock>, IVanillaBlock<AdditionalStairBlock>
 	{
-		public BlockState getModelStateImpl();
+		BlockState getModelStateImpl();
 	}
 
-	public default BlockState getBlockState(ComplexFacing facing, CommonStairShape shape, BlockState currentState) {
+	default BlockState getBlockState(ComplexFacing facing, CommonStairShape shape, BlockState currentState) {
 		return getBlockState(CommonStairShapeState.of(facing, shape), currentState);
 	}
 
-	public default BlockState getBlockState(CommonStairShapeState shapeState, BlockState currentState)
+	default BlockState getBlockState(CommonStairShapeState shapeState, BlockState currentState)
 	{
 		VanillaStairShapeState vanillaShapeState = shapeState.vanilla();
 		if (vanillaShapeState != null)
@@ -61,39 +61,39 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 			return getBlockStateInternal(shapeState, currentState);
 	}
 	
-	public BlockState getBlockStateInternal(CommonStairShapeState shapeState, BlockState currentState);
+	BlockState getBlockStateInternal(CommonStairShapeState shapeState, BlockState currentState);
 
 	@Override
-	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
+    default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		CommonStairShapeState state = this.getShapeState(blockState);
 		ComplexFacing oldFacing = state.facing;
 		ComplexFacing newFacing = ComplexFacing.forFacing(transform.apply(oldFacing.forward), transform.apply(oldFacing.up));
 		return getBlockState(newFacing, state.shape, blockState);
 	}
-	public static ComplexFacing getFacingOrNull(BlockState blockState) {
+	static ComplexFacing getFacingOrNull(BlockState blockState) {
 		return blockState.getBlock() instanceof IStairBlock ?  ((IStairBlock<?>) blockState.getBlock()).getShapeState(blockState).facing : null;
 	}
 	
-	public abstract CommonStairShapeState getShapeState(BlockState blockState);
+	CommonStairShapeState getShapeState(BlockState blockState);
 	
-	public StairConnectionsType connectionsType();
+	StairConnectionsType connectionsType();
 
 	@Override
-	public default BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos)
+    default BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos)
 	{
 		ComplexFacing facing = getShapeState(state).facing;
 		return getBlockState(facing, getShape(facing, level, pos), state);
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState blockState)
+    default BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState blockState)
 	{
 		ComplexFacing facing = getFacing(context);
 		return getBlockState(facing, getShape(facing, context.getLevel(), context.getClickedPos()), blockState);
 	}
 	
-	public default CommonStairShape getShape(ComplexFacing facing, IWorld level, BlockPos pos) {
+	default CommonStairShape getShape(ComplexFacing facing, IWorld level, BlockPos pos) {
 		StairConnectionsType connectionsType = connectionsType();
 		boolean allowVertical = connectionsType.allowVertical;
 		boolean allowMixed = connectionsType.allowMixed;
@@ -200,13 +200,13 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		return CommonStairShape.STRAIGHT;
 	}
 
-	public static final float ARROW_OFFSET = -0.4375f;
-	public static final float ARROW_OUTER = 0.375f;
-	public static final float ARROW_INNER = 0.125f;
+	float ARROW_OFFSET = -0.4375f;
+	float ARROW_OUTER = 0.375f;
+	float ARROW_INNER = 0.125f;
 	
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementPreview(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a) {
+    default void renderPlacementPreview(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a) {
 		if (!this.connectionsType().allowFlipped) return;
 		ComplexFacing facing = getFacing(result);
 		//z is up
@@ -234,12 +234,12 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		pose.popPose();
 	}
 
-	static final float OUTER_EDGE = .5f;
-	static final float INNER_EDGE = .25f;
+	float OUTER_EDGE = .5f;
+	float INNER_EDGE = .25f;
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a)
+    default void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a)
 	{
 		Matrix4f poseMat = pose.last().pose();
 		Matrix3f normMat = pose.last().normal();
@@ -269,21 +269,21 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	}
     
 	@Override
-	public default GenerationType<?, ?> getGenerationType() {
+    default GenerationType<?, ?> getGenerationType() {
 		return APGenerationTypes.stairs();
 	}
 
-	public default ComplexFacing getFacing(BlockRayTraceResult hitResult)
+	default ComplexFacing getFacing(BlockRayTraceResult hitResult)
 	{
 		return getFacing(hitResult.getDirection(), hitResult.getLocation(), hitResult.getBlockPos());
 	}
 
-	public default ComplexFacing getFacing(BlockItemUseContext context)
+	default ComplexFacing getFacing(BlockItemUseContext context)
 	{
 		return getFacing(context.getClickedFace(), context.getClickLocation(), context.getClickedPos());
 	}
 
-	public default ComplexFacing getFacing(Direction out, Vector3d hitPos, Vector3i blockPos)
+	default ComplexFacing getFacing(Direction out, Vector3d hitPos, Vector3i blockPos)
 	{
 		return getFacing(out, 
 				(float) (hitPos.x - blockPos.getX() - .5), 
@@ -291,21 +291,21 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 				(float) (hitPos.z - blockPos.getZ() - .5));
 	}
 
-	public default ComplexFacing getFacing(Direction out, float hitX, float hitY, float hitZ)
+	default ComplexFacing getFacing(Direction out, float hitX, float hitY, float hitZ)
 	{
 		switch (out.getAxis()) {
 		case X:
-			return getFacingFromSide((float) hitZ, (float) hitY, Direction.SOUTH, Direction.UP, out);
+			return getFacingFromSide(hitZ, hitY, Direction.SOUTH, Direction.UP, out);
 		case Y:
-			return getFacingFromSide((float) hitX, (float) hitZ, Direction.EAST, Direction.SOUTH, out);
+			return getFacingFromSide(hitX, hitZ, Direction.EAST, Direction.SOUTH, out);
 		case Z:
-			return getFacingFromSide((float) hitX, (float) hitY, Direction.EAST, Direction.UP, out);
+			return getFacingFromSide(hitX, hitY, Direction.EAST, Direction.UP, out);
 		default: 
 			return ComplexFacing.SOUTH_UP;
 		}
 	}
 	
-	public default ComplexFacing getFacingFromSide(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
+	default ComplexFacing getFacingFromSide(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
 		if (localY > localX) { //top-left half
 			if (localY > -localX) { //top quarter
 				return getFacingFromQuarter(localX, localY, localRight, localUp, localOut);
@@ -321,7 +321,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 		}
 	}
 	
-	public default ComplexFacing getFacingFromQuarter(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
+	default ComplexFacing getFacingFromQuarter(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
 		Direction forward, up;
 		if (localY > INNER_EDGE) { //top half
 			up = localUp.getOpposite();
@@ -341,7 +341,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 
     @Override
 	@OnlyIn(Dist.CLIENT)
-	public default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
+    default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
 		tooltip.add(new TranslationTextComponent(connectionsType().tooltip));

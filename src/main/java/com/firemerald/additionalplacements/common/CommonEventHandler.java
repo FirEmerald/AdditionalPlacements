@@ -75,8 +75,7 @@ public class CommonEventHandler
 				if (block != Blocks.AIR)
 				{
 					mapping.remap(block);
-					return;
-				}
+                }
 			}
 			else //remap old mod ID
 			{
@@ -84,8 +83,7 @@ public class CommonEventHandler
 				if (block != Blocks.AIR)
 				{
 					mapping.remap(block);
-					return;
-				}
+                }
 			}
 		});
 	}

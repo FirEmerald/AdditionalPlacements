@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -28,9 +27,9 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 		super(properties);
 	}
 
-	public AdditionalCarpetBlock carpet;
+	private AdditionalCarpetBlock carpet;
 
-	public CarpetBlock asCarpet()
+	private CarpetBlock asCarpet()
 	{
 		return (CarpetBlock) (Object) this;
 	}
@@ -77,9 +76,9 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 		return currentState.is(carpet) ? currentState : carpet.copyProperties(currentState, carpet.defaultBlockState());
 	}
 
-	@Inject(at = @At("RETURN"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockItemUseContext.class}),
-			@Desc(value = "func_196258_a", ret = BlockState.class, args = {BlockItemUseContext.class})
+	@Inject(at = @At("RETURN"), remap = false, cancellable = true, require = 0, method = {
+			"getStateForPlacement(Lnet/minecraft/item/BlockItemUseContext;)Lnet/minecraft/block/BlockState;",
+			       "func_196258_a(Lnet/minecraft/item/BlockItemUseContext;)Lnet/minecraft/block/BlockState;"
 	})
 	private void getStateForPlacement(BlockItemUseContext context, CallbackInfoReturnable<BlockState> ci)
 	{
@@ -95,9 +94,9 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 		else return superRet;
 	}
 
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
-			@Desc(value = "func_185499_a", ret = BlockState.class, args = {BlockState.class, Rotation.class})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			       "rotate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Rotation;)Lnet/minecraft/block/BlockState;",
+			"func_185499_a(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Rotation;)Lnet/minecraft/block/BlockState;"
 	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{
@@ -113,9 +112,9 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 		else return super.rotate(blockState, rotation);
 	}
 
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "mirror", ret = BlockState.class, args = {BlockState.class, Mirror.class}),
-			@Desc(value = "func_185471_a", ret = BlockState.class, args = {BlockState.class, Mirror.class})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			       "mirror(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Mirror;)Lnet/minecraft/block/BlockState;",
+			"func_185471_a(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Mirror;)Lnet/minecraft/block/BlockState;"
 	})
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
 	{

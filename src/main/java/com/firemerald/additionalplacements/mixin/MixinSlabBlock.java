@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -28,9 +27,9 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 		super(properties);
 	}
 
-	public VerticalSlabBlock slab;
+	private VerticalSlabBlock slab;
 
-	public SlabBlock asSlab()
+	private SlabBlock asSlab()
 	{
 		return (SlabBlock) (Object) this;
 	}
@@ -88,9 +87,9 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(getStateForPlacementImpl(context, ci.getReturnValue()));
 	}
 
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
-			@Desc(value = "func_185499_a", ret = BlockState.class, args = {BlockState.class, Rotation.class})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			       "rotate(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Rotation;)Lnet/minecraft/block/BlockState;",
+			"func_185499_a(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Rotation;)Lnet/minecraft/block/BlockState;"
 	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{
@@ -106,10 +105,9 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 		else return super.rotate(blockState, rotation);
 	}
 
-
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "mirror", ret = BlockState.class, args = {BlockState.class, Mirror.class}),
-			@Desc(value = "func_185471_a", ret = BlockState.class, args = {BlockState.class, Mirror.class})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			       "mirror(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Mirror;)Lnet/minecraft/block/BlockState;",
+			"func_185471_a(Lnet/minecraft/block/BlockState;Lnet/minecraft/util/Mirror;)Lnet/minecraft/block/BlockState;"
 	})
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
 	{

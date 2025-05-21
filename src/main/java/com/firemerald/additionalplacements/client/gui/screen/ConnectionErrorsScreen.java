@@ -29,9 +29,7 @@ public class ConnectionErrorsScreen extends Screen {
         super.init();
         errorList = new ConnectionErrorsList(this, 10, 10, width - 20, height - 40, rootError, wasSinglePlayer);
         int buttonWidth = Math.min(200, width - 20);
-        okButton = new Button((width - buttonWidth) / 2, height - 30, buttonWidth, 20, DialogTexts.GUI_DONE, (button) -> {
-        	minecraft.setScreen(nextScreen);
-        });
+        okButton = new Button((width - buttonWidth) / 2, height - 30, buttonWidth, 20, DialogTexts.GUI_DONE, (button) -> minecraft.setScreen(nextScreen));
         addWidget(errorList);
         addWidget(okButton);
         setFocused(errorList);

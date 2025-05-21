@@ -35,44 +35,44 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public interface IPlacementBlock<T extends Block> extends IItemProvider, IGenerationControl
 {
-	public T getOtherBlock();
+	T getOtherBlock();
 
-	public default BlockState rotateImpl(BlockState blockState, Rotation rotation)
+	default BlockState rotateImpl(BlockState blockState, Rotation rotation)
 	{
 		return transform(blockState, rotation::rotate);
 	}
 
-	public default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
+	default BlockState mirrorImpl(BlockState blockState, Mirror mirror)
 	{
 		return transform(blockState, mirror::mirror);
 	}
 
-	public BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
+	BlockState transform(BlockState blockState, Function<Direction, Direction> transform);
 
-	public BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState);
+	BlockState getStateForPlacementImpl(BlockItemUseContext context, BlockState currentState);
 
-	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos);
+	BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, IWorld level, BlockPos pos, BlockPos otherPos);
 
 	@OnlyIn(Dist.CLIENT)
-	public default void appendHoverTextImpl(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
+    default void appendHoverTextImpl(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		if (APConfigs.common().showTooltip.get() && getGenerationType().placementEnabled()) addPlacementTooltip(stack, level, tooltip, flag);
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	public void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag);
+    void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag);
 
-	public boolean hasAdditionalStates();
+	boolean hasAdditionalStates();
 
-	public BlockState getDefaultAdditionalState(BlockState currentState);
+	BlockState getDefaultAdditionalState(BlockState currentState);
 
-	public BlockState getDefaultVanillaState(BlockState currentState);
+	BlockState getDefaultVanillaState(BlockState currentState);
 
-	public boolean isThis(BlockState blockState);
+	boolean isThis(BlockState blockState);
 	
-	public static final float SQRT_2_INV = 0.70710678118654752440084436210485f;
+	float SQRT_2_INV = 0.70710678118654752440084436210485f;
 
-	public static Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {
+	Quaternion[] DIRECTION_TRANSFORMS = new Quaternion[] {
 			new Quaternion(SQRT_2_INV, 0, 0, SQRT_2_INV), //DOWN
 			new Quaternion(-SQRT_2_INV, 0, 0, SQRT_2_INV), //UP
 			new Quaternion(0, 1, 0, 0), //NORTH
@@ -82,7 +82,7 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider, IGenera
 	};
 
 	@OnlyIn(Dist.CLIENT)
-	public default void renderHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, ActiveRenderInfo camera, float partial)
+    default void renderHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, ActiveRenderInfo camera, float partial)
 	{
 		BlockPos hit = result.getBlockPos();
 		if (enablePlacement(hit, player.level, result.getDirection(), player)) {
@@ -124,27 +124,27 @@ public interface IPlacementBlock<T extends Block> extends IItemProvider, IGenera
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementPreview(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a) {}
+    default void renderPlacementPreview(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a) {}
 
 	@OnlyIn(Dist.CLIENT)
-	public void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a);
+    void renderPlacementHighlight(MatrixStack pose, IVertexBuilder vertexConsumer, PlayerEntity player, BlockRayTraceResult result, float partial, float r, float g, float b, float a);
 
-	public default boolean enablePlacement(@Nullable PlayerEntity player) {
+	default boolean enablePlacement(@Nullable PlayerEntity player) {
 		return getGenerationType().placementEnabled() && (!(player instanceof IAPPlayer) || ((IAPPlayer) player).isPlacementEnabled());
 	}
 
-	public default boolean enablePlacement(BlockPos hit, World level, Direction direction, @Nullable PlayerEntity player) {
+	default boolean enablePlacement(BlockPos hit, World level, Direction direction, @Nullable PlayerEntity player) {
 		return enablePlacement(player);
 	}
 	
-	public GenerationType<?, ?> getGenerationType();
+	GenerationType<?, ?> getGenerationType();
 	
 	@Override
-	public default boolean generateAdditionalStates() {
+    default boolean generateAdditionalStates() {
 		return true;
 	}
 	
-	public default boolean canGenerateAdditionalStates() {
+	default boolean canGenerateAdditionalStates() {
 		return generateAdditionalStates() && !hasAdditionalStates();
 	}
 }

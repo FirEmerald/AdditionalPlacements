@@ -109,18 +109,18 @@ public class TagMismatchChecker extends Thread
 				{
 					AdditionalPlacementsMod.LOGGER.warn("====== BEGIN LIST ======");
 					blockMissingExtra.forEach(blockMissingExtra -> {
-						AdditionalPlacementsMod.LOGGER.warn("\t" + blockMissingExtra.getLeft().getRegistryName());
+                        AdditionalPlacementsMod.LOGGER.warn("\t{}", blockMissingExtra.getLeft().getRegistryName());
 						Collection<ResourceLocation> missing = blockMissingExtra.getMiddle();
 						if (!missing.isEmpty())
 						{
 							AdditionalPlacementsMod.LOGGER.warn("\t\tmissing");
-							missing.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t" + tag));
+							missing.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t{}", tag));
 						}
 						Collection<ResourceLocation> extra = blockMissingExtra.getRight();
 						if (!extra.isEmpty())
 						{
 							AdditionalPlacementsMod.LOGGER.warn("\t\textra");
-							extra.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t" + tag));
+							extra.forEach(tag -> AdditionalPlacementsMod.LOGGER.warn("\t\t\t{}", tag));
 						}
 					});
 					AdditionalPlacementsMod.LOGGER.warn("====== END LIST ======");
@@ -152,7 +152,6 @@ public class TagMismatchChecker extends Thread
 		else return hasPermission.test(2);
 	}
 
-	@SuppressWarnings("resource")
 	@OnlyIn(Dist.CLIENT)
 	public static boolean canGenerateTagsClient(PlayerEntity player)
 	{

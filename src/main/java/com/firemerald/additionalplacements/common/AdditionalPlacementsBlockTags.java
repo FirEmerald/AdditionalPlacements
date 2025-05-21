@@ -13,8 +13,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class AdditionalPlacementsBlockTags
 {
-	private static final IntPredicate SEPERATOR = c -> { return c == '_' || c == ' ' || c == '/' || c == '.'; };
-	private static Map<String, Map<ResourceLocation, ResourceLocation>> remappedTags = new HashMap<>();
+	private static final IntPredicate SEPERATOR = c -> c == '_' || c == ' ' || c == '/' || c == '.';
+	private static final Map<String, Map<TagKey<Block>, TagKey<Block>>> remappedTags = new HashMap<>();
 
 	public static Set<ResourceLocation> remap(Set<ResourceLocation> tags, String typeName, String typeNamePlural)
 	{

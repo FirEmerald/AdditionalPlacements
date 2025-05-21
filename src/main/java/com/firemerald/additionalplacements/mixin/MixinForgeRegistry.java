@@ -18,7 +18,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 public class MixinForgeRegistry
 {
 	@SuppressWarnings("unchecked")
-	@Inject(method = "register", at = @At("RETURN"), remap = false)
+	@Inject(method = "register(Lnet/minecraftforge/registries/IForgeRegistryEntry;)V", at = @At("RETURN"), remap = false)
 	private <V extends IForgeRegistryEntry<V>> void register(V value, CallbackInfo ci)
     {
 		if (this == ForgeRegistries.BLOCKS && AdditionalPlacementsMod.dynamicRegistration)
