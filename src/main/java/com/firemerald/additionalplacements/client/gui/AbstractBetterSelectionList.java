@@ -253,7 +253,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 				break;
 			} else y += item.getHeight();
 		}
-		this.setScrollAmount(y - this.height / 2);
+		this.setScrollAmount(y - this.height / 2d);
 	}
 
 	protected void ensureVisible(E entry) {
@@ -320,16 +320,15 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 				if (clicked != null) {
 					if (clicked.mouseClicked(mouseX, mouseY, button)) {
 						E focused = this.getFocused();
-						if (focused != clicked && focused instanceof ContainerEventHandler) {
-							ContainerEventHandler containereventhandler = (ContainerEventHandler) focused;
-							containereventhandler.setFocused((GuiEventListener) null);
+						if (focused != clicked && focused instanceof ContainerEventHandler containereventhandler) {
+                            containereventhandler.setFocused((GuiEventListener) null);
 						}
 
 						this.setFocused(clicked);
 						this.setDragging(true);
 						return true;
 					}
-				} else if (this.clickedHeader((int) (mouseX - (this.getX() + this.width / 2 - this.getRowWidth() / 2)), (int) (mouseY - this.getY()) + (int) this.getScrollAmount() - 4)) {
+				} else if (this.clickedHeader((int) (mouseX - (this.getX() + this.width / 2d - this.getRowWidth() / 2d)), (int) (mouseY - this.getY()) + (int) this.getScrollAmount() - 4)) {
 					return true;
 				}
 
@@ -411,9 +410,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	}
 
 	protected void moveSelection(SelectionDirection ordering) {
-		this.moveSelection(ordering, (element) -> {
-			return true;
-		});
+		this.moveSelection(ordering, (element) -> true);
 	}
 
 	protected void refreshSelection() {
@@ -591,10 +588,10 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	protected static enum SelectionDirection {
+	protected enum SelectionDirection {
 		UP,
-		DOWN;
-	}
+		DOWN
+    }
 
 	class TrackedList extends AbstractList<E> {
 		private final List<E> delegate = Lists.newArrayList();

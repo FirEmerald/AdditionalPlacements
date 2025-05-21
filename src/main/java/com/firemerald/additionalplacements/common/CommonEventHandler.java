@@ -37,10 +37,9 @@ public class CommonEventHandler
 		if (event.getItemStack().getItem() instanceof BlockItem)
 		{
 			Block block = ((BlockItem) event.getItemStack().getItem()).getBlock();
-			if (block instanceof IPlacementBlock)
+			if (block instanceof IPlacementBlock<?> verticalBlock)
 			{
-				IPlacementBlock<?> verticalBlock = ((IPlacementBlock<?>) block);
-				if (verticalBlock.hasAdditionalStates()) verticalBlock.appendHoverTextImpl(event.getItemStack(), event.getEntity() == null ? null : event.getEntity().getLevel(), event.getToolTip(), event.getFlags());
+                if (verticalBlock.hasAdditionalStates()) verticalBlock.appendHoverTextImpl(event.getItemStack(), event.getEntity() == null ? null : event.getEntity().getLevel(), event.getToolTip(), event.getFlags());
 			}
 		}
 	}
@@ -92,8 +91,7 @@ public class CommonEventHandler
 				if (block != Blocks.AIR)
 				{
 					mapping.remap(block);
-					return;
-				}
+                }
 			}
 			else //remap old mod ID
 			{
@@ -101,8 +99,7 @@ public class CommonEventHandler
 				if (block != Blocks.AIR)
 				{
 					mapping.remap(block);
-					return;
-				}
+                }
 			}
 		});
 	}

@@ -22,7 +22,8 @@ public abstract class APPacket
 	{
 		NetworkEvent.Context context = supplier.get();
 		if (context.getDirection() == getDirection()) handle(context);
-		else AdditionalPlacementsMod.LOGGER.error("Tried to handle " + getClass() + " with invalid direction " + context.getDirection());
+		else
+            AdditionalPlacementsMod.LOGGER.error("Tried to handle {} with invalid direction {}", getClass(), context.getDirection());
 	}
 
     public void sendTo(PacketTarget target)

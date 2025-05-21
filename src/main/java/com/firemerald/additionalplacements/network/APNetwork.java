@@ -40,7 +40,7 @@ public class APNetwork
         INSTANCE = ChannelBuilder
             .named(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "network"))
             .networkProtocolVersion(() -> VERSION)
-            .clientAcceptedVersions(s -> VERSION.equals(s) || NetworkRegistry.ABSENT.toString().equals(s))
+            .clientAcceptedVersions(s -> VERSION.equals(s) || NetworkRegistry.ABSENT.equals(s))
             .serverAcceptedVersions(VERSION::equals)
             .simpleChannel();
         registerServerPlayPacket(SetPlacementTogglePacket.class, SetPlacementTogglePacket::new);

@@ -13,7 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class UnbakedPlacementModel implements UnbakedModel
 {
-	private static record ModelKey(AdditionalPlacementBlock<?> block, ResourceLocation ourModelLocation, ModelState ourModelRotation, UnbakedModel theirModel, BlockRotation theirModelRotation) {}
+	private record ModelKey(AdditionalPlacementBlock<?> block, ResourceLocation ourModelLocation, ModelState ourModelRotation, UnbakedModel theirModel, BlockRotation theirModelRotation) {}
 
 	private static final Map<ModelKey, UnbakedPlacementModel> MODEL_CACHE = new HashMap<>();
 
