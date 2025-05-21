@@ -12,24 +12,23 @@ import net.neoforged.neoforge.common.DataMapHooks;
 
 @Mixin(DataMapHooks.class)
 public class MixinDataMapHooks {
-
-	@Inject(method = "getNextOxidizedStage", at = @At("HEAD"))
+	@Inject(method = "getNextOxidizedStage(Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/Block;", at = @At("HEAD"), cancellable = true, remap = false)
     private static void getNextOxidizedStage(Block block, CallbackInfoReturnable<Block> cli) {
-		if (block instanceof AdditionalPlacementBlock apBlock) cli.setReturnValue(DataMapHooks.getNextOxidizedStage(apBlock.getOtherBlock()));
+		if (block instanceof AdditionalPlacementBlock<?> apBlock) cli.setReturnValue(DataMapHooks.getNextOxidizedStage(apBlock.getOtherBlock()));
     }
 
-	@Inject(method = "getPreviousOxidizedStage", at = @At("HEAD"))
+	@Inject(method = "getPreviousOxidizedStage(Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/Block;", at = @At("HEAD"), cancellable = true, remap = false)
 	private static void getPreviousOxidizedStage(Block block, CallbackInfoReturnable<Block> cli) {
-		if (block instanceof AdditionalPlacementBlock apBlock) cli.setReturnValue(DataMapHooks.getPreviousOxidizedStage(apBlock.getOtherBlock()));
+		if (block instanceof AdditionalPlacementBlock<?> apBlock) cli.setReturnValue(DataMapHooks.getPreviousOxidizedStage(apBlock.getOtherBlock()));
     }
 
-	@Inject(method = "getBlockWaxed", at = @At("HEAD"))
+	@Inject(method = "getBlockWaxed(Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/Block;", at = @At("HEAD"), cancellable = true, remap = false)
 	private static void getBlockWaxed(Block block, CallbackInfoReturnable<Block> cli) {
-		if (block instanceof AdditionalPlacementBlock apBlock) cli.setReturnValue(DataMapHooks.getBlockWaxed(apBlock.getOtherBlock()));
+		if (block instanceof AdditionalPlacementBlock<?> apBlock) cli.setReturnValue(DataMapHooks.getBlockWaxed(apBlock.getOtherBlock()));
     }
 
-	@Inject(method = "getBlockUnwaxed", at = @At("HEAD"))
+	@Inject(method = "getBlockUnwaxed(Lnet/minecraft/world/level/block/Block;)Lnet/minecraft/world/level/block/Block;", at = @At("HEAD"), cancellable = true, remap = false)
 	private static void getBlockUnwaxed(Block block, CallbackInfoReturnable<Block> cli) {
-		if (block instanceof AdditionalPlacementBlock apBlock) cli.setReturnValue(DataMapHooks.getBlockUnwaxed(apBlock.getOtherBlock()));
+		if (block instanceof AdditionalPlacementBlock<?> apBlock) cli.setReturnValue(DataMapHooks.getBlockUnwaxed(apBlock.getOtherBlock()));
     }
 }

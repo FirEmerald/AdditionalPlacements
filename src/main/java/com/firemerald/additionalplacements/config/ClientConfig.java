@@ -29,7 +29,7 @@ public class ClientConfig
         		.define("toggle_placement_logic_state_message", true);
         toggleQuickpressTime = builder
         		.comment("The length of time in milliseconds for which the placement toggle key must be held for it to automatically return to the previous state when the key is released. setting to 0 turns the key into hold only, setting it to a high value (such as 1000000) will make it generally behave as always a toggle")
-        		.defineInRange("toggle_quickpress_time", 500l, 0, Long.MAX_VALUE);
+        		.defineInRange("toggle_quickpress_time", 500L, 0, Long.MAX_VALUE);
         enablePlacementHighlight = builder
         		.comment("Whether to enable the rendering of the placement grid and/or preview.")
         		.define("enable_placement_highlights", true);

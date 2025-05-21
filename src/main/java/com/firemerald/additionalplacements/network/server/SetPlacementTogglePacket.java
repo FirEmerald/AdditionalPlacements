@@ -10,9 +10,9 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class SetPlacementTogglePacket extends ServerPacket<RegistryFriendlyByteBuf>
 {
-	public static final Type<SetPlacementTogglePacket> TYPE = new Type<>(ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "set_placement_toggle"));
+	public static final Type<SetPlacementTogglePacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "set_placement_toggle"));
 
-	private boolean state;
+	private final boolean state;
 
 	public SetPlacementTogglePacket(boolean state)
 	{

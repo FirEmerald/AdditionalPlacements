@@ -4,6 +4,7 @@ import com.firemerald.additionalplacements.util.ComplexFacing;
 
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 public enum V1StairPlacing implements StringRepresentable {
 	NORTH_EAST("north_east", Direction.NORTH, Direction.EAST,
@@ -36,7 +37,7 @@ public enum V1StairPlacing implements StringRepresentable {
     public final Direction counterClockWiseFront, clockWiseFront, counterClockWiseBack, clockWiseBack;
     public final ComplexFacing equivalent, cwTop, ccwTop, cwBottom, ccwBottom;
 
-    private V1StairPlacing(String name, Direction counterClockWise, Direction clockWise, ComplexFacing equivalent, ComplexFacing cwTop, ComplexFacing ccwTop, ComplexFacing cwBottom, ComplexFacing ccwBottom)
+    V1StairPlacing(String name, Direction counterClockWise, Direction clockWise, ComplexFacing equivalent, ComplexFacing cwTop, ComplexFacing ccwTop, ComplexFacing cwBottom, ComplexFacing ccwBottom)
     {
         this.name = name;
         this.counterClockWiseFront = counterClockWise;
@@ -51,7 +52,7 @@ public enum V1StairPlacing implements StringRepresentable {
     }
 
 	@Override
-	public String getSerializedName() {
+	public @NotNull String getSerializedName() {
 		return name;
 	}
 }

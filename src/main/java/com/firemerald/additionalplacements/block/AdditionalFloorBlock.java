@@ -99,7 +99,7 @@ public abstract class AdditionalFloorBlock<T extends Block> extends AdditionalPl
 		if (APConfigs.common().fixOldStates.get()) {
 			if (!IStateFixer.contains(properties, PLACING)) {
 				if (properties.contains("facing")) {
-					AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V1 floor block state: " + properties);
+                    AdditionalPlacementsMod.LOGGER.debug("{} Fixing V1 floor block state: {}", this, properties);
 					IStateFixer.renameProperty(properties, "facing", PLACING);
 				}
 			}

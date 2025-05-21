@@ -22,7 +22,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class ConfigurationCheckFailedPacket extends ClientPacket<FriendlyByteBuf>
 {
-	public static final Type<ConfigurationCheckFailedPacket> TYPE = new Type<>(ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "configuration_check_failed"));
+	public static final Type<ConfigurationCheckFailedPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "configuration_check_failed"));
 
 	private final List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors;
 

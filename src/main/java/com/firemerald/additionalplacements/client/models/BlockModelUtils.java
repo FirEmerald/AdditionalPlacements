@@ -43,12 +43,12 @@ public class BlockModelUtils
 		else return state;
 	}
 
-	public static final BakedModel getBakedModel(BlockState state)
+	public static BakedModel getBakedModel(BlockState state)
 	{
 		return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
 	}
 
-	public static final ModelData getModelData(BlockState blockState, ModelData defaultData)
+	public static ModelData getModelData(BlockState blockState, ModelData defaultData)
 	{
 		if (blockState.hasBlockEntity()) {
 			ModelData add = ((EntityBlock) blockState.getBlock()).newBlockEntity(new BlockPos(0, 0, 0), blockState).getModelData();
@@ -65,7 +65,7 @@ public class BlockModelUtils
 		builder.with(prop2, defaultData.get(prop2));
 	}
 
-	public static final BakedQuad retexture(BakedQuad jsonBakedQuad, TextureAtlasSprite newSprite, int newTintIndex, int vertexSize, int uvOffset)
+	public static BakedQuad retexture(BakedQuad jsonBakedQuad, TextureAtlasSprite newSprite, int newTintIndex, int vertexSize, int uvOffset)
 	{
 		return new BakedQuad(
 				updateVertices(
@@ -85,7 +85,7 @@ public class BlockModelUtils
 
 	public static final float[] ZERO_POINT = {0, 0, 0};
 
-	public static final float getFaceSize(int[] vertices, int vertexSize, int posOffset)
+	public static float getFaceSize(int[] vertices, int vertexSize, int posOffset)
 	{
 		float[] first = newVertex(vertices, 0, posOffset);
 		float[] prev = new float[3];
@@ -137,7 +137,7 @@ public class BlockModelUtils
 				);
 	}
 
-	public static final int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertexSize, int uvOffset)
+	public static int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertexSize, int uvOffset)
 	{
 		int[] updatedVertices = vertices.clone();
 		for (int vertexIndex = uvOffset; vertexIndex < vertices.length; vertexIndex += vertexSize)
@@ -148,12 +148,12 @@ public class BlockModelUtils
 		return updatedVertices;
 	}
 
-	private static final int changeUVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
+	private static int changeUVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
 	{
 		return Float.floatToRawIntBits(newSprite.getU(oldSprite.getUOffset(Float.intBitsToFloat(vertex))));
 	}
 
-	private static final int changeVVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
+	private static int changeVVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
 	{
 		return Float.floatToRawIntBits(newSprite.getV(oldSprite.getVOffset(Float.intBitsToFloat(vertex))));
 	}

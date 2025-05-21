@@ -166,30 +166,30 @@ public class AdditionalStairBlock extends AdditionalPlacementLiquidBlock<StairBl
 	public CommonStairShapeState getOldPropertyShapeState(CompoundTag properties) {
 		if (APConfigs.common().fixStates.get()) {
 			if (IStateFixer.contains(properties, connectionsType)) {
-				AdditionalPlacementsMod.LOGGER.debug(this + " Potentially fixing V3 stair block state: " + properties);
+                AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing V3 stair block state: {}", this, properties);
 				String shapeStateName = IStateFixer.getPropertyString(properties, connectionsType);
 				if (!connectionsType.isValid(shapeStateName)) {
-					AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V3 stair block state");
+                    AdditionalPlacementsMod.LOGGER.debug("{} Fixing V3 stair block state", this);
 					return CommonStairShapeState.get(shapeStateName);
 				}
 			} else if (APConfigs.common().fixOldStates.get()) {
 				if (properties.contains("shape")) {
 					if (properties.contains("facing")) { //potentially V2
-						AdditionalPlacementsMod.LOGGER.debug(this + " Potentially fixing potential V2 block state: " + properties);
+                        AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing potential V2 block state: {}", this, properties);
 						V2StairFacing facing = V2StairFacing.get(properties.getString("facing"));
 						V2StairShape shape = V2StairShape.get(properties.getString("shape"));
 						if (facing != null && shape != null) { //V2
-							AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V2 block state");
+                            AdditionalPlacementsMod.LOGGER.debug("{} Fixing V2 block state", this);
 							properties.remove("facing");
 							properties.remove("shape");
 							return V2StairShapeState.toCommon(facing, shape);
 						}
 					} else if (properties.contains("placing")) { //potentially V1
-						AdditionalPlacementsMod.LOGGER.debug(this + " Potentially fixing potential V1 block state: " + properties);
+                        AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing potential V1 block state: {}", this, properties);
 						V1StairPlacing placing = V1StairPlacing.get(properties.getString("placing"));
 						V1StairShape shape = V1StairShape.get(properties.getString("shape"));
 						if (placing != null && shape != null) { //V1
-							AdditionalPlacementsMod.LOGGER.debug(this + " Fixing V1 block state");
+                            AdditionalPlacementsMod.LOGGER.debug("{} Fixing V1 block state", this);
 							properties.remove("placing");
 							properties.remove("shape");
 							return V1StairShapeState.toCommon(placing, shape);

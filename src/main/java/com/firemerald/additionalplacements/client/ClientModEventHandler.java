@@ -40,9 +40,7 @@ public class ClientModEventHandler
 
     @SubscribeEvent
     public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
-    	event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> {
-    		BakedPlacementModel.clearCache();
-    	});
+    	event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> BakedPlacementModel.clearCache());
     }
 
     @SubscribeEvent

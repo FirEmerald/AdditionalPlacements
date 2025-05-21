@@ -6,5 +6,5 @@ import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.resources.model.UnbakedModel;
 
 public interface IBlockStateModelLoaderExtension {
-	public void setTopLevelModels(Map<ModelResourceLocation, UnbakedModel> topLevelModels);
+	void setTopLevelModels(Map<ModelResourceLocation, UnbakedModel> topLevelModels);
 }
