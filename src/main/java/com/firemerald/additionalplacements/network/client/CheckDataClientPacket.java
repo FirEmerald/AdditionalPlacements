@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.network.client;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.generation.Registration;

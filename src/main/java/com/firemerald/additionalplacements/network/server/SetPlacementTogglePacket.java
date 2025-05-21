@@ -12,7 +12,7 @@ public class SetPlacementTogglePacket extends ServerPacket<PlayPayloadContext>
 {
 	public static final ResourceLocation ID = new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "set_placement_toggle");
 
-	private boolean state;
+	private final boolean state;
 
 	public SetPlacementTogglePacket(boolean state)
 	{

@@ -26,7 +26,7 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 
 public class BakedPlacementModel extends PlacementModelWrapper
 {
-	private static record ModelKey(AdditionalPlacementBlock<?> block, BakedModel ourModel, BakedModel theirModel, BlockRotation modelRotation) {}
+	private record ModelKey(AdditionalPlacementBlock<?> block, BakedModel ourModel, BakedModel theirModel, BlockRotation modelRotation) {}
 
 	private static final Map<ModelKey, BakedPlacementModel> MODEL_CACHE = new HashMap<>();
 

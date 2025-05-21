@@ -18,7 +18,7 @@ public class AdditionalBlockColor implements BlockColor
 	public int getColor(BlockState state, BlockAndTintGetter tintGetter, BlockPos pos, int i)
 	{
 		Block block = state.getBlock();
-		if (block instanceof AdditionalPlacementBlock placement) return Minecraft.getInstance().getBlockColors().getColor(placement.getModelState(state), tintGetter, pos, i);
+		if (block instanceof AdditionalPlacementBlock<?> placement) return Minecraft.getInstance().getBlockColors().getColor(placement.getModelState(state), tintGetter, pos, i);
 		else return -1;
 	}
 }

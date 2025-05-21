@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.generation;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
@@ -21,7 +20,7 @@ import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 
 public abstract class GenerationType<T extends Block, U extends AdditionalPlacementBlock<T>> {
 
-	protected abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>, W extends BuilderBase<T, U, V, W>> {
+	public abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>, W extends BuilderBase<T, U, V, W>> {
 		protected Set<String> addsProperties = Collections.emptySet();
 		protected GenerationBlacklist blacklist = new GenerationBlacklist.Builder().build();
 		protected boolean placementEnabled = true;
@@ -64,7 +63,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	private final GenerationBlacklist blacklist;
 	private final boolean defaultPlacementEnabled;
 	private BooleanValue placementEnabled;
-	private List<CreatedBlockEntry<T, U>> created = new ArrayList<>();
+	private final List<CreatedBlockEntry<T, U>> created = new ArrayList<>();
 	private final List<IBlockBlacklister<? super T>> blacklisters = new LinkedList<>();
 
 	protected GenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
@@ -179,9 +178,9 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	public final boolean enabledForBlock(T block, ResourceLocation blockId) {
 		if (blacklisters.stream().anyMatch(blacklister -> blacklister.blacklist(block, blockId))) return false;
 		if (blacklist.test(blockId)) {
-			Collection<String> has = block.defaultBlockState().getProperties().stream().map(Property::getName).filter(addsProperties::contains).collect(Collectors.toList());
+			Collection<String> has = block.defaultBlockState().getProperties().stream().map(Property::getName).filter(addsProperties::contains).toList();
 			if (!has.isEmpty()) {
-				AdditionalPlacementsMod.LOGGER.warn("Generation type " + this.name + " cannot generate for " + blockId + " as it already contains the following properties that would be added: ");
+                AdditionalPlacementsMod.LOGGER.warn("Generation type {} cannot generate for {} as it already contains the following properties that would be added: ", this.name, blockId);
 				AdditionalPlacementsMod.LOGGER.warn(has.toString());
 				AdditionalPlacementsMod.LOGGER.warn("Add it to the blacklist inside additionalplacements-startup.toml to stop this message from appearing in the future.");
 				return false;

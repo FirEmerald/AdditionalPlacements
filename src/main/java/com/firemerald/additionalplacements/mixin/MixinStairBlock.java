@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.mixin;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -24,11 +25,12 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(StairBlock.class)
 public abstract class MixinStairBlock implements IVanillaStairBlock
 {
-	public AdditionalStairBlock stairs;
+	private AdditionalStairBlock stairs;
+	@Final
 	@Shadow
-	private BlockState baseState;
+    protected BlockState baseState;
 
-	public StairBlock asStair()
+	private StairBlock asStair()
 	{
 		return (StairBlock) (Object) this;
 	}

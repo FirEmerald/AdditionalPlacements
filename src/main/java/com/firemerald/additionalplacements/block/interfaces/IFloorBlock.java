@@ -26,46 +26,46 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 {
 	@Override
-	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
+    default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Direction placing = getPlacing(blockState);
 		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
+    default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
 	{
 		return forPlacing(getPlacingDirection(context), currentState);
 	}
 
-	public abstract BlockState forPlacing(Direction dir, BlockState blockState);
+	BlockState forPlacing(Direction dir, BlockState blockState);
 
-	public abstract Direction getPlacing(BlockState blockState);
+	Direction getPlacing(BlockState blockState);
 
-	public default Direction getPlacingDirection(BlockPlaceContext context)
+	default Direction getPlacingDirection(BlockPlaceContext context)
 	{
 		return context.getClickedFace().getOpposite();
 	}
 
 	@Override
 	@OnlyIn(Dist.CLIENT)
-	public default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {}
+    default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {}
 
     @Override
-	public default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
+    default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 		tooltip.add(Component.translatable("tooltip.additionalplacements.ceiling_placement"));
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public default Direction transformModelDirection(Direction from)
+    default Direction transformModelDirection(Direction from)
 	{
 		return from;
 	}
 
 	@OnlyIn(Dist.CLIENT)
-	public default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, ModelData extraData)
+    default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, ModelData extraData)
 	{
 		return switch(getPlacing(state)) {
 		case UP -> side -> switch (side) {
@@ -89,8 +89,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 		case SOUTH -> Direction.DOWN;
 		case EAST -> Direction.WEST;
 		case WEST -> Direction.EAST;
-		default -> side;
-		};
+        };
 		case EAST -> side -> switch (side) {
 		case UP -> Direction.NORTH;
 		case DOWN -> Direction.SOUTH;
@@ -98,8 +97,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 		case SOUTH -> Direction.EAST;
 		case EAST -> Direction.DOWN;
 		case WEST -> Direction.UP;
-		default -> side;
-		};
+        };
 		case WEST -> side -> switch (side) {
 		case UP -> Direction.NORTH;
 		case DOWN -> Direction.SOUTH;
@@ -107,8 +105,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 		case SOUTH -> Direction.WEST;
 		case EAST -> Direction.UP;
 		case WEST -> Direction.DOWN;
-		default -> side;
-		};
+        };
 		default -> Function.identity();
 		};
 	}

@@ -35,7 +35,7 @@ public class CommandGenerateStairsDebugger
 								.executes(context -> {
 									BlockPos center = BlockPosArgument.getLoadedBlockPos(context, "pos");
 									BlockInput blockInput = BlockStateArgument.getBlock(context, "block");
-									if (blockInput.getState().getBlock() instanceof IStairBlock stair && stair.hasAdditionalStates()) {
+									if (blockInput.getState().getBlock() instanceof IStairBlock<?> stair && stair.hasAdditionalStates()) {
 										ServerLevel serverLevel = context.getSource().getLevel();
 										boolean allowMixed = stair.connectionsType().allowMixed;
 										boolean allowVertical = stair.connectionsType().allowVertical;
