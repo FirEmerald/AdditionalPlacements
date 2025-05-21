@@ -30,22 +30,19 @@ public class ClientEventHandler
 	public static void onHighlightBlock(RenderHighlightEvent.Block event)
 	{
 		if (!APConfigs.client().enablePlacementHighlight.get()) return;
-		@SuppressWarnings("resource")
 		Player player = Minecraft.getInstance().player;
 		ItemStack stack = player.getMainHandItem();
 		if (stack.isEmpty()) stack = player.getOffhandItem();
 		if (stack.getItem() instanceof BlockItem)
 		{
 			Block block = ((BlockItem) stack.getItem()).getBlock();
-			if (block instanceof IPlacementBlock)
+			if (block instanceof IPlacementBlock<?> verticalBlock)
 			{
-				IPlacementBlock<?> verticalBlock = ((IPlacementBlock<?>) block);
-				if (verticalBlock.hasAdditionalStates()) verticalBlock.renderHighlight(event.getPoseStack(), event.getMultiBufferSource().getBuffer(RenderType.LINES), player, event.getTarget(), event.getCamera(), event.getPartialTick());
+                if (verticalBlock.hasAdditionalStates()) verticalBlock.renderHighlight(event.getPoseStack(), event.getMultiBufferSource().getBuffer(RenderType.LINES), player, event.getTarget(), event.getCamera(), event.getPartialTick());
 			}
 		}
 	}
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onInput(InputEvent event)
 	{
@@ -72,7 +69,6 @@ public class ClientEventHandler
 		APClientData.setPlacementEnabledAndSynchronize(APConfigs.client().defaultPlacementLogicState.get(), APConfigs.client().loginPlacementLogicStateMessage.get());
 	}
 
-	@SuppressWarnings("resource")
 	@SubscribeEvent
 	public static void onClientTick(TickEvent.ClientTickEvent event)
 	{
