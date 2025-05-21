@@ -8,21 +8,18 @@ import com.electronwill.nightconfig.core.ConfigFormat;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
 import com.electronwill.nightconfig.toml.TomlFormat;
+import com.firemerald.additionalplacements.config.blocklist.Blocklist;
 import com.firemerald.additionalplacements.generation.GenerationType;
 import com.firemerald.additionalplacements.generation.Registration;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class StartupConfig {
-	public final GenerationBlacklist blacklist = new GenerationBlacklist.Builder().build();
+	public final Blocklist enabled = new Blocklist(false, true);
 
 	public StartupConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Startup settings").push("startup");
-		builder
-		.comment("Options for controlling which blocks can generate variants of a their type (if one exists).")
-		.push("enabled");
-		blacklist.addToConfig(builder);
-		builder.pop();
+		enabled.addToConfig(builder, "enabled", "Blocklist for controlling which blocks can generate variants of a their type (if one exists).");
         Registration.buildConfig(builder, GenerationType::buildStartupConfig);
 	}
 
@@ -46,7 +43,7 @@ public class StartupConfig {
     }
 
 	public void onConfigLoaded() {
-		blacklist.loadListsFromConfig();
+		enabled.loadListsFromConfig();
 		Registration.forEach(GenerationType::onStartupConfigLoaded);
 	}
 }

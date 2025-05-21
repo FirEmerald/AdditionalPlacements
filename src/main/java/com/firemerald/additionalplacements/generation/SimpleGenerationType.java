@@ -8,7 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 
 public class SimpleGenerationType<T extends Block, U extends AdditionalPlacementBlock<T>> extends GenerationType<T, U> {
-	protected abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends SimpleGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends GenerationType.BuilderBase<T, U, V, W> {
+	public abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends SimpleGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends GenerationType.BuilderBase<T, U, V, W> {
 		protected Function<? super T, ? extends U> constructor;
 
 		public W constructor(Function<? super T, ? extends U> constructor) {

@@ -47,7 +47,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public AdditionalPlacementBlock(T parentBlock)
 	{
 		super(theHack(parentBlock));
-		this.copyProps = copyPropsStatic.toArray(Property[]::new);
+		this.copyProps = copyPropsStatic.toArray(new Property[copyPropsStatic.size()]);
 		copyPropsStatic.clear();
 		this.parentBlock = parentBlock;
 	}
