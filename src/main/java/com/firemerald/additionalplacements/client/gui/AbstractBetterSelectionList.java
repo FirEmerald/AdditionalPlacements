@@ -75,7 +75,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	}
 
 	public E getFirstElement() {
-		return this.children.get(0);
+		return this.children.getFirst();
 	}
 
 	/**
@@ -117,7 +117,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 
 	protected void addEntryToTop(E entry) {
 		double d0 = this.getMaxScroll() - this.getScrollAmount();
-		this.children.add(0, entry);
+		this.children.addFirst(entry);
 		this.setScrollAmount(this.getMaxScroll() - d0);
 	}
 
@@ -257,7 +257,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 				break;
 			} else y += item.getHeight();
 		}
-		this.setScrollAmount(y - this.height / 2);
+		this.setScrollAmount(y - this.height / 2d);
 	}
 
 	protected void ensureVisible(E entry) {
@@ -330,16 +330,15 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 				if (clicked != null) {
 					if (clicked.mouseClicked(mouseX, mouseY, button)) {
 						E focused = this.getFocused();
-						if (focused != clicked && focused instanceof ContainerEventHandler) {
-							ContainerEventHandler containereventhandler = (ContainerEventHandler) focused;
-							containereventhandler.setFocused((GuiEventListener) null);
+						if (focused != clicked && focused instanceof ContainerEventHandler containereventhandler) {
+                            containereventhandler.setFocused((GuiEventListener) null);
 						}
 
 						this.setFocused(clicked);
 						this.setDragging(true);
 						return true;
 					}
-				} else if (this.clickedHeader((int) (mouseX - (this.getX() + this.width / 2 - this.getRowWidth() / 2)), (int) (mouseY - this.getY()) + (int) this.getScrollAmount() - 4)) {
+				} else if (this.clickedHeader((int) (mouseX - (this.getX() + this.width / 2d - this.getRowWidth() / 2d)), (int) (mouseY - this.getY()) + (int) this.getScrollAmount() - 4)) {
 					return true;
 				}
 
@@ -409,7 +408,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	/**
 	 * Sets the focus state of the GUI element.
 	 *
-	 * @param pFocused the focused GUI element.
+	 * @param listener the focused GUI element.
 	 */
 	@Override
 	public void setFocused(@Nullable GuiEventListener listener) {
@@ -427,9 +426,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 
 	@Nullable
 	protected E nextEntry(ScreenDirection direction) {
-		return this.nextEntry(direction, (unused) -> {
-			return true;
-		});
+		return this.nextEntry(direction, (unused) -> true);
 	}
 
 	@Nullable
@@ -439,32 +436,32 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 
 	@Nullable
 	protected E nextEntry(ScreenDirection direction, Predicate<E> predicate, @Nullable E selected) {
-		byte temp;
-		switch (direction) {
-		case RIGHT:
-		case LEFT:
-			temp = 0;
-			break;
-		case UP:
-			temp = -1;
-			break;
-		case DOWN:
-			temp = 1;
-			break;
-		default:
-			throw new IncompatibleClassChangeError();
-		}
 
-		int entryDirection = temp;
-		if (!this.children().isEmpty() && entryDirection != 0) {
+        if (!this.children().isEmpty() && (int) (byte) switch (direction) {
+case RIGHT, LEFT -> 0;
+case UP -> -1;
+case DOWN -> 1;
+        } != 0) {
 			int start;
 			if (selected == null) {
-				start = entryDirection > 0 ? 0 : this.children().size() - 1;
+				start = (int) (byte) switch (direction) {
+                    case RIGHT, LEFT -> 0;
+                    case UP -> -1;
+                    case DOWN -> 1;
+                } > 0 ? 0 : this.children().size() - 1;
 			} else {
-				start = this.children().indexOf(selected) + entryDirection;
+				start = this.children().indexOf(selected) + (int) (byte) switch (direction) {
+                    case RIGHT, LEFT -> 0;
+                    case UP -> -1;
+                    case DOWN -> 1;
+                };
 			}
 
-			for (int index = start; index >= 0 && index < this.children.size(); index += entryDirection) {
+			for (int index = start; index >= 0 && index < this.children.size(); index += (byte) switch (direction) {
+                case RIGHT, LEFT -> 0;
+                case UP -> -1;
+                case DOWN -> 1;
+            }) {
 				E entry = this.children().get(index);
 				if (predicate.test(entry)) {
 					return entry;

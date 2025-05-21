@@ -31,20 +31,11 @@ public class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlo
 	@Override
 	protected int getSignalStrength(Level level, BlockPos pos)
 	{
-		Class<? extends Entity> oclass1;
-		switch (this.parentBlock.type.pressurePlateSensitivity()) {
-		case EVERYTHING:
-			oclass1 = Entity.class;
-			break;
-		case MOBS:
-			oclass1 = LivingEntity.class;
-			break;
-		default:
-			throw new IncompatibleClassChangeError();
-		}
 
-		Class<? extends Entity> oclass = oclass1;
-		return BasePressurePlateBlock.getEntityCount(level, TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalFloorBlock.PLACING).ordinal() - 1].move(pos), oclass) > 0 ? 15 : 0;
+        return BasePressurePlateBlock.getEntityCount(level, TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalFloorBlock.PLACING).ordinal() - 1].move(pos), switch (this.parentBlock.type.pressurePlateSensitivity()) {
+case EVERYTHING -> Entity.class;
+case MOBS -> LivingEntity.class;
+        }) > 0 ? 15 : 0;
 	}
 
 	@Override

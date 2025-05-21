@@ -10,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.neoforge.network.configuration.ICustomConfigurationTask;
 
 public class CheckDataConfigurationTask implements ICustomConfigurationTask {
-	public static final Type TYPE = new Type(ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "configuration_checks"));
+	public static final Type TYPE = new Type(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "configuration_checks"));
 
     @Override
     public void run(Consumer<CustomPacketPayload> sender) {

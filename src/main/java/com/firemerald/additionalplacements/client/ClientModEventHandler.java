@@ -39,9 +39,7 @@ public class ClientModEventHandler
 
     @SubscribeEvent
     public static void onRegisterClientReloadListeners(AddClientReloadListenersEvent event) {
-    	event.addListener(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "baked_placement_cache"), (ResourceManagerReloadListener) resourceManager -> {
-    		BakedPlacementModel.clearCache();
-    	});
+    	event.addListener(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "baked_placement_cache"), (ResourceManagerReloadListener) resourceManager -> BakedPlacementModel.clearCache());
     }
 
     @SubscribeEvent

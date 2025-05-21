@@ -65,7 +65,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 	}
 	
 	public V extraProperties(Consumer<ExtendedModelTemplateBuilder> extraProperties) {
-		extraProperties = this.extraProperties.andThen(extraProperties);
+		this.extraProperties = this.extraProperties.andThen(extraProperties);
 		return me();
 	}
 	
