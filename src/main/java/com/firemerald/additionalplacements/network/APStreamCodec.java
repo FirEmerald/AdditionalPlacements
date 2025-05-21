@@ -5,12 +5,8 @@ import java.util.function.Function;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
-public class APStreamCodec<T extends FriendlyByteBuf, U extends APPacket<T>> implements StreamCodec<T, U> {
-	public final Function<T, U> constructor;
-
-	public APStreamCodec(Function<T, U> constructor) {
-		this.constructor = constructor;
-	}
+public record APStreamCodec<T extends FriendlyByteBuf, U extends APPacket<T>>(
+		Function<T, U> constructor) implements StreamCodec<T, U> {
 
 	@Override
 	public U decode(T buf) {

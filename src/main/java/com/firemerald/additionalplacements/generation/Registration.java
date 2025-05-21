@@ -33,7 +33,7 @@ public class Registration {
 
 	@SuppressWarnings("unchecked")
 	public static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryApply(Block block, ResourceLocation blockId, BiConsumer<ResourceKey<Block>, AdditionalPlacementBlock<?>> action) {
-		if (block instanceof IPlacementBlock placement && placement.canGenerateAdditionalStates() && !BLACKLISTERS.stream().anyMatch(blacklister -> blacklister.blacklist(block, blockId)) && APConfigs.startup().blacklist.test(blockId)) {
+		if (block instanceof IPlacementBlock<?> placement && placement.canGenerateAdditionalStates() && BLACKLISTERS.stream().noneMatch(blacklister -> blacklister.blacklist(block, blockId)) && APConfigs.startup().blacklist.test(blockId)) {
 			GenerationType<T, U> type = (GenerationType<T, U>) getType(block);
 			if (type != null) type.apply((T) block, blockId, (BiConsumer<ResourceKey<Block>, U>) action);
 		}
@@ -60,7 +60,8 @@ public class Registration {
 		V type = builder.construct(name, description);
 		FabricLoader.getInstance().invokeEntrypoints("additional-placements-generators", RegistrationInitializer.class, instance -> instance.addBlacklisters(clazz, type, blacklister -> type.addBlacklister(blacklister)));
 		TYPES.put(name, type);
-		if (TYPES_BY_CLASS.containsKey(clazz)) AdditionalPlacementsMod.LOGGER.warn("A generation type for class " + clazz + " is already registered. The registration with name " + name + " will not be used.");
+		if (TYPES_BY_CLASS.containsKey(clazz))
+            AdditionalPlacementsMod.LOGGER.warn("A generation type for class {} is already registered. The registration with name {} will not be used.", clazz, name);
 		else TYPES_BY_CLASS.put(clazz, type);
 		return type;
 	}

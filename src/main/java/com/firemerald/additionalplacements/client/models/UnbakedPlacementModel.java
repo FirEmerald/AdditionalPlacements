@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class UnbakedPlacementModel implements UnbakedBlockStateModel
 {
-	private static record ModelKey(AdditionalPlacementBlock<?> block, ResourceLocation ourModelLocation, ModelState ourModelRotation, UnbakedBlockStateModel theirModel, BlockRotation theirModelRotation) {}
+	private record ModelKey(AdditionalPlacementBlock<?> block, ResourceLocation ourModelLocation, ModelState ourModelRotation, UnbakedBlockStateModel theirModel, BlockRotation theirModelRotation) {}
 
 	private static final Map<ModelKey, UnbakedPlacementModel> MODEL_CACHE = new HashMap<>();
 

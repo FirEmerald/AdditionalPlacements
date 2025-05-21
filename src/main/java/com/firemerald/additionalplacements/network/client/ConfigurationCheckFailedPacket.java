@@ -22,7 +22,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class ConfigurationCheckFailedPacket extends ClientConfigurationPacket
 {
-	public static final Type<ConfigurationCheckFailedPacket> TYPE = new Type<>(ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "configuration_check_failed"));
+	public static final Type<ConfigurationCheckFailedPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "configuration_check_failed"));
 
 	private final List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors;
 
@@ -82,8 +82,8 @@ public class ConfigurationCheckFailedPacket extends ClientConfigurationPacket
 
 	@Environment(EnvType.CLIENT)
 	static class HandleErrors implements Runnable {
-		MessageTree rootError;
-		Minecraft client;
+		final MessageTree rootError;
+		final Minecraft client;
 
 		HandleErrors(Minecraft client, MessageTree rootError) {
 			this.client = client;

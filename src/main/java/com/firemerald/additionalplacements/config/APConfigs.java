@@ -86,12 +86,11 @@ public class APConfigs {
     }
 
 	public static boolean isColorString(Object o) {
-		if (o instanceof String) {
-			String s = (String) o;
-			if (s.length() == 8) { //must be 8 characters (AARRGGBB)
+		if (o instanceof String s) {
+            if (s.length() == 8) { //must be 8 characters (AARRGGBB)
 				for (int i = 0; i < 8; ++i) {
 					char c = s.charAt(i);
-					if ((c < '0' || c > '9') && (c < 'a' && c > 'f') && (c < 'A' && c > 'F')) return false; //only 0-9, a-f, or A-F allowed
+                    if ((c < '0' || c > '9') && (c < 'a' || c > 'f') && (c < 'A' || c > 'F')) return false; //only 0-9, a-f, or A-F allowed
 				}
 				return true;
 			}

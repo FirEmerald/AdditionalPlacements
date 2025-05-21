@@ -8,9 +8,9 @@ import com.firemerald.additionalplacements.util.ComplexFacing;
 import net.minecraft.resources.ResourceLocation;
 
 public class StairModels {
-	public static final ResourceLocation BASE_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/stairs/base");
-	public static final ResourceLocation COLUMN_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/stairs/column");
-	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/stairs/side_all");
+	public static final ResourceLocation BASE_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/stairs/base");
+	public static final ResourceLocation COLUMN_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/stairs/column");
+	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/stairs/side_all");
 
 	public static final String[] MODELS = new String[] {
 			"/top/straight",
