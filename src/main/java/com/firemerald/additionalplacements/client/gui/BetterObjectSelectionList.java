@@ -25,16 +25,15 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 	 *
 	 * @return the next focus path as a ComponentPath, or {@code null} if there is
 	 *         no next focus path.
-	 * @param pEvent the focus navigation event.
+	 * @param event the focus navigation event.
 	 */
 	@Override
 	@Nullable
 	public ComponentPath nextFocusPath(FocusNavigationEvent event) {
 		if (this.getItemCount() == 0) {
 			return null;
-		} else if (this.isFocused() && event instanceof FocusNavigationEvent.ArrowNavigation) {
-			FocusNavigationEvent.ArrowNavigation focusnavigationevent$arrownavigation = (FocusNavigationEvent.ArrowNavigation) event;
-			E e1 = this.nextEntry(focusnavigationevent$arrownavigation.direction());
+		} else if (this.isFocused() && event instanceof FocusNavigationEvent.ArrowNavigation focusnavigationevent$arrownavigation) {
+            E e1 = this.nextEntry(focusnavigationevent$arrownavigation.direction());
 			return e1 != null ? ComponentPath.path(this, ComponentPath.leaf(e1)) : null;
 		} else if (!this.isFocused()) {
 			E e = this.getSelected();
@@ -75,7 +74,7 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 		/**
 		 * Updates the narration output with the current narration information.
 		 *
-		 * @param pNarrationElementOutput the output to update with narration
+		 * @param narrationElementOutput the output to update with narration
 		 *                                information.
 		 */
 		@Override
