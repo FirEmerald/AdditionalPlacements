@@ -81,9 +81,7 @@ public class ClientModEvents implements ClientModInitializer
 	    		}
 	    	});
 	    	client.getBlockColors().register(new AdditionalBlockColor(), Registry.BLOCK.stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
-	    	((ReloadableResourceManager) client.getResourceManager()).registerReloadListener((ResourceManagerReloadListener) resourceManager -> {
-	    		BakedPlacementModel.clearCache();
-	    	});
+	    	((ReloadableResourceManager) client.getResourceManager()).registerReloadListener((ResourceManagerReloadListener) resourceManager -> BakedPlacementModel.clearCache());
 			hasInit = true;
 		}
 	}
@@ -93,10 +91,9 @@ public class ClientModEvents implements ClientModInitializer
 		if (stack.getItem() instanceof BlockItem)
 		{
 			Block block = ((BlockItem) stack.getItem()).getBlock();
-			if (block instanceof IPlacementBlock)
+			if (block instanceof IPlacementBlock<?> verticalBlock)
 			{
-				IPlacementBlock<?> verticalBlock = ((IPlacementBlock<?>) block);
-				if (verticalBlock.hasAdditionalStates()) verticalBlock.appendHoverTextImpl(stack, null, lines, context);
+                if (verticalBlock.hasAdditionalStates()) verticalBlock.appendHoverTextImpl(stack, null, lines, context);
 			}
 		}
 	}
@@ -106,17 +103,15 @@ public class ClientModEvents implements ClientModInitializer
 		if (!APConfigs.client().enablePlacementHighlight.get()) return true;
 		if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK)
 		{
-			@SuppressWarnings("resource")
 			Player player = Minecraft.getInstance().player;
 			ItemStack stack = player.getMainHandItem();
 			if (stack.isEmpty()) stack = player.getOffhandItem();
 			if (stack.getItem() instanceof BlockItem)
 			{
 				Block block = ((BlockItem) stack.getItem()).getBlock();
-				if (block instanceof IPlacementBlock)
+				if (block instanceof IPlacementBlock<?> verticalBlock)
 				{
-					IPlacementBlock<?> verticalBlock = ((IPlacementBlock<?>) block);
-					if (verticalBlock.hasAdditionalStates()) verticalBlock.renderHighlight(context.matrixStack(), context.consumers().getBuffer(RenderType.LINES), player, (BlockHitResult) hitResult, context.camera(), context.tickDelta());
+                    if (verticalBlock.hasAdditionalStates()) verticalBlock.renderHighlight(context.matrixStack(), context.consumers().getBuffer(RenderType.LINES), player, (BlockHitResult) hitResult, context.camera(), context.tickDelta());
 				}
 			}
 		}

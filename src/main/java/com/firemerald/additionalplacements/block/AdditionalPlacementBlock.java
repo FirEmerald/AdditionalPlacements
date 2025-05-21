@@ -52,7 +52,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock<T>
 {
-	private static List<Property<?>> copyPropsStatic = new ArrayList<>();
+	private static final List<Property<?>> copyPropsStatic = new ArrayList<>();
 	public final T parentBlock;
 	private final Property<?>[] copyProps;
 
@@ -266,10 +266,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		BlockState newState = level.getBlockState(pos);
 		if (newState.getBlock() != this) //block has changed
 		{
-			if (newState.getBlock() instanceof IPlacementBlock)
+			if (newState.getBlock() instanceof IPlacementBlock<?> placement)
 			{
-				IPlacementBlock<?> placement = (IPlacementBlock<?>) newState.getBlock();
-				if (placement.hasAdditionalStates())
+                if (placement.hasAdditionalStates())
 				{
 					BlockState changedState = placement.getOtherBlock().defaultBlockState();
 					for (Property<?> property : changedState.getProperties())

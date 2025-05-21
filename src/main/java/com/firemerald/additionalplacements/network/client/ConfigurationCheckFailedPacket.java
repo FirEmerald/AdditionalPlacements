@@ -88,8 +88,8 @@ public class ConfigurationCheckFailedPacket extends ClientLoginPacket
 
 	@Environment(EnvType.CLIENT)
 	static class HandleErrors implements Runnable {
-		MessageTree rootError;
-		Minecraft client;
+		final MessageTree rootError;
+		final Minecraft client;
 
 		HandleErrors(Minecraft client, MessageTree rootError) {
 			this.client = client;

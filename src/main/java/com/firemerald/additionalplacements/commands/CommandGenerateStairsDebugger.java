@@ -33,7 +33,7 @@ public class CommandGenerateStairsDebugger
 								.executes(context -> {
 									BlockPos center = BlockPosArgument.getLoadedBlockPos(context, "pos");
 									BlockInput blockInput = BlockStateArgument.getBlock(context, "block");
-									if (blockInput.getState().getBlock() instanceof IStairBlock stair && stair.hasAdditionalStates()) {
+									if (blockInput.getState().getBlock() instanceof IStairBlock<?> stair && stair.hasAdditionalStates()) {
 										ServerLevel serverLevel = context.getSource().getLevel();
 										boolean allowMixed = stair.connectionsType().allowMixed;
 										boolean allowVertical = stair.connectionsType().allowVertical;
@@ -77,7 +77,7 @@ public class CommandGenerateStairsDebugger
 	}
 
 	private static void throwInvalidBlock(BlockState state) throws CommandSyntaxException {
-		throw new SimpleCommandExceptionType(new TranslatableComponent("commands.ap_stairs_state_debug.wrong_block", state.getBlock().getRegistryName())).create();
+		throw new SimpleCommandExceptionType(new TranslatableComponent("commands.ap_stairs_state_debug.wrong_block", state.getBlock().getRegistryName().toString())).create();
 	}
 
 	private static void set(ServerLevel serverLevel, IStairBlock<?> stair, BlockState rootState, Set<Property<?>> props, CompoundTag tag, ComplexFacing facing, BlockPos middle, BlockPos.MutableBlockPos pos, int offset, int offFront, int offTop) {

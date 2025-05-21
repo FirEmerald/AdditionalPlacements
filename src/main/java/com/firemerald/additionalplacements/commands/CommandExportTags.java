@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
+import java.util.stream.Stream;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
@@ -54,12 +55,14 @@ public class CommandExportTags
 
 	public static void emptyDirectory(Path path) throws IOException
 	{
-		Iterator<Path> it = Files.list(path).iterator();
-		while (it.hasNext())
-		{
-			Path file = it.next();
-			if (Files.isDirectory(file)) emptyDirectory(file);
-			Files.delete(file);
+		try (Stream<Path> files = Files.list(path)) {
+			Iterator<Path> it = files.iterator();
+			while (it.hasNext())
+			{
+				Path file = it.next();
+				if (Files.isDirectory(file)) emptyDirectory(file);
+				Files.delete(file);
+			}
 		}
 	}
 
@@ -115,7 +118,7 @@ public class CommandExportTags
 					}
 					catch (IOException e)
 					{
-						AdditionalPlacementsMod.LOGGER.error("Error generating datapack: failed to save tag " + tag.location().toString(), e);
+						AdditionalPlacementsMod.LOGGER.error("Error generating datapack: failed to save tag {}", tag.location(), e);
 						source.sendFailure(new TranslatableComponent("msg.additionalplacements.generate.failure.tag", tag.location().toString()));
 					}
 				});

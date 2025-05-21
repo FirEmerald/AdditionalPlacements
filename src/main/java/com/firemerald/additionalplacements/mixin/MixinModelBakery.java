@@ -46,13 +46,13 @@ public class MixinModelBakery {
 		return null;
 	}
 
-	@Inject(method = "<init>", at = @At("RETURN"))
+	@Inject(method = "<init>(Lnet/minecraft/server/packs/resources/ResourceManager;Lnet/minecraft/client/color/block/BlockColors;Lnet/minecraft/util/profiling/ProfilerFiller;I)V", at = @At("RETURN"))
 	public void init(ResourceManager resourceManager, BlockColors blockColors, ProfilerFiller profiler, int maxMipmapLevel, CallbackInfo cli) {
 		UnbakedPlacementModel.clearCache();
 	}
 
 	@Redirect(
-			method = "loadModel",
+			method = "loadModel(Lnet/minecraft/resources/ResourceLocation;)V",
 			at = @At(value = "INVOKE", target = "org/slf4j/Logger.warn(Ljava/lang/String;Ljava/lang/Object;Ljava/lang/Object;)V"),
 			slice = @Slice(
 					from = @At(value = "CONSTANT", args = {"stringValue=Exception loading blockstate definition: {}: {}"}),
@@ -69,9 +69,10 @@ public class MixinModelBakery {
 	}
 
 	@ModifyVariable(
-			method = "method_21604",
+			method = "method_21604(Ljava/util/Map;Lnet/minecraft/resources/ResourceLocation;Lcom/mojang/datafixers/util/Pair;Ljava/util/Map;Lnet/minecraft/client/resources/model/ModelResourceLocation;Lnet/minecraft/world/level/block/state/BlockState;)V",
 			at = @At("STORE"),
-			index = 7
+			index = 7,
+			remap = false
 			)
 	private Pair<UnbakedModel, Supplier<ModelBakery.ModelGroupKey>> loadModelLambda(
 			Pair<UnbakedModel, Supplier<ModelBakery.ModelGroupKey>> modelPair,
@@ -82,10 +83,8 @@ public class MixinModelBakery {
 			ModelResourceLocation currentModelLocation,
 			BlockState ourState) {
 		if (modelPair == null) { //replace only states which do not already have a model
-			if (ourState != null && ourState.getBlock() instanceof AdditionalPlacementBlock) {
-				AdditionalPlacementBlock<?> block = (AdditionalPlacementBlock<?>) ourState.getBlock();
-
-				BlockState theirState = block.getModelState(ourState);
+			if (ourState != null && ourState.getBlock() instanceof AdditionalPlacementBlock<?> block) {
+                BlockState theirState = block.getModelState(ourState);
 				StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
 				ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
 				ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());
