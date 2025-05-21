@@ -21,7 +21,7 @@ import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public class CheckDataServerPacket extends ServerPacket<FriendlyByteBuf>
 {
-	public static final Type<CheckDataServerPacket> TYPE = new Type<>(ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "check_data_server"));
+	public static final Type<CheckDataServerPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "check_data_server"));
 
 	private final Map<ResourceLocation, Pair<CompoundTag, List<MessageTree>>> serverData;
 
@@ -38,7 +38,7 @@ public class CheckDataServerPacket extends ServerPacket<FriendlyByteBuf>
 
 	public CheckDataServerPacket(FriendlyByteBuf buf)
 	{
-		serverData = buf.readMap(buffer -> buffer.readResourceLocation(), buf2 -> {
+		serverData = buf.readMap(FriendlyByteBuf::readResourceLocation, buf2 -> {
 			CompoundTag clientTag = buf2.readNbt();
 			List<MessageTree> clientErrors = buf2.readList(MessageTree::new);
 			return Pair.of(clientTag, clientErrors);
@@ -54,7 +54,7 @@ public class CheckDataServerPacket extends ServerPacket<FriendlyByteBuf>
 	@Override
 	public void write(FriendlyByteBuf buf)
 	{
-		buf.writeMap(serverData, (buffer, id) -> buffer.writeResourceLocation(id), (buf2, data) -> {
+		buf.writeMap(serverData, FriendlyByteBuf::writeResourceLocation, (buf2, data) -> {
 			buf2.writeNbt(data.getLeft());
 			buf2.writeCollection(data.getRight(), MessageTree::write);
 		});

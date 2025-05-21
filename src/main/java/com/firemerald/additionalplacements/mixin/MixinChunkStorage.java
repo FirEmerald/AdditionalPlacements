@@ -28,40 +28,29 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
 
 @Mixin(ChunkStorage.class)
 public class MixinChunkStorage {
-
-	@Inject(method = "upgradeChunkTag", at = @At("RETURN"), cancellable = true)
+	@Inject(method = "upgradeChunkTag(Lnet/minecraft/resources/ResourceKey;Ljava/util/function/Supplier;Lnet/minecraft/nbt/CompoundTag;Ljava/util/Optional;)Lnet/minecraft/nbt/CompoundTag;", at = @At("RETURN"))
 	public void upgradeChunkTag(ResourceKey<Level> pLevelKey, Supplier<DimensionDataStorage> pStorage, CompoundTag pChunkData, Optional<ResourceKey<Codec<? extends ChunkGenerator>>> pChunkGeneratorKey, CallbackInfoReturnable<CompoundTag> cli) {
 		//AdditionalPlacementsMod.LOGGER.info(NBTUtils.toJson(pChunkData).toString());
 		if (APConfigs.common().fixStates.get()) {
 			CompoundTag chunkData = cli.getReturnValue();
 			if (chunkData != null) {
-				NBTUtils.ifListNotEmpty(chunkData, "sections", Tag.TAG_COMPOUND, sections -> {
-					sections.forEach(section -> {
-						NBTUtils.ifCompoundNotEmpty((CompoundTag) section, "block_states", blockStates -> {
-							NBTUtils.ifListNotEmpty(blockStates, "palette", Tag.TAG_COMPOUND, palette -> {
-								palette.forEach(blockTag -> {
-									CompoundTag block = (CompoundTag) blockTag;
-									if (block.contains("Name", Tag.TAG_STRING)) {
-										String name = block.getString("Name");
-										Optional<Reference<Block>> optionalBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.tryParse(name));
-										optionalBlock.ifPresent(blockRef -> {
-											if (blockRef.value() instanceof IStateFixer fixer) {
-												CompoundTag original = block.getCompound("Properties");
-												CompoundTag fixed = fixer.fix(original, newBlock -> {
-													block.put("Name", StringTag.valueOf(BuiltInRegistries.BLOCK.getKey(newBlock).toString()));
-												});
-												if (original != fixed) {
-													if (fixed == null) block.remove("Properties");
-													else block.put("Properties", fixed);
-												}
-											}
-										});
-									}
-								});
-							});
+				NBTUtils.ifListNotEmpty(chunkData, "sections", Tag.TAG_COMPOUND, sections -> sections.forEach(section -> NBTUtils.ifCompoundNotEmpty((CompoundTag) section, "block_states", blockStates -> NBTUtils.ifListNotEmpty(blockStates, "palette", Tag.TAG_COMPOUND, palette -> palette.forEach(blockTag -> {
+					CompoundTag block = (CompoundTag) blockTag;
+					if (block.contains("Name", Tag.TAG_STRING)) {
+						String name = block.getString("Name");
+						Optional<Reference<Block>> optionalBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.tryParse(name));
+						optionalBlock.ifPresent(blockRef -> {
+							if (blockRef.value() instanceof IStateFixer fixer) {
+								CompoundTag original = block.getCompound("Properties");
+								CompoundTag fixed = fixer.fix(original, newBlock -> block.put("Name", StringTag.valueOf(BuiltInRegistries.BLOCK.getKey(newBlock).toString())));
+								if (original != fixed) {
+									if (fixed == null) block.remove("Properties");
+									else block.put("Properties", fixed);
+								}
+							}
 						});
-					});
-				});
+					}
+				})))));
 			}
 		}
 	}

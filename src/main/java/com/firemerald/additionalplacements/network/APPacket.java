@@ -18,7 +18,8 @@ public abstract class APPacket<T extends FriendlyByteBuf> implements CustomPacke
 	public void handle(IPayloadContext context)
 	{
 		if (context.flow() == getDirection()) handleInternal(context);
-		else AdditionalPlacementsMod.LOGGER.error("Tried to handle " + getClass() + " with invalid direction " + context.flow());
+		else
+            AdditionalPlacementsMod.LOGGER.error("Tried to handle {} with invalid direction {}", getClass(), context.flow());
 	}
 
     public void reply(IPayloadContext context)

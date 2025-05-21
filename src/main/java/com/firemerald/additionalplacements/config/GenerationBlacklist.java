@@ -144,24 +144,16 @@ public class GenerationBlacklist {
 				.define("default", defaultDefaultState);
 		modWhitelistConfig = builder
 				.comment("Whitelist for mods whose blocks will be enabled.")
-				.defineListAllowEmpty("mod_whitelist", defaultModWhitelist, () -> "<mod id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty("mod_whitelist", defaultModWhitelist, () -> "<mod id>", o -> o instanceof String);
 		modBlacklistConfig = builder
 				.comment("Blacklist for mods whose blocks will be disabled. Takes priority over the mod whitelist.")
-				.defineListAllowEmpty("mod_blacklist", defaultModBlacklist, () -> "<mod id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty("mod_blacklist", defaultModBlacklist, () -> "<mod id>", o -> o instanceof String);
 		blockWhitelistConfig = builder
 				.comment("Whitelist for blocks that will be enabled. Takes priority over the the mod blacklist and whitelist.")
-				.defineListAllowEmpty("block_whitelist", defaultBlockWhitelist, () -> "<block id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty("block_whitelist", defaultBlockWhitelist, () -> "<block id>", o -> o instanceof String);
 		blockBlacklistConfig = builder
 				.comment("Blacklist for blocks that will be disabled. Takes priority over the block whitelist, the mod blacklist, and the mod whitelist.")
-				.defineListAllowEmpty("block_blacklist", defaultBlockBlacklist, () -> "<block id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty("block_blacklist", defaultBlockBlacklist, () -> "<block id>", o -> o instanceof String);
 	}
 
 	public void loadListsFromConfig() {
