@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Desc;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -28,9 +27,9 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 		super(properties);
 	}
 
-	public AdditionalWeightedPressurePlateBlock plate;
+	private AdditionalWeightedPressurePlateBlock plate;
 
-	public WeightedPressurePlateBlock asPlate()
+	private WeightedPressurePlateBlock asPlate()
 	{
 		return (WeightedPressurePlateBlock) (Object) this;
 	}
@@ -77,9 +76,9 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 		return currentState.is(plate) ? currentState : plate.copyProperties(currentState, plate.defaultBlockState());
 	}
 
-	@Inject(at = @At("RETURN"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "getStateForPlacement", ret = BlockState.class, args = {BlockPlaceContext.class}),
-			@Desc(value = "m_5573_", ret = BlockState.class, args = {BlockPlaceContext.class})
+	@Inject(at = @At("RETURN"), remap = false, cancellable = true, require = 0, method = {
+			"getStateForPlacement(Lnet/minecraft/world/item/context/BlockPlaceContext;)Lnet/minecraft/world/level/block/state/BlockState;",
+			             "m_5573_(Lnet/minecraft/world/item/context/BlockPlaceContext;)Lnet/minecraft/world/level/block/state/BlockState;"
 	})
 	private void getStateForPlacement(BlockPlaceContext context, CallbackInfoReturnable<BlockState> ci)
 	{
@@ -95,10 +94,10 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 		else return superRet;
 	}
 
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "rotate", ret = BlockState.class, args = {BlockState.class, Rotation.class}),
-			@Desc(value = "m_6843_", ret = BlockState.class, args = {BlockState.class, Rotation.class})
-			})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			 "rotate(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Rotation;)Lnet/minecraft/world/level/block/state/BlockState;",
+			"m_6843_(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Rotation;)Lnet/minecraft/world/level/block/state/BlockState;"
+	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (this.hasAdditionalStates()) ci.setReturnValue(rotateImpl(blockState, rotation));
@@ -112,10 +111,9 @@ public abstract class MixinWeightedPressurePlateBlock extends Block implements I
 		else return super.rotate(blockState, rotation);
 	}
 
-
-	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, target = {
-			@Desc(value = "mirror", ret = BlockState.class, args = {BlockState.class, Mirror.class}),
-			@Desc(value = "m_6943_", ret = BlockState.class, args = {BlockState.class, Mirror.class})
+	@Inject(at = @At("HEAD"), remap = false, cancellable = true, require = 0, method = {
+			 "mirror(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Mirror;)Lnet/minecraft/world/level/block/state/BlockState;",
+			"m_6943_(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/block/Mirror;)Lnet/minecraft/world/level/block/state/BlockState;"
 	})
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci)
 	{

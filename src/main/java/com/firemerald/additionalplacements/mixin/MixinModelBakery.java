@@ -22,8 +22,7 @@ public class MixinModelBakery {
 	@Final
 	public Map<ModelResourceLocation, UnbakedModel> topLevelModels;
 
-
-	@WrapOperation(method = "<init>", at = @At(value = "INVOKE", target = "net/minecraft/client/resources/model/BlockStateModelLoader.loadAllBlockStates()V"))
+	@WrapOperation(method = "<init>(Lnet/minecraft/client/color/block/BlockColors;Lnet/minecraft/util/profiling/ProfilerFiller;Ljava/util/Map;Ljava/util/Map;)V", at = @At(value = "INVOKE", target = "net/minecraft/client/resources/model/BlockStateModelLoader.loadAllBlockStates()V"))
 	public void loadAllBlockStates(BlockStateModelLoader blockstatemodelloader, Operation<Void> original)
 	{
 		((IBlockStateModelLoaderExtension) blockstatemodelloader).setTopLevelModels(topLevelModels);

@@ -10,9 +10,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
 public class SlabModels {
-	public static final ResourceLocation BASE_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/slabs/base");
-	public static final ResourceLocation COLUMN_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/slabs/column");
-	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/slabs/side_all");
+	public static final ResourceLocation BASE_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/slabs/base");
+	public static final ResourceLocation COLUMN_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/slabs/column");
+	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/slabs/side_all");
 
 	public static final String[] MODELS = new String[] {
 			"/negative",

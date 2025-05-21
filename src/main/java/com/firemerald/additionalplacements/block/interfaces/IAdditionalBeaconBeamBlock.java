@@ -7,7 +7,7 @@ import net.minecraft.world.level.block.Block;
 public interface IAdditionalBeaconBeamBlock<T extends Block> extends IPlacementBlock<T>, BeaconBeamBlock
 {
 	@Override
-    public default DyeColor getColor()
+    default DyeColor getColor()
     {
     	return ((BeaconBeamBlock) getOtherBlock()).getColor();
     }

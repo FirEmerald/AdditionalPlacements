@@ -5,5 +5,5 @@ import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.client.resources.model.UnbakedModel;
 
 public interface IModelBakerExtensions {
-	public BakedModel apBakeUncached(UnbakedModel model, ModelState state);
+	BakedModel apBakeUncached(UnbakedModel model, ModelState state);
 }

@@ -8,9 +8,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class CarpetModels {
-	public static final ResourceLocation BASE_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/carpets/base");
-	public static final ResourceLocation COLUMN_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/carpets/column");
-	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "block/carpets/side_all");
+	public static final ResourceLocation BASE_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/carpets/base");
+	public static final ResourceLocation COLUMN_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/carpets/column");
+	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "block/carpets/side_all");
 
 	public static final String[] MODELS = new String[] {
 			"/carpet"

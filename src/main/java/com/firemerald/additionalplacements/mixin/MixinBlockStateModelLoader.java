@@ -44,9 +44,10 @@ public class MixinBlockStateModelLoader implements IBlockStateModelLoaderExtensi
     private BlockColors blockColors;
 
 	@ModifyVariable(
-			method = "method_61066",
+			method = "method_61066(Ljava/util/Map;Lnet/minecraft/resources/ResourceLocation;Ljava/util/Map;Lnet/minecraft/client/resources/model/ModelResourceLocation;Lnet/minecraft/world/level/block/state/BlockState;)V",
 			at = @At("STORE"),
-			index = 6
+			index = 6,
+			remap = false
 			)
 	private BlockStateModelLoader.LoadedModel loadModelLambda(
 			BlockStateModelLoader.LoadedModel loadedModel,
@@ -75,7 +76,7 @@ public class MixinBlockStateModelLoader implements IBlockStateModelLoaderExtensi
 		return loadedModel;
 	}
 
-	@Inject(method = "loadBlockStateDefinitions", at = @At("RETURN"))
+	@Inject(method = "loadBlockStateDefinitions(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/level/block/state/StateDefinition;)V", at = @At("RETURN"))
 	private void loadBlockStateDefinitions(CallbackInfo cli) {
 		UnbakedPlacementModel.clearCache();
 	}

@@ -20,7 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 
 public class CheckDataServerPacket extends ServerConfigurationPacket
 {
-	public static final Type<CheckDataServerPacket> TYPE = new Type<>(ResourceLocation.tryBuild(AdditionalPlacementsMod.MOD_ID, "check_data_server"));
+	public static final Type<CheckDataServerPacket> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "check_data_server"));
 
 	private final Map<ResourceLocation, Pair<CompoundTag, List<MessageTree>>> serverData;
 

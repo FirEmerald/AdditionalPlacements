@@ -80,34 +80,22 @@ public class BlockBlacklist extends GenerationBlacklist {
 				.define("default", defaultDefaultState);
 		modWhitelistConfig = builder
 				.comment("Whitelist for mods whose blocks will be enabled.")
-				.defineListAllowEmpty(Collections.singletonList("mod_whitelist"), () -> defaultModWhitelist, () -> "<mod id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty(Collections.singletonList("mod_whitelist"), () -> defaultModWhitelist, () -> "<mod id>", o -> o instanceof String);
 		modBlacklistConfig = builder
 				.comment("Blacklist for mods whose blocks will be disabled. Takes priority over the mod whitelist.")
-				.defineListAllowEmpty(Collections.singletonList("mod_blacklist"), () -> defaultModBlacklist, () -> "<mod id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty(Collections.singletonList("mod_blacklist"), () -> defaultModBlacklist, () -> "<mod id>", o -> o instanceof String);
 		tagWhitelistConfig = builder
 				.comment("Whitelist for tags whose blocks will be enabled. Takes priority over the the mod blacklist and whitelist.")
-				.defineListAllowEmpty(Collections.singletonList("tag_whitelist"), () -> defaultTagBlacklist, () -> "<tag id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty(Collections.singletonList("tag_whitelist"), () -> defaultTagBlacklist, () -> "<tag id>", o -> o instanceof String);
 		tagBlacklistConfig = builder
 				.comment("Blacklist for tags whose blocks will be disabled. Takes priority over the block whitelist and the mod blacklist and whitelist.")
-				.defineListAllowEmpty(Collections.singletonList("tag_blacklist"), () -> defaultTagWhitelist, () -> "<tag id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty(Collections.singletonList("tag_blacklist"), () -> defaultTagWhitelist, () -> "<tag id>", o -> o instanceof String);
 		blockWhitelistConfig = builder
 				.comment("Whitelist for blocks that will be enabled. Takes priority over the the mod and tag blacklist and whitelist.")
-				.defineListAllowEmpty(Collections.singletonList("block_whitelist"), () -> defaultBlockWhitelist, () -> "<block id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty(Collections.singletonList("block_whitelist"), () -> defaultBlockWhitelist, () -> "<block id>", o -> o instanceof String);
 		blockBlacklistConfig = builder
 				.comment("Blacklist for blocks that will be disabled. Takes priority over the block whitelist and the mod and tag blacklist and whitelist.")
-				.defineListAllowEmpty(Collections.singletonList("block_blacklist"), () -> defaultBlockBlacklist, () -> "<block id>", o -> {
-					return o instanceof String;
-				});
+				.defineListAllowEmpty(Collections.singletonList("block_blacklist"), () -> defaultBlockBlacklist, () -> "<block id>", o -> o instanceof String);
 	}
 
 	@Override
