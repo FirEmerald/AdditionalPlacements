@@ -15,5 +15,5 @@ public interface IBlockBlacklister<T extends Block> {
 	 * @param originalId the ID of the block being checked
 	 * @return if an additional placement block should not be generated for this block
 	 */
-	public boolean blacklist(T originalBlock, ResourceLocation originalId);
+	boolean blacklist(T originalBlock, ResourceLocation originalId);
 }

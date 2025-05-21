@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.mixin;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 @Mixin(BasePressurePlateBlock.class)
 public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateBlockExtensions
 {
+	@Final
 	@Shadow
 	private BlockSetType type;
 
