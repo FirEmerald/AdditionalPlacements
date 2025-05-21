@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.client.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -21,6 +22,6 @@ public class Unwrapper {
 	}
 
 	private static Optional<BakedModel> unwrapSingle(BakedModel model) {
-		return UNWRAPPERS.stream().map(uw -> uw.apply(model)).filter(bm -> bm != null).findFirst();
+		return UNWRAPPERS.stream().map(uw -> uw.apply(model)).filter(Objects::nonNull).findFirst();
 	}
 }

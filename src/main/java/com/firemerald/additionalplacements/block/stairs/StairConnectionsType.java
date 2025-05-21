@@ -27,7 +27,7 @@ public class StairConnectionsType extends Property<CommonStairShapeState> {
 				(!state.shape.isVertical || allowVertical) &&
 				(!state.shape.isMixed || allowMixed) &&
 				(!state.isComplexFlipped || allowFlipped))
-		.collect(Collectors.toUnmodifiableList()), null);
+		.toList(), null);
 	}
 
 	public StairConnectionsType(String tooltip, boolean allowVertical, boolean allowMixed, boolean allowFlipped, CommonStairShapeState... allowedShapeStates) {
@@ -48,7 +48,7 @@ public class StairConnectionsType extends Property<CommonStairShapeState> {
 		this.allowVertical = allowVertical;
 		this.allowMixed = allowMixed;
 		this.allowFlipped = allowFlipped;
-		this.defaultShapeState = values.get(0);
+		this.defaultShapeState = values.getFirst();
 		this.values = values;
 		this.valueMap = values.stream().collect(Collectors.toMap(CommonStairShapeState::getSerializedName, state -> state));
 		this.ordinalToIndex = new int[CommonStairShapeState.COUNT];
@@ -78,9 +78,8 @@ public class StairConnectionsType extends Property<CommonStairShapeState> {
 	@Override
 	public boolean equals(Object pOther) {
 		if (this == pOther) return true;
-		else if (pOther instanceof StairConnectionsType) {
-			StairConnectionsType connectionsType = (StairConnectionsType) pOther;
-			return
+		else if (pOther instanceof StairConnectionsType connectionsType) {
+            return
 					this.values.equals(connectionsType.values) &&
 					this.valueMap.equals(connectionsType.valueMap) &&
 					this.tooltip.equals(connectionsType.tooltip) &&

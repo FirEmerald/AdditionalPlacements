@@ -23,11 +23,10 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(ModelManager.class)
 public class MixinModelManager {
 	@Inject(
-			method = "discoverModelDependencies",
-			at = @At("HEAD"),
-			require = 1
+			method = "discoverModelDependencies(Lnet/minecraft/client/resources/model/UnbakedModel;Ljava/util/Map;Lnet/minecraft/client/resources/model/BlockStateModelLoader$LoadedModels;)Lnet/minecraft/client/resources/model/ModelDiscovery;",
+			at = @At("HEAD")
 			)
-	public void discoverModelDependencies(UnbakedModel missingModel, Map<ResourceLocation, UnbakedModel> unbakedModels, BlockStateModelLoader.LoadedModels loadedModels, CallbackInfoReturnable<ModelDiscovery> cli) {
+	public void discoverModelDependencies(UnbakedModel missingModel, Map<ResourceLocation, UnbakedModel> inputModels, BlockStateModelLoader.LoadedModels loadedModels, CallbackInfoReturnable<ModelDiscovery> cir) {
 		Map<ModelResourceLocation, LoadedModel> models = loadedModels.models();
 		Registration.forEachCreated(entry -> {
 			AdditionalPlacementBlock<?> block = entry.newBlock();

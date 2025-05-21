@@ -33,10 +33,10 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 {
-	public static interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
+	interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
 	{
 		@Override
-		public default Direction getPlacing(BlockState blockState)
+        default Direction getPlacing(BlockState blockState)
 		{
 			SlabType type = blockState.getValue(SlabBlock.TYPE);
 			return type == SlabType.DOUBLE ? null : type == SlabType.TOP ? Direction.UP : Direction.DOWN;
@@ -44,13 +44,13 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
+    default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
 	{
 		Direction placing = getPlacing(blockState);
 		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
 	}
 
-	public default boolean canBeReplacedImpl(BlockState state, BlockPlaceContext context)
+	default boolean canBeReplacedImpl(BlockState state, BlockPlaceContext context)
 	{
 		ItemStack itemstack = context.getItemInHand();
 		if (itemstack.is(this.asItem()))
@@ -71,7 +71,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
+    default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
 	{
 		BlockPos blockPos = context.getClickedPos();
 		BlockState blockState = context.getLevel().getBlockState(blockPos);
@@ -79,7 +79,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
         else return forPlacing(getPlacingDirection(context), currentState);
 	}
 
-	public default BlockState forPlacing(Direction dir, BlockState blockState)
+	default BlockState forPlacing(Direction dir, BlockState blockState)
 	{
 		return (dir.getAxis() == Axis.Y ?
 				getDefaultVanillaState(blockState) :
@@ -87,10 +87,9 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 				.setValue(SlabBlock.TYPE, dir.getAxisDirection() == AxisDirection.POSITIVE ? SlabType.TOP : SlabType.BOTTOM);
 	}
 
-	@Nullable
-	public Direction getPlacing(BlockState blockState);
+	@Nullable Direction getPlacing(BlockState blockState);
 
-	public default Direction getPlacingDirection(BlockPlaceContext context)
+	default Direction getPlacingDirection(BlockPlaceContext context)
 	{
 		double hitX = context.getClickLocation().x - context.getClickedPos().getX() - .5;
 		double hitY = context.getClickLocation().y - context.getClickedPos().getY() - .5;
@@ -174,12 +173,12 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
         }
 	}
 
-	static final float OUTER_EDGE = .5f;
-	static final float INNER_EDGE = .25f;
+	float OUTER_EDGE = .5f;
+	float INNER_EDGE = .25f;
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public default void renderPlacementHighlight(PoseStack poseStack, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a)
+    default void renderPlacementHighlight(PoseStack poseStack, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a)
 	{
 		PoseStack.Pose pose = poseStack.last();
 
@@ -197,12 +196,12 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@Override
-	public default GenerationType<?, ?> getGenerationType() {
+    default GenerationType<?, ?> getGenerationType() {
 		return APGenerationTypes.slab();
 	}
 
     @Override
-    public default void addPlacementTooltip(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag)
+    default void addPlacementTooltip(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag)
 	{
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 	}

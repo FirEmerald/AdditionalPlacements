@@ -12,7 +12,7 @@ import net.minecraft.client.resources.model.UnbakedModel;
 @Mixin(ModelBaker.class)
 public interface MixinModelBaker extends IModelBakerExtensions {
 	@Override
-	public default BakedModel apBakeUncached(UnbakedModel model, ModelState state) {
+    default BakedModel apBakeUncached(UnbakedModel model, ModelState state) {
 		throw new IllegalStateException("ModelBaker not implementing IModelBakerExtensions found. Generally caused by calling PlacementBlockModel.bake with a ModelBaker that isn't an instance of ModelBakery.ModelBakerImpl");
 	}
 }

@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block.stairs.v1;
 import com.firemerald.additionalplacements.block.stairs.common.CommonStairShape;
 
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 public enum V1StairShape implements StringRepresentable {
     STRAIGHT("straight", V1StairPlacingType.NORMAL, CommonStairShape.STRAIGHT),
@@ -51,7 +52,7 @@ public enum V1StairShape implements StringRepresentable {
     public final V1StairPlacingType placingType;
     public final CommonStairShape equivalent;
 
-    private V1StairShape(String name, V1StairPlacingType placingType, CommonStairShape equivalent)
+    V1StairShape(String name, V1StairPlacingType placingType, CommonStairShape equivalent)
     {
         this.name = name;
         this.placingType = placingType;
@@ -59,7 +60,7 @@ public enum V1StairShape implements StringRepresentable {
     }
 
 	@Override
-	public String getSerializedName() {
+	public @NotNull String getSerializedName() {
 		return name;
 	}
 }
