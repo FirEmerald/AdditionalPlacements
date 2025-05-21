@@ -30,6 +30,6 @@ public class AdditionalPlacementsMod
         bus.addListener(APConfigs::onModConfigsLoaded);
         bus.addListener(APConfigs::onModConfigsReloaded);
         Registration.addRegistration(new APGenerationTypes());
-        LOGGER.warn("During block registration you may recieve several reports of \"Potentially Dangerous alternative prefix `additionalplacements`\". Ignore these, they are intended.");
+        LOGGER.warn("During block registration you may receive several reports of \"Potentially Dangerous alternative prefix `additionalplacements`\". Ignore these, they are intended.");
     }
 }
