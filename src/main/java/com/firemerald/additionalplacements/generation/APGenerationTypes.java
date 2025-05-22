@@ -6,7 +6,8 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.stairs.AdditionalStairBlock;
-import com.firemerald.additionalplacements.config.BlockBlacklist;
+import com.firemerald.additionalplacements.config.blocklist.Blocklist;
+import com.firemerald.additionalplacements.config.blocklist.IDBlocklistEntry;
 import com.firemerald.additionalplacements.generation.GenerationType.BuilderBase;
 
 import net.minecraft.resources.ResourceLocation;
@@ -23,25 +24,20 @@ public class APGenerationTypes implements RegistrationInitializer {
 	public void onInitializeRegistration(IRegistration register) {
 		slab                    = get(register, SlabBlock.class                 , "slab"                   , "Slabs"                   ,
 				new SimpleRotatableGenerationType.Builder<SlabBlock, VerticalSlabBlock>()
-				.blacklistModelRotation(new BlockBlacklist.Builder()
-						.blockBlacklist(
-								"minecraft:sandstone_slab",
-								"minecraft:cut_sandstone_slab",
-								"minecraft:red_sandstone_slab",
-								"minecraft:cut_red_sandstone_slab")
-						.build())
-				.blacklistTextureRotation(new BlockBlacklist.Builder()
-						.blockBlacklist("minecraft:smooth_stone_slab")
-						.build())
+						.modelRotationEnabled(new Blocklist(true, true,
+								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "sandstone_slab")),
+								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "cut_sandstone_slab")),
+								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "red_sandstone_slab")),
+								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "cut_red_sandstone_slab"))))
+						.textureRotationEnabled(new Blocklist(true, true,
+								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "smooth_stone_slab"))))
 				.constructor(VerticalSlabBlock::of)
 				.addsProperties("axis"));
 		stairs                  = get(register, StairBlock.class                , "stairs"                 , "Stairs"                  ,
 				new VerticalStairsGenerationType.Builder<StairBlock, AdditionalStairBlock>()
-				.blacklistModelRotation(new BlockBlacklist.Builder()
-						.blockBlacklist(
-								"minecraft:sandstone_stairs",
-								"minecraft:red_sandstone_stairs")
-						.build())
+						.modelRotationEnabled(new Blocklist(true, true,
+								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "sandstone_stairs")),
+								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "red_sandstone_stairs"))))
 				.addsProperties("front_top_shape"));
 		carpet                  = get(register, CarpetBlock.class               , "carpet"                 , "Carpets"                 , AdditionalCarpetBlock::of,                "facing");
 		pressurePlate           = get(register, PressurePlateBlock.class        , "pressure_plate"         , "Regular pressure plates" , AdditionalPressurePlateBlock::of,         "facing");
