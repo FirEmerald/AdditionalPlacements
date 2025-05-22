@@ -46,8 +46,7 @@ public class MixinBlockStateModelLoader implements IBlockStateModelLoaderExtensi
 	@ModifyVariable(
 			method = "method_61066(Ljava/util/Map;Lnet/minecraft/resources/ResourceLocation;Ljava/util/Map;Lnet/minecraft/client/resources/model/ModelResourceLocation;Lnet/minecraft/world/level/block/state/BlockState;)V",
 			at = @At("STORE"),
-			index = 6,
-			remap = false
+			index = 6
 			)
 	private BlockStateModelLoader.LoadedModel loadModelLambda(
 			BlockStateModelLoader.LoadedModel loadedModel,
