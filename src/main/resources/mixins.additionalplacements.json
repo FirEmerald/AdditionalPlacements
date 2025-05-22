@@ -1,27 +1,28 @@
 {
-	"required": true,
-	"package": "com.firemerald.additionalplacements.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-		"MixinBasePressurePlateBlock",
-		"MixinCarpetBlock",
-		"MixinPressurePlateBlock",
-		"MixinSlabBlock",
-		"MixinStairBlock",
-		"MixinWeightedPressurePlateBlock",
-		"MixinPlayer",
-		"MixinServerPlayer",
-		"MixinChunkStorage"
-	],
-	"client": [
-		"MixinLocalPlayer",
-		"MixinModelBaker",
-		"MixinModelBakery",
-		"MixinBlockStateModelLoader",
-		"MixinModelBakerImpl"
-	],
-	"minVersion": "0.8",
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "com.firemerald.additionalplacements.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "MixinBasePressurePlateBlock",
+    "MixinCarpetBlock",
+    "MixinChunkStorage",
+    "MixinIronBarsBlock",
+    "MixinPlayer",
+    "MixinPressurePlateBlock",
+    "MixinServerPlayer",
+    "MixinSlabBlock",
+    "MixinStairBlock",
+    "MixinWeightedPressurePlateBlock"
+  ],
+  "client": [
+    "MixinBlockStateModelLoader",
+    "MixinLocalPlayer",
+    "MixinModelBaker",
+    "MixinModelBakerImpl",
+    "MixinModelBakery"
+  ],
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
 	}
 }
