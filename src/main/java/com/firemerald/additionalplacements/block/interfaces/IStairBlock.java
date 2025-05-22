@@ -24,6 +24,8 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -38,7 +40,7 @@ import net.minecraft.world.IWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
+public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable
 {
 	interface IVanillaStairBlock extends IStairBlock<AdditionalStairBlock>, IVanillaBlock<AdditionalStairBlock>
 	{
@@ -345,5 +347,56 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	{
 		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
 		tooltip.add(new TranslationTextComponent(connectionsType().tooltip));
+	}
+
+	@Override
+	public default boolean paneConnectOverride(BlockState ourState, Direction.Axis paneAxis, Direction connectDir) {
+		CommonStairShapeState shapeState = getShapeState(ourState);
+		if (connectDir == shapeState.facing.backward) { //connects front
+			switch (shapeState.shape.paneFront) {
+                case NONE:
+                    return false;
+				case BOTH:
+					return true;
+                case HORIZONTAL:
+					return paneAxis == shapeState.facing.left.getAxis();
+                case VERTICAL:
+					return paneAxis == shapeState.facing.up.getAxis();
+            }
+		} else if (connectDir == shapeState.facing.down) { //connects top
+			switch (shapeState.shape.paneTop) {
+				case NONE:
+					return false;
+				case BOTH:
+					return true;
+				case HORIZONTAL:
+					return paneAxis == shapeState.facing.left.getAxis();
+				case VERTICAL:
+					return paneAxis == shapeState.facing.forward.getAxis();
+			}
+		} else if (connectDir == shapeState.facing.left) { //connects right
+			switch (shapeState.shape.paneRight) {
+				case NONE:
+					return false;
+				case BOTH:
+					return true;
+				case HORIZONTAL:
+					return paneAxis == shapeState.facing.forward.getAxis();
+				case VERTICAL:
+					return paneAxis == shapeState.facing.up.getAxis();
+			}
+		} else if (connectDir == shapeState.facing.right) { //connects left
+			switch (shapeState.shape.paneLeft) {
+				case NONE:
+					return false;
+				case BOTH:
+					return true;
+				case HORIZONTAL:
+					return paneAxis == shapeState.facing.forward.getAxis();
+				case VERTICAL:
+					return paneAxis == shapeState.facing.up.getAxis();
+			}
+		} else return true; //back and bottom always connect
+		return false; //should not reach
 	}
 }

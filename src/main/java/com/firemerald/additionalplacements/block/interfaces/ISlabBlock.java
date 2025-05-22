@@ -20,6 +20,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.SlabType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Direction.Axis;
@@ -35,7 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
+public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable
 {
 	interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
 	{
@@ -230,5 +231,19 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
     default void addPlacementTooltip(ItemStack stack, @Nullable IBlockReader level, List<ITextComponent> tooltip, ITooltipFlag flag)
 	{
 		tooltip.add(new TranslationTextComponent("tooltip.additionalplacements.vertical_placement"));
+	}
+
+	public Axis getAxis(BlockState state);
+
+	@Override
+	public default boolean paneConnectOverride(BlockState ourState, Axis paneAxis, Direction connectDir) {
+		SlabType type = ourState.getValue(BlockStateProperties.SLAB_TYPE);
+		if (type == SlabType.DOUBLE) return true;
+		else {
+			Axis axis = getAxis(ourState);
+			if (axis == paneAxis) return false;
+			else if (axis != connectDir.getAxis()) return true; //connect from sides
+			else return (connectDir.getAxisDirection() == AxisDirection.POSITIVE) ^ (type == SlabType.TOP); //connect from back
+		}
 	}
 }

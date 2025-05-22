@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block;
 import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.block.interfaces.IPaneConnectable;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStateFixer;
@@ -184,5 +185,10 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 			}
 		}
 		return properties;
+	}
+
+	@Override
+	public Axis getAxis(BlockState state) {
+		return state.getValue(AXIS);
 	}
 }
