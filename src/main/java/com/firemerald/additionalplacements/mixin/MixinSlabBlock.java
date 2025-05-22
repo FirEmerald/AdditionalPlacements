@@ -133,4 +133,9 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock
 	{
 		return super.updateShape(state, level, tickAccess, pos, direction, otherPos, otherState, rand);
 	}
+
+	@Override
+	public Direction.Axis getAxis(BlockState state) {
+		return Direction.Axis.Y;
+	}
 }
