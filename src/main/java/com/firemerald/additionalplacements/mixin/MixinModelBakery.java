@@ -51,8 +51,7 @@ public class MixinModelBakery {
 	@ModifyVariable(
 			method = "method_21604(Ljava/util/Map;Lnet/minecraft/resources/ResourceLocation;Lcom/mojang/datafixers/util/Pair;Ljava/util/Map;Lnet/minecraft/client/resources/model/ModelResourceLocation;Lnet/minecraft/world/level/block/state/BlockState;)V",
 			at = @At("STORE"),
-			index = 7,
-			remap = false
+			index = 7
 			)
 	private Pair<UnbakedModel, Supplier<ModelBakery.ModelGroupKey>> loadModelLambda(
 			Pair<UnbakedModel, Supplier<ModelBakery.ModelGroupKey>> modelPair,
