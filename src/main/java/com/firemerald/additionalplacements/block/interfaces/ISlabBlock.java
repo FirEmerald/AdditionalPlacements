@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -32,7 +33,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.BlockHitResult;
 
-public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
+public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable
 {
 	interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock>
 	{
@@ -206,5 +207,19 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>
     default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
 	{
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
+	}
+
+	public Axis getAxis(BlockState state);
+
+	@Override
+	public default boolean paneConnectOverride(BlockState ourState, Axis paneAxis, Direction connectDir) {
+		SlabType type = ourState.getValue(BlockStateProperties.SLAB_TYPE);
+		if (type == SlabType.DOUBLE) return true;
+		else {
+			Axis axis = getAxis(ourState);
+			if (axis == paneAxis) return false;
+			else if (axis != connectDir.getAxis()) return true; //connect from sides
+			else return (connectDir.getAxisDirection() == AxisDirection.POSITIVE) ^ (type == SlabType.TOP); //connect from back
+		}
 	}
 }
