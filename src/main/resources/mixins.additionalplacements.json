@@ -12,7 +12,8 @@
 		"MixinWeightedPressurePlateBlock",
 		"MixinPlayer",
 		"MixinServerPlayer",
-		"MixinChunkStorage"
+		"MixinChunkStorage",
+		"MixinIronBarsBlock"
 	],
 	"client": [
 		"MixinLocalPlayer",
