@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(StructureTransform.class)
 public class MixinStructureTransform
 {
-	@Inject(method = "apply(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/state/BlockState;", at = @At("HEAD"), cancellable = true)
+	@Inject(method = "apply(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/state/BlockState;", at = @At("HEAD"), cancellable = true, remap = false)
 	public void apply(BlockState state, CallbackInfoReturnable<BlockState> ci)
 	{
 		if (state.getBlock() instanceof IPlacementBlock<?> block)
