@@ -9,7 +9,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
 public class SimpleGenerationType<T extends Block, U extends AdditionalPlacementBlock<T>> extends GenerationType<T, U> {
-	protected abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends SimpleGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends GenerationType.BuilderBase<T, U, V, W> {
+	public abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends SimpleGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends GenerationType.BuilderBase<T, U, V, W> {
 		protected BiFunction<? super T, ResourceKey<Block>, ? extends U> constructor;
 
 		public W constructor(BiFunction<? super T, ResourceKey<Block>, ? extends U> constructor) {
