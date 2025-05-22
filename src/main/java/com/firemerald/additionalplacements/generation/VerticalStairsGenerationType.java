@@ -9,7 +9,7 @@ import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock
 import com.firemerald.additionalplacements.block.interfaces.IStairBlock;
 import com.firemerald.additionalplacements.block.stairs.AdditionalStairBlock;
 import com.firemerald.additionalplacements.block.stairs.StairConnectionsType;
-import com.firemerald.additionalplacements.config.GenerationBlacklist;
+import com.firemerald.additionalplacements.config.blocklist.Blocklist;
 import com.firemerald.additionalplacements.util.MessageTree;
 
 import net.minecraft.nbt.CompoundTag;
@@ -22,23 +22,23 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 public class VerticalStairsGenerationType<T extends StairBlock, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock & IStairBlock<T>> extends SimpleRotatableGenerationType<T, U> {
-	protected abstract static class BuilderBase<T extends StairBlock, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock & IStairBlock<T>, V extends SimpleRotatableGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends SimpleRotatableGenerationType.BuilderBase<T, U, V, W> {
-		protected GenerationBlacklist
-		vertcialConnectionsBlacklist = new GenerationBlacklist.Builder().build(),
-		mixedConnectionsBlacklist = new GenerationBlacklist.Builder().build();
+	public abstract static class BuilderBase<T extends StairBlock, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock & IStairBlock<T>, V extends SimpleRotatableGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends SimpleRotatableGenerationType.BuilderBase<T, U, V, W> {
+		protected Blocklist
+				verticalConnectionsEnabled = new Blocklist(false, true),
+				mixedConnectionsEnabled = new Blocklist(false, true);
 
 		@Override
 		public W constructor(Function<? super T, ? extends U> constructor) {
 			throw new IllegalStateException("Function<? super T, ? extends U> constructor not supported");
 		}
 
-		public W blacklistVerticalConnections(GenerationBlacklist blacklist) {
-			this.vertcialConnectionsBlacklist = blacklist;
+		public W verticalConnectionsEnabled(Blocklist enabled) {
+			this.verticalConnectionsEnabled = enabled;
 			return me();
 		}
 
-		public W blacklistMixedConnections(GenerationBlacklist blacklist) {
-			this.mixedConnectionsBlacklist = blacklist;
+		public W mixedConnectionsEnabled(Blocklist enabled) {
+			this.mixedConnectionsEnabled = enabled;
 			return me();
 		}
 	}
@@ -50,28 +50,19 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 		}
 	}
 
-	private final GenerationBlacklist vertcialConnectionsBlacklist;
-	private final GenerationBlacklist mixedConnectionsBlacklist;
+	private final Blocklist verticalConnectionsEnabled, mixedConnectionsEnabled;
 
 	protected VerticalStairsGenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
 		super(name, description, builder);
-		this.vertcialConnectionsBlacklist = builder.vertcialConnectionsBlacklist;
-		this.mixedConnectionsBlacklist = builder.mixedConnectionsBlacklist;
+		this.verticalConnectionsEnabled = builder.verticalConnectionsEnabled;
+		this.mixedConnectionsEnabled = builder.mixedConnectionsEnabled;
 	}
 
 	@Override
 	public void buildStartupConfig(ForgeConfigSpec.Builder builder) {
 		super.buildStartupConfig(builder);
-		builder
-		.comment("Options to control which blocks will allow for vertical stair connections.\nKeep in mind vertical is RELATIVE to the placement of the stair - \"vertical\" for a vertically placed stair will be one of the two horizontal directions.")
-		.push("allow_vertical_connections");
-		vertcialConnectionsBlacklist.addToConfig(builder);
-		builder.pop();
-		builder
-		.comment("Options to control which blocks will allow for mixed stair connections.\nThese are any valid combination of horizontal and vertical connection - as such, a stair that cannot connect vertically cannot connect complexly.\nThis also controls connections between stairs who's facings don't necessarily match up - I.E. a stair facing UP_EAST and one facing EAST_UP.\nKeep in mind horizontal and vertical are RELATIVE to the placement of the stair - \"vertical\" and \"horizontal\" for a vertically placed stair are both horizontal directions.")
-		.push("allow_mixed_connections");
-		mixedConnectionsBlacklist.addToConfig(builder);
-		builder.pop();
+		verticalConnectionsEnabled.addToConfig(builder, "allow_vertical_connections", "Blocklist to control which blocks will allow for vertical stair connections.\nKeep in mind vertical is RELATIVE to the placement of the stair - \"vertical\" for a vertically placed stair will be one of the two horizontal directions.");
+		mixedConnectionsEnabled.addToConfig(builder, "allow_mixed_connections", "Blocklist to control which blocks will allow for mixed stair connections.\nThese are any valid combination of horizontal and vertical connection - as such, a stair that cannot connect vertically cannot connect complexly.\nThis also controls connections between stairs who's facings don't necessarily match up - I.E. a stair facing UP_EAST and one facing EAST_UP.\nKeep in mind horizontal and vertical are RELATIVE to the placement of the stair - \"vertical\" and \"horizontal\" for a vertically placed stair are both horizontal directions.");
 	}
 
 	@Override
@@ -147,16 +138,16 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 	@Override
 	public void loadStartupConfig() {
 		super.loadStartupConfig();
-		vertcialConnectionsBlacklist.loadListsFromConfig();
-		mixedConnectionsBlacklist.loadListsFromConfig();
+		verticalConnectionsEnabled.loadListsFromConfig();
+		mixedConnectionsEnabled.loadListsFromConfig();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public U construct(T block, ResourceLocation blockId) {
 		return (U) AdditionalStairBlock.of(block,
-				!vertcialConnectionsBlacklist.test(blockId) ? StairConnectionsType.SIMPLE :
-					!mixedConnectionsBlacklist.test(blockId) ? StairConnectionsType.EXTENDED :
+				!verticalConnectionsEnabled.test(block, blockId) ? StairConnectionsType.SIMPLE :
+						!mixedConnectionsEnabled.test(block, blockId) ? StairConnectionsType.EXTENDED :
 						StairConnectionsType.COMPLEX);
 	}
 }
