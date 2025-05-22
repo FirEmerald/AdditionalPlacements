@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.config.blocklist;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.generation.CreatedBlockEntry;
 import net.minecraft.ResourceLocationException;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
