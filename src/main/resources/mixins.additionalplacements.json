@@ -15,7 +15,7 @@
 	],
 	"client": [
 		"MixinLocalPlayer",
-		"MixinModelManager"
+		"MixinBlockStateModelLoader"
 	],
 	"minVersion": "0.8",
 	"injectors": {
