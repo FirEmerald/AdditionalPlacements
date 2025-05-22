@@ -4,5 +4,5 @@
       <modelVersion>4.0.0</modelVersion>
       <groupId>local</groupId>
       <artifactId>continuity</artifactId>
-      <version>3.0.0</version>
+      <version>3.0.1-test.4</version>
     </project>
