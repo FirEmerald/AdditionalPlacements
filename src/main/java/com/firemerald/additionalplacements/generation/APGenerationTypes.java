@@ -40,9 +40,9 @@ public class APGenerationTypes implements RegistrationInitializer {
 								new IDBlocklistEntry(false, ResourceLocation.fromNamespaceAndPath("minecraft", "sandstone_stairs")),
 								new IDBlocklistEntry(false, ResourceLocation.fromNamespaceAndPath("minecraft", "red_sandstone_stairs"))))
 				.addsProperties("front_top_shape"));
-		carpet                  = get(register, CarpetBlock.class               , "carpet"                 , "Carpets"                 , AdditionalCarpetBlock::of,                "facing");
-		pressurePlate           = get(register, PressurePlateBlock.class        , "pressure_plate"         , "Regular pressure plates" , AdditionalPressurePlateBlock::of,         "facing");
-		weightedPressurePlate   = get(register, WeightedPressurePlateBlock.class, "weighted_pressure_plate", "Weighted pressure plates", AdditionalWeightedPressurePlateBlock::of, "facing");
+		carpet                  = get(register, CarpetBlock.class               , "carpet"                 , "Carpets"                 , AdditionalCarpetBlock::of,                "ap_placing");
+		pressurePlate           = get(register, PressurePlateBlock.class        , "pressure_plate"         , "Regular pressure plates" , AdditionalPressurePlateBlock::of,         "ap_placing");
+		weightedPressurePlate   = get(register, WeightedPressurePlateBlock.class, "weighted_pressure_plate", "Weighted pressure plates", AdditionalWeightedPressurePlateBlock::of, "ap_placing");
 	}
 
 	private static <T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock> SimpleRotatableGenerationType<T, U> get(IRegistration register, Class<T> clazz, String name, String description, BiFunction<? super T, ResourceKey<Block>, ? extends U> constructor, String... addsProperties) {
