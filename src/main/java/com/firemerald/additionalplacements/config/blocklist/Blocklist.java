@@ -4,6 +4,7 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.generation.CreatedBlockEntry;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -73,7 +74,7 @@ public class Blocklist {
                 }
                 try {
                     ResourceLocation tag = new ResourceLocation(key.substring(2));
-                    return new TagBlocklistEntry(value, TagKey.create(Registry.BLOCK_REGISTRY, tag));
+                    return new TagBlocklistEntry(value, TagKey.create(Registries.BLOCK, tag));
                 } catch (ResourceLocationException e) {
                     AdditionalPlacementsMod.LOGGER.warn("Invalid blocklist key {}: invalid tag", key, e);
                     return new InvalidBlocklistEntry(key);
