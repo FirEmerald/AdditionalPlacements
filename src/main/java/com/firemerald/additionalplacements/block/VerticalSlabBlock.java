@@ -196,4 +196,9 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 		}
 		return properties;
 	}
+
+	@Override
+	public Axis getAxis(BlockState state) {
+		return state.getValue(AXIS);
+	}
 }
