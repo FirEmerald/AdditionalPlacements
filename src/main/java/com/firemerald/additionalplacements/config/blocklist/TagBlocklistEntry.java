@@ -1,19 +1,20 @@
 package com.firemerald.additionalplacements.config.blocklist;
 
 import net.minecraft.block.Block;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.ResourceLocation;
 
 public class TagBlocklistEntry extends BlocklistEntryBase {
-    public final ResourceLocation tag;
+    public final ITag<Block> tag;
 
-    public TagBlocklistEntry(boolean value, ResourceLocation tag) {
+    public TagBlocklistEntry(boolean value, ITag<Block> tag) {
         super(value);
         this.tag = tag;
     }
 
     @Override
     public boolean contains(Block block, ResourceLocation id) {
-        return block.getTags().contains(tag);
+        return tag.contains(block);
     }
 
     @Override
