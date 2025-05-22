@@ -11,10 +11,7 @@ import java.util.stream.Stream;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.common.TagMismatchChecker;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraft.commands.CommandSourceStack;
@@ -111,7 +108,12 @@ public class CommandExportTags
 						JsonObject obj = new JsonObject();
 						obj.addProperty("replace", false);
 						JsonArray array = new JsonArray();
-						blocks.forEach(block -> array.add(ForgeRegistries.BLOCKS.getKey(block).toString()));
+						blocks.forEach(block -> {
+							JsonObject obj2 = new JsonObject();
+							obj2.add("id", new JsonPrimitive(ForgeRegistries.BLOCKS.getKey(block).toString()));
+							obj2.add("required", new JsonPrimitive(false));
+							array.add(obj2);
+						});
 						obj.add("values", array);
 						Files.writeString(tagPath, GSON.toJson(obj), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
 					}
