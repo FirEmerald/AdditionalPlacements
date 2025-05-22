@@ -3,13 +3,12 @@ package com.firemerald.additionalplacements.generation;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.config.APConfigs;
-import com.firemerald.additionalplacements.config.GenerationBlacklist;
+import com.firemerald.additionalplacements.config.blocklist.Blocklist;
 import com.firemerald.additionalplacements.util.MessageTree;
 
 import net.minecraft.nbt.CompoundTag;
@@ -20,10 +19,9 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
 public abstract class GenerationType<T extends Block, U extends AdditionalPlacementBlock<T>> {
-
-	protected abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>, W extends BuilderBase<T, U, V, W>> {
+	public abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>, W extends BuilderBase<T, U, V, W>> {
 		protected Set<String> addsProperties = Collections.emptySet();
-		protected GenerationBlacklist blacklist = new GenerationBlacklist.Builder().build();
+		protected Blocklist enabled = new Blocklist(false, true);
 		protected boolean placementEnabled = true;
 
 		@SuppressWarnings("unchecked")
@@ -40,8 +38,8 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 			return me();
 		}
 
-		public W blacklist(GenerationBlacklist blacklist) {
-			this.blacklist = blacklist;
+		public W enabled(Blocklist enabled) {
+			this.enabled = enabled;
 			return me();
 		}
 
@@ -61,17 +59,17 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	public final ResourceLocation name;
 	public final String description;
 	private final Set<String> addsProperties;
-	private final GenerationBlacklist blacklist;
+	private final Blocklist enabled;
 	private final boolean defaultPlacementEnabled;
 	private BooleanValue placementEnabled;
-	private List<CreatedBlockEntry<T, U>> created = new ArrayList<>();
+	private final List<CreatedBlockEntry<T, U>> created = new ArrayList<>();
 	private final List<IBlockBlacklister<? super T>> blacklisters = new LinkedList<>();
 
 	protected GenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
 		this.name = name;
 		this.description = description;
 		this.addsProperties = builder.addsProperties;
-		this.blacklist = builder.blacklist;
+		this.enabled = builder.enabled;
 		this.defaultPlacementEnabled = builder.placementEnabled;
 	}
 
@@ -86,11 +84,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	//The following method is for the "startup" config, a custom config that loads before block registration and doesn't support re-loading changed values in-game.
 	//They should be used for options that affect the dynamic generation of additional placement blocks.
 	public void buildStartupConfig(ForgeConfigSpec.Builder builder) {
-		builder
-		.comment("Options for controlling which blocks (that are valid for this type) will generate variants of this type")
-		.push("enabled");
-		blacklist.addToConfig(builder);
-		builder.pop();
+		enabled.addToConfig(builder, "enabled", "Blocklist for controlling which blocks (that are valid for this type) will generate variants of this type");
 	}
 
 	public final void onStartupConfigLoaded() {
@@ -98,7 +92,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	}
 
 	protected void loadStartupConfig() {
-		blacklist.loadListsFromConfig();
+		enabled.loadListsFromConfig();
 	}
 
 	public void buildCommonConfig(ForgeConfigSpec.Builder builder) {
@@ -178,10 +172,10 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 
 	public final boolean enabledForBlock(T block, ResourceLocation blockId) {
 		if (blacklisters.stream().anyMatch(blacklister -> blacklister.blacklist(block, blockId))) return false;
-		if (blacklist.test(blockId)) {
-			Collection<String> has = block.defaultBlockState().getProperties().stream().map(Property::getName).filter(addsProperties::contains).collect(Collectors.toList());
+		if (enabled.test(block, blockId)) {
+			Collection<String> has = block.defaultBlockState().getProperties().stream().map(Property::getName).filter(addsProperties::contains).toList();
 			if (!has.isEmpty()) {
-				AdditionalPlacementsMod.LOGGER.warn("Generation type " + this.name + " cannot generate for " + blockId + " as it already contains the following properties that would be added: ");
+                AdditionalPlacementsMod.LOGGER.warn("Generation type {} cannot generate for {} as it already contains the following properties that would be added: ", this.name, blockId);
 				AdditionalPlacementsMod.LOGGER.warn(has.toString());
 				AdditionalPlacementsMod.LOGGER.warn("Add it to the blacklist inside additionalplacements-startup.toml to stop this message from appearing in the future.");
 				return false;

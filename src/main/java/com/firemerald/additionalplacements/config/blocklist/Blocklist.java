@@ -37,7 +37,7 @@ public class Blocklist {
 
     public void addToConfig(ForgeConfigSpec.Builder builder, String key, String comment) {
         blocklistConfig = builder
-                .comment(comment + "\nSee TODO for blocklist format") //TODO
+                .comment(comment + "\nSee https://github.com/FirEmerald/AdditionalPlacements/wiki/Blocklist-Format for blocklist format")
                 .defineListAllowEmpty(Collections.singletonList(key), () -> defaultBlocklistConfig, o -> o instanceof String);
     }
 
