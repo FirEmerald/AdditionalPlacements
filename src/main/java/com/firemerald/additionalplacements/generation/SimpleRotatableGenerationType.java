@@ -2,31 +2,31 @@ package com.firemerald.additionalplacements.generation;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
-import com.firemerald.additionalplacements.config.BlockBlacklist;
 
+import com.firemerald.additionalplacements.config.blocklist.Blocklist;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class SimpleRotatableGenerationType<T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock> extends SimpleGenerationType<T, U> {
-	protected abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock, V extends SimpleRotatableGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends SimpleGenerationType.BuilderBase<T, U, V, W> {
-		protected BlockBlacklist
-		logicRotationBlacklist = new BlockBlacklist.Builder().build(),
-		textureRotationBlacklist = new BlockBlacklist.Builder().build(),
-		modelRotationBlacklist = new BlockBlacklist.Builder().build();
+	public abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock, V extends SimpleRotatableGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends SimpleGenerationType.BuilderBase<T, U, V, W> {
+		protected Blocklist
+				logicRotationEnabled = new Blocklist(true, true),
+				textureRotationEnabled = new Blocklist(true, true),
+				modelRotationEnabled = new Blocklist(true, true);
 
-		public W blacklistLogicRotation(BlockBlacklist blacklist) {
-			this.logicRotationBlacklist = blacklist;
+		public W logicRotationEnabled(Blocklist enabled) {
+			this.logicRotationEnabled = enabled;
 			return me();
 		}
 
-		public W blacklistTextureRotation(BlockBlacklist blacklist) {
-			this.textureRotationBlacklist = blacklist;
+		public W textureRotationEnabled(Blocklist enabled) {
+			this.textureRotationEnabled = enabled;
 			return me();
 		}
 
-		public W blacklistModelRotation(BlockBlacklist blacklist) {
-			this.modelRotationBlacklist = blacklist;
+		public W modelRotationEnabled(Blocklist enabled) {
+			this.modelRotationEnabled = enabled;
 			return me();
 		}
 	}
@@ -38,62 +38,50 @@ public class SimpleRotatableGenerationType<T extends Block, U extends Additional
 		}
 	}
 
-	private final BlockBlacklist logicRotationBlackist, textureRotationBlacklist, modelRotationBlacklist;
+	private final Blocklist logicRotationEnabled, textureRotationEnabled, modelRotationEnabled;
 
 	protected SimpleRotatableGenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
 		super(name, description, builder);
-		this.logicRotationBlackist = builder.logicRotationBlacklist;
-		this.textureRotationBlacklist = builder.textureRotationBlacklist;
-		this.modelRotationBlacklist = builder.modelRotationBlacklist;
+		this.logicRotationEnabled = builder.logicRotationEnabled;
+		this.textureRotationEnabled = builder.textureRotationEnabled;
+		this.modelRotationEnabled = builder.modelRotationEnabled;
 	}
 
 	@Override
 	public void buildClientConfig(ModConfigSpec.Builder builder) {
 		super.buildClientConfig(builder);
-		builder
-		.comment("Options to control which blocks will rotate the textures of their original blocks.")
-		.push("rotated_textures");
-		textureRotationBlacklist.addToConfig(builder);
-		builder.pop();
-		builder
-		.comment("Options to control which blocks will use \"rotated models\" of their original blocks.")
-		.push("rotated_models");
-		modelRotationBlacklist.addToConfig(builder);
-		builder.pop();
+		textureRotationEnabled.addToConfig(builder, "rotated_textures", "Blocklist to control which blocks will rotate the textures of their original blocks.");
+		modelRotationEnabled.addToConfig(builder, "rotated_models", "Blocklist to control which blocks will use \"rotated models\" of their original blocks.");
 	}
 
 	@Override
 	public void loadClientConfig() {
 		super.loadClientConfig();
-		textureRotationBlacklist.loadListsFromConfig();
-		modelRotationBlacklist.loadListsFromConfig();
+		textureRotationEnabled.loadListsFromConfig();
+		modelRotationEnabled.loadListsFromConfig();
 	}
 
 	@Override
 	public void updateClientSettings() {
 		super.updateClientSettings();
-		forEachCreated(entry -> entry.newBlock().setModelRotation(textureRotationBlacklist.testOriginal(entry), modelRotationBlacklist.testOriginal(entry)));
+		forEachCreated(entry -> entry.newBlock().setModelRotation(textureRotationEnabled.testOriginal(entry), modelRotationEnabled.testOriginal(entry)));
 	}
 
 	@Override
 	public void buildServerConfig(ModConfigSpec.Builder builder) {
 		super.buildServerConfig(builder);
-		builder
-		.comment("Options to control which blocks will use \"rotated logic\" of their original blocks. Mainly affects bounding boxes.")
-		.push("rotated_logic");
-		logicRotationBlackist.addToConfig(builder);
-		builder.pop();
+		logicRotationEnabled.addToConfig(builder, "rotated_logic", "Blocklist to control which blocks will use \"rotated logic\" of their original blocks. Mainly affects bounding boxes.");
 	}
 
 	@Override
 	public void loadServerConfig() {
 		super.loadServerConfig();
-		logicRotationBlackist.loadListsFromConfig();
+		logicRotationEnabled.loadListsFromConfig();
 	}
 
 	@Override
 	public void updateServerSettings() {
 		super.updateServerSettings();
-		forEachCreated(entry -> entry.newBlock().setLogicRotation(logicRotationBlackist.testOriginal(entry)));
+		forEachCreated(entry -> entry.newBlock().setLogicRotation(logicRotationEnabled.testOriginal(entry)));
 	}
 }
