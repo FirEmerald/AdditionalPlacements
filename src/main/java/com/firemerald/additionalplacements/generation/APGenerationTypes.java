@@ -32,7 +32,7 @@ public class APGenerationTypes implements RegistrationInitializer {
 						.textureRotationEnabled(new Blocklist(true, true,
 								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "smooth_stone_slab"))))
 				.constructor(VerticalSlabBlock::of)
-				.addsProperties("axis"));
+				.addsProperties("ap_axis"));
 		stairs                  = get(register, StairBlock.class                , "stairs"                 , "Stairs"                  ,
 				new VerticalStairsGenerationType.Builder<StairBlock, AdditionalStairBlock>()
 						.modelRotationEnabled(new Blocklist(true, true,
