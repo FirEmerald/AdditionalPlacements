@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.block;
 import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
-import com.firemerald.additionalplacements.block.interfaces.IPaneConnectable;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStateFixer;
