@@ -38,7 +38,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
+public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable
 {
 	interface IVanillaStairBlock extends IStairBlock<AdditionalStairBlock>, IVanillaBlock<AdditionalStairBlock>
 	{
@@ -341,5 +341,39 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>
 	{
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 		tooltip.add(Component.translatable(connectionsType().tooltip));
+	}
+
+	@Override
+	public default boolean paneConnectOverride(BlockState ourState, Direction.Axis paneAxis, Direction connectDir) {
+		CommonStairShapeState shapeState = getShapeState(ourState);
+		if (connectDir == shapeState.facing.backward) { //connects front
+			return switch (shapeState.shape.paneFront) {
+				case NONE -> false;
+				case BOTH -> true;
+				case HORIZONTAL -> paneAxis == shapeState.facing.left.getAxis();
+				case VERTICAL -> paneAxis == shapeState.facing.up.getAxis();
+			};
+		} else if (connectDir == shapeState.facing.down) { //connects top
+			return switch (shapeState.shape.paneTop) {
+				case NONE -> false;
+				case BOTH -> true;
+				case HORIZONTAL -> paneAxis == shapeState.facing.left.getAxis();
+				case VERTICAL -> paneAxis == shapeState.facing.forward.getAxis();
+			};
+		} else if (connectDir == shapeState.facing.left) { //connects right
+			return switch (shapeState.shape.paneRight) {
+				case NONE -> false;
+				case BOTH -> true;
+				case HORIZONTAL -> paneAxis == shapeState.facing.forward.getAxis();
+				case VERTICAL -> paneAxis == shapeState.facing.up.getAxis();
+			};
+		} else if (connectDir == shapeState.facing.right) { //connects left
+			return switch (shapeState.shape.paneLeft) {
+				case NONE -> false;
+				case BOTH -> true;
+				case HORIZONTAL -> paneAxis == shapeState.facing.forward.getAxis();
+				case VERTICAL -> paneAxis == shapeState.facing.up.getAxis();
+			};
+		} else return true; //back and bottom always connect
 	}
 }
