@@ -1,8 +1,10 @@
 package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
-import com.firemerald.additionalplacements.client.models.BakedPlacementModel;
 
+import com.firemerald.additionalplacements.client.models.BakedRetexturedPlacementModel;
+import com.firemerald.additionalplacements.client.models.BakedRotatedPlacementModel;
+import com.firemerald.additionalplacements.client.models.BakingCache;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -37,6 +39,10 @@ public class ClientModEventHandler
 
     @SubscribeEvent
     public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
-    	event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> BakedPlacementModel.clearCache());
+		event.registerReloadListener((ResourceManagerReloadListener) resourceManager -> {
+			BakingCache.clearCache();
+			BakedRotatedPlacementModel.clearCache();
+			BakedRetexturedPlacementModel.clearCache();
+		});
     }
 }
