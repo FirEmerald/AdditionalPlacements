@@ -2,14 +2,12 @@ package com.firemerald.additionalplacements.client;
 
 import java.util.List;
 
+import com.firemerald.additionalplacements.client.models.*;
 import org.jetbrains.annotations.Nullable;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.firemerald.additionalplacements.client.models.BakedPlacementModel;
-import com.firemerald.additionalplacements.client.models.IFabricForwardingModel;
-import com.firemerald.additionalplacements.client.models.Unwrapper;
 import com.firemerald.additionalplacements.common.CommonModEvents;
 import com.firemerald.additionalplacements.config.APConfigs;
 
@@ -81,7 +79,11 @@ public class ClientModEvents implements ClientModInitializer
 	    		}
 	    	});
 	    	client.getBlockColors().register(new AdditionalBlockColor(), Registry.BLOCK.stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
-	    	((ReloadableResourceManager) client.getResourceManager()).registerReloadListener((ResourceManagerReloadListener) resourceManager -> BakedPlacementModel.clearCache());
+			((ReloadableResourceManager) client.getResourceManager()).registerReloadListener((ResourceManagerReloadListener) resourceManager -> {
+				BakingCache.clearCache();
+				BakedRotatedPlacementModel.clearCache();
+				BakedRetexturedPlacementModel.clearCache();
+			});
 			hasInit = true;
 		}
 	}
