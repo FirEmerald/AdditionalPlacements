@@ -6,6 +6,9 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.client.models.UnbakedRetexturedPlacementModel;
+import com.firemerald.additionalplacements.client.models.UnbakedRotatedPlacementModel;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.client.models.PlacementModelState;
-import com.firemerald.additionalplacements.client.models.UnbakedPlacementModel;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.util.BlockRotation;
 import com.mojang.datafixers.util.Pair;
@@ -45,7 +47,8 @@ public class MixinModelBakery {
 
 	@Inject(method = "<init>(Lnet/minecraft/client/color/block/BlockColors;Lnet/minecraft/util/profiling/ProfilerFiller;Ljava/util/Map;Ljava/util/Map;)V", at = @At("RETURN"))
 	public void init(BlockColors blockColors, ProfilerFiller profilerFiller, Map<ResourceLocation, BlockModel> modelResources, Map<ResourceLocation, List<ModelBakery.LoadedJson>> blockStateResources, CallbackInfo cli) {
-		UnbakedPlacementModel.clearCache();
+		UnbakedRotatedPlacementModel.clearCache();
+		UnbakedRetexturedPlacementModel.clearCache();
 	}
 
 	@ModifyVariable(
@@ -67,22 +70,29 @@ public class MixinModelBakery {
 			BlockState ourState) {
 		if (modelPair == null) { //replace only states which do not already have a model
 			if (ourState != null && ourState.getBlock() instanceof AdditionalPlacementBlock<?> block) {
-
                 BlockState theirState = block.getModelState(ourState);
-				StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
-				ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
-				ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());
 				ModelResourceLocation theirModelLocation = BlockModelShaper.stateToModelLocation(theirState);
 				UnbakedModel theirModel = getModel(theirModelLocation);
-				BlockRotation theirModelRotation = block.getRotation(ourState);
-				UnbakedPlacementModel unbakedModel = UnbakedPlacementModel.of(block, ourModel, ourModelRotation, theirModelLocation, theirModel, theirModelRotation);
-
-				List<Property<?>> coloringProperties = this.blockColors.getColoringProperties(theirState.getBlock()).stream()
-						.filter(block::isValidProperty) //just in case
-						.collect(Collectors.toList());
-	            return Pair.of(unbakedModel, () -> ModelBakery.ModelGroupKey.create(ourState, unbakedModel, coloringProperties));
-			}
-		}
-		return modelPair;
+				if (theirModel != null) {
+					UnbakedModel unbakedModel;
+					if (block.rotatesModel(ourState)) {
+						BlockRotation theirModelRotation = block.getRotation(ourState);
+						unbakedModel = UnbakedRotatedPlacementModel.of(theirModelLocation, theirModel, theirModelRotation, block.rotatesTexture(ourState));
+					} else {
+						StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
+						ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
+						ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());
+						unbakedModel = UnbakedRetexturedPlacementModel.of(ourModel, ourModelRotation, theirModelLocation, theirModel);
+					}
+					List<Property<?>> coloringProperties = this.blockColors.getColoringProperties(theirState.getBlock()).stream()
+							.filter(block::isValidProperty) //just in case
+							.collect(Collectors.toList());
+					return Pair.of(unbakedModel, () -> ModelBakery.ModelGroupKey.create(ourState, unbakedModel, coloringProperties));
+				} else {
+					AdditionalPlacementsMod.LOGGER.warn("Could not generate a model for {} as none exists for {}", ourState, theirState);
+					return null;
+				}
+			} else return null;
+		} else return modelPair;
 	}
 }
