@@ -2,6 +2,10 @@ package com.firemerald.additionalplacements.client.models;
 
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,20 +18,33 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 
-public abstract class PlacementModelWrapper extends BakedModelWrapper<BakedModel> {
+import javax.annotation.Nonnull;
 
-    public PlacementModelWrapper(BakedModel originalModel)
-    {
+public abstract class PlacementModelWrapper extends BakedModelWrapper<BakedModel> {
+    public PlacementModelWrapper(BakedModel originalModel) {
     	super(originalModel);
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand)
-    {
-    	return this.getQuads(state, side, rand, null, null);
-    }
+    @Deprecated
+    public abstract List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand);
 
-    @NotNull
     @Override
     public abstract List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @Nullable ModelData extraData, @Nullable RenderType renderType);
+
+    @Override
+    public TriState useAmbientOcclusion(BlockState state, ModelData extraData, RenderType renderType) {
+        return originalModel.useAmbientOcclusion(BlockModelUtils.getModeledState(state), extraData, renderType);
+    }
+
+    @Nonnull
+    @Override
+    public ModelData getModelData(@Nonnull BlockAndTintGetter level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nonnull ModelData modelData) {
+        return originalModel.getModelData(level, pos, BlockModelUtils.getModeledState(state), modelData);
+    }
+
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@Nonnull BlockState state, @Nonnull RandomSource rand, @Nonnull ModelData data) {
+        return originalModel.getRenderTypes(BlockModelUtils.getModeledState(state), rand, data);
+    }
 }

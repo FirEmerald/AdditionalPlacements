@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.client.models.UnbakedRetexturedPlacementModel;
+import com.firemerald.additionalplacements.client.models.UnbakedRotatedPlacementModel;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -16,7 +19,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.client.IBlockStateModelLoaderExtension;
 import com.firemerald.additionalplacements.client.models.PlacementModelState;
-import com.firemerald.additionalplacements.client.models.UnbakedPlacementModel;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.util.BlockRotation;
 
@@ -60,26 +62,34 @@ public class MixinBlockStateModelLoader implements IBlockStateModelLoaderExtensi
 			BlockState ourState) {
 		if (loadedModel == null) { //replace only states which do not already have a model
 			if (ourState != null && ourState.getBlock() instanceof AdditionalPlacementBlock<?> block) {
-
 				BlockState theirState = block.getModelState(ourState);
-				StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
-				ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
-				ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());
 				UnbakedModel theirModel = topLevelModels.get(BlockModelShaper.stateToModelLocation(theirState));
-				BlockRotation theirModelRotation = block.getRotation(ourState);
-				UnbakedPlacementModel unbakedModel = UnbakedPlacementModel.of(block, ourModel, ourModelRotation, theirModel, theirModelRotation);
-
-				List<Property<?>> coloringProperties = this.blockColors.getColoringProperties(theirState.getBlock()).stream()
-						.filter(block::isValidProperty) //just in case
-						.collect(Collectors.toList());
-	            return new BlockStateModelLoader.LoadedModel(unbakedModel, () -> BlockStateModelLoader.ModelGroupKey.create(ourState, unbakedModel, coloringProperties));
-			}
-		}
-		return loadedModel;
+				if (theirModel != null) {
+					UnbakedModel unbakedModel;
+					if (block.rotatesModel(ourState)) {
+						BlockRotation theirModelRotation = block.getRotation(ourState);
+						unbakedModel = UnbakedRotatedPlacementModel.of(theirModel, theirModelRotation, block.rotatesTexture(ourState));
+					} else {
+						StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
+						ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
+						ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());
+						unbakedModel = UnbakedRetexturedPlacementModel.of(ourModel, ourModelRotation, theirModel);
+					}
+					List<Property<?>> coloringProperties = this.blockColors.getColoringProperties(theirState.getBlock()).stream()
+							.filter(block::isValidProperty) //just in case
+							.collect(Collectors.toList());
+					return new BlockStateModelLoader.LoadedModel(unbakedModel, () -> BlockStateModelLoader.ModelGroupKey.create(ourState, unbakedModel, coloringProperties));
+				} else {
+                    AdditionalPlacementsMod.LOGGER.warn("Could not generate a model for {} as none exists for {}", ourState, theirState);
+					return null;
+				}
+			} else return null;
+		} else return loadedModel;
 	}
 
 	@Inject(method = "loadBlockStateDefinitions(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/world/level/block/state/StateDefinition;)V", at = @At("RETURN"))
 	private void loadBlockStateDefinitions(CallbackInfo cli) {
-		UnbakedPlacementModel.clearCache();
+		UnbakedRotatedPlacementModel.clearCache();
+		UnbakedRetexturedPlacementModel.clearCache();
 	}
 }
