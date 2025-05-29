@@ -1,8 +1,10 @@
 package com.firemerald.additionalplacements.client.models;
 
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import org.jetbrains.annotations.Nullable;
 
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
@@ -36,4 +38,7 @@ public abstract class PlacementModelWrapper extends DelegateBakedModel
 	public void emitItemQuads(QuadEmitter emitter, Supplier<RandomSource> randomSupplier) {
 		VanillaModelEncoder.emitItemQuads(emitter, this, null, randomSupplier);
 	}
+
+	@Override
+	public abstract List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction direction, RandomSource random);
 }

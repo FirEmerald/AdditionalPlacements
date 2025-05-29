@@ -1,8 +1,10 @@
 package com.firemerald.additionalplacements.mixin;
 
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.client.models.PlacementModelState;
-import com.firemerald.additionalplacements.client.models.UnbakedPlacementModel;
+import com.firemerald.additionalplacements.client.models.UnbakedRetexturedPlacementModel;
+import com.firemerald.additionalplacements.client.models.UnbakedRotatedPlacementModel;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.generation.Registration;
 import com.firemerald.additionalplacements.util.BlockRotation;
@@ -36,22 +38,29 @@ public class MixinBlockStateModelLoader {
                     ModelResourceLocation ourModelLocation = BlockModelShaper.stateToModelLocation(ourState);
                     models.computeIfAbsent(ourModelLocation, unused -> {
                         BlockState theirState = block.getModelState(ourState);
-                        StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
-                        ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
-                        ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());
                         ModelResourceLocation theirModelLocation = BlockModelShaper.stateToModelLocation(theirState);
                         if (models.containsKey(theirModelLocation)) {
                             UnbakedBlockStateModel theirModel = models.get(theirModelLocation).model();
-                            BlockRotation theirModelRotation = block.getRotation(ourState);
-                            return new BlockStateModelLoader.LoadedModel(
-                                            ourState,
-                                            UnbakedPlacementModel.of(block, ourModel, ourModelRotation, theirModel, theirModelRotation)
-                                    );
-                        } else return null;
+                            UnbakedBlockStateModel unbakedModel;
+                            if (block.rotatesModel(ourState)) {
+                                BlockRotation theirModelRotation = block.getRotation(ourState);
+                                unbakedModel = UnbakedRotatedPlacementModel.of(theirModel, theirModelRotation, block.rotatesTexture(ourState));
+                            } else {
+                                StateModelDefinition modelDefinition = block.getModelDefinition(ourState);
+                                ResourceLocation ourModel = modelDefinition.location(block.getBaseModelPrefix());
+                                ModelState ourModelRotation = PlacementModelState.by(modelDefinition.xRotation(), modelDefinition.yRotation());
+                                unbakedModel = UnbakedRetexturedPlacementModel.of(ourModel, ourModelRotation, theirModel);
+                            }
+                            return new BlockStateModelLoader.LoadedModel(ourState, unbakedModel);
+                        } else {
+                            AdditionalPlacementsMod.LOGGER.warn("Could not generate a model for {} as none exists for {}", ourState, theirState);
+                            return null;
+                        }
                     });
                 });
             });
-            UnbakedPlacementModel.clearCache();
+            UnbakedRotatedPlacementModel.clearCache();
+            UnbakedRetexturedPlacementModel.clearCache();
             return loadedModels;
         }));
     }
