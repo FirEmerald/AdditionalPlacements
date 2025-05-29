@@ -2,6 +2,10 @@ package com.firemerald.additionalplacements.client.models;
 
 import java.util.List;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
+import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,12 +26,28 @@ public abstract class PlacementModelWrapper extends DelegateBakedModel {
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand)
+    @Deprecated
+    public abstract @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand);
+
+    @Override
+    public abstract @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, @Nullable ModelData extraData, @Nullable RenderType renderType);
+
+    @Override
+    public TriState useAmbientOcclusion(BlockState state, ModelData extraData, RenderType renderType)
     {
-    	return this.getQuads(state, side, rand, null, null);
+        return parent.useAmbientOcclusion(BlockModelUtils.getModeledState(state), extraData, renderType);
     }
 
     @NotNull
     @Override
-    public abstract List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @Nullable ModelData extraData, @Nullable RenderType renderType);
+    public ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData)
+    {
+        return parent.getModelData(level, pos, BlockModelUtils.getModeledState(state), modelData);
+    }
+
+    @Override
+    public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data)
+    {
+        return parent.getRenderTypes(BlockModelUtils.getModeledState(state), rand, data);
+    }
 }

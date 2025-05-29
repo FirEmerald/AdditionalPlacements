@@ -2,7 +2,9 @@ package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
-import com.firemerald.additionalplacements.client.models.BakedPlacementModel;
+import com.firemerald.additionalplacements.client.models.BakedRetexturedPlacementModel;
+import com.firemerald.additionalplacements.client.models.BakedRotatedPlacementModel;
+import com.firemerald.additionalplacements.client.models.BakingCache;
 import com.firemerald.additionalplacements.datagen.AdditionalPlacementsModelProvider;
 
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -39,7 +41,11 @@ public class ClientModEventHandler
 
     @SubscribeEvent
     public static void onRegisterClientReloadListeners(AddClientReloadListenersEvent event) {
-    	event.addListener(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "baked_placement_cache"), (ResourceManagerReloadListener) resourceManager -> BakedPlacementModel.clearCache());
+    	event.addListener(ResourceLocation.fromNamespaceAndPath(AdditionalPlacementsMod.MOD_ID, "baked_placement_cache"), (ResourceManagerReloadListener) resourceManager -> {
+            BakingCache.clearCache();
+            BakedRotatedPlacementModel.clearCache();
+            BakedRetexturedPlacementModel.clearCache();
+        });
     }
 
     @SubscribeEvent
