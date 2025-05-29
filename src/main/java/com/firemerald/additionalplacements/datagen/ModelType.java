@@ -67,8 +67,8 @@ public class ModelType<T extends AdditionalPlacementBlock<?>>
 					StateModelDefinition modelDef = block.getModelDefinition(state);
 					return ConfiguredModel.builder()
 					.modelFile(modelProvider.getExistingFile(modelProvider.modLoc(folder + modelDef.model())))
-					.rotationX(modelDef.xRotation())
-					.rotationY(modelDef.yRotation())
+					.rotationX(modelDef.xRotation().shift * 90)
+					.rotationY(modelDef.yRotation().shift * 90)
 					.uvLock(uvLock)
 					.build();
 				}, block.getCopyProps());

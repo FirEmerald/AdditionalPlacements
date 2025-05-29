@@ -15,7 +15,6 @@ import com.firemerald.additionalplacements.util.MessageTree;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -86,7 +85,8 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 
 	public static void addBlockEntry(CompoundTag tag, ResourceLocation id) {
 		ListTag modList;
-		if (tag.contains(id.getNamespace(), Tag.TAG_LIST)) modList = tag.getList(id.getNamespace(), Tag.TAG_STRING);
+		Optional<ListTag> modListOpt = tag.getList(id.getNamespace());
+		if (modListOpt.isPresent()) modList = modListOpt.get();
 		else tag.put(id.getNamespace(), modList = new ListTag());
 		modList.add(StringTag.valueOf(id.getPath()));
 	}
@@ -126,12 +126,14 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 	}
 
 	public static Set<ResourceLocation> loadEntries(CompoundTag tag, String key) {
-		if (tag.contains(key, Tag.TAG_COMPOUND)) {
-			CompoundTag entries = tag.getCompound(key);
+		Optional<CompoundTag> entriesOpt = tag.getCompound(key);
+		if (entriesOpt.isPresent()) {
+			CompoundTag entries = entriesOpt.get();
 			Set<ResourceLocation> set = new HashSet<>();
-			entries.getAllKeys().forEach(modId -> {
-				ListTag modList = entries.getList(modId, Tag.TAG_STRING);
-				modList.forEach(nameTag -> set.add(ResourceLocation.tryBuild(modId, nameTag.getAsString())));
+			entries.keySet().forEach(modId -> {
+				entries.getList(modId).ifPresent(modList -> {
+					modList.forEach(nameTag -> nameTag.asString().ifPresent(name -> set.add(ResourceLocation.tryBuild(modId, name))));
+				});
 			});
 			return set;
 		} else return Collections.emptySet();

@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.block;
 
 import java.util.Optional;
 
+import net.minecraft.world.entity.LivingEntity;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
@@ -9,7 +10,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -30,9 +30,9 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public ItemStack pickupBlock(@Nullable Player player, LevelAccessor level, BlockPos pos, BlockState blockState)
+	public ItemStack pickupBlock(@Nullable LivingEntity owner, LevelAccessor level, BlockPos pos, BlockState blockState)
 	{
-		ItemStack ret = this.getOtherBlock().pickupBlock(player, level, pos, this.getModelState(blockState));
+		ItemStack ret = this.getOtherBlock().pickupBlock(owner, level, pos, this.getModelState(blockState));
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return ret;
 	}
@@ -44,9 +44,9 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public boolean canPlaceLiquid(@Nullable Player player, BlockGetter level, BlockPos pos, BlockState blockState, Fluid fluid)
+	public boolean canPlaceLiquid(@Nullable LivingEntity owner, BlockGetter level, BlockPos pos, BlockState blockState, Fluid fluid)
 	{
-		return this.getOtherBlock().canPlaceLiquid(player, level, pos, getModelState(blockState), fluid);
+		return this.getOtherBlock().canPlaceLiquid(owner, level, pos, getModelState(blockState), fluid);
 	}
 
 	@Override

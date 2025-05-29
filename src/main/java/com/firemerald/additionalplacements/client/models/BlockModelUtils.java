@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
@@ -21,10 +22,8 @@ import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Environment(EnvType.CLIENT)
@@ -32,11 +31,11 @@ public class BlockModelUtils
 {
 	public static BlockState getModeledState(BlockState state)
 	{
-		if (state.getBlock() instanceof AdditionalPlacementBlock) return ((AdditionalPlacementBlock<?>) state.getBlock()).getModelState(state);
+		if (state != null && state.getBlock() instanceof AdditionalPlacementBlock<?> block) return block.getModelState(state);
 		else return state;
 	}
 
-	public static BakedModel getBakedModel(BlockState state)
+	public static BlockStateModel getBakedModel(BlockState state)
 	{
 		return Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
 	}
@@ -45,17 +44,17 @@ public class BlockModelUtils
 	{
 		return new BakedQuad(
 				updateVertices(
-						jsonBakedQuad.getVertices(),
-						jsonBakedQuad.getSprite(),
+						jsonBakedQuad.vertices(),
+						jsonBakedQuad.sprite(),
 						newSprite,
 						vertexSize,
 						uvOffset
 						),
 				newTintIndex,
-				jsonBakedQuad.getDirection(),
+				jsonBakedQuad.direction(),
 				newSprite,
-				jsonBakedQuad.isShade(),
-				jsonBakedQuad.getLightEmission()
+				jsonBakedQuad.shade(),
+				jsonBakedQuad.lightEmission()
 				);
 	}
 
@@ -155,16 +154,16 @@ public class BlockModelUtils
 	}
 
 	@SuppressWarnings("deprecation")
-	public static Pair<TextureAtlasSprite, Integer> getSidedTexture(BlockState fromState, BakedModel fromModel, Direction fromSide, RandomSource rand, int vertexSize, int posOffset) {
+	public static Pair<TextureAtlasSprite, Integer> getSidedTexture(List<BlockModelPart> fromModel, Direction fromSide, int vertexSize, int posOffset) {
 		Map<Pair<TextureAtlasSprite, Integer>, Double> weights = new HashMap<>();
-		List<BakedQuad> referenceQuads = fromModel.getQuads(fromState, fromSide, rand);
-		if (fromSide != null && (referenceQuads.isEmpty() || referenceQuads.stream().noneMatch(quad -> quad.getDirection() == fromSide))) //no valid culled sides
-			referenceQuads = fromModel.getQuads(fromState, null, rand); //all quads for this render type
+		List<BakedQuad> referenceQuads = fromModel.stream().flatMap(part -> part.getQuads(fromSide).stream()).toList();
+		if (fromSide != null && (referenceQuads.isEmpty() || referenceQuads.stream().noneMatch(quad -> quad.direction() == fromSide))) //no valid culled sides
+			referenceQuads = fromModel.stream().flatMap(part -> part.getQuads(null).stream()).toList();
 		if (!referenceQuads.isEmpty()) {
 			referenceQuads.forEach(referredBakedQuad -> {
-				if (fromSide == null || referredBakedQuad.getDirection() == fromSide) { //only for quads facing the correct side
-					Pair<TextureAtlasSprite, Integer> tex = Pair.of(referredBakedQuad.getSprite(), referredBakedQuad.getTintIndex());
-					weights.merge(tex, (double) BlockModelUtils.getFaceSize(referredBakedQuad.getVertices(), vertexSize, posOffset), Double::sum);
+				if (fromSide == null || referredBakedQuad.direction() == fromSide) { //only for quads facing the correct side
+					Pair<TextureAtlasSprite, Integer> tex = Pair.of(referredBakedQuad.sprite(), referredBakedQuad.tintIndex());
+					weights.merge(tex, (double) BlockModelUtils.getFaceSize(referredBakedQuad.vertices(), vertexSize, posOffset), Double::sum);
 				}
 			});
 			return weights.entrySet().stream().max((e1, e2) -> (int) Math.signum(e2.getValue() - e1.getValue())).map(Map.Entry::getKey).orElse(
@@ -174,75 +173,44 @@ public class BlockModelUtils
 		else return Pair.of(Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(MissingTextureAtlasSprite.getLocation()), -1);
 	}
 
-	public static List<BakedQuad> retexturedQuads(BlockState modelState, BakedModel originalModel, BakedModel ourModel, Direction side, RandomSource rand)
+	public static List<BakedQuad> retexturedQuads(List<BlockModelPart> originalModel, BlockModelPart ourModel, Direction side)
 	{
-		VertexFormat format = DefaultVertexFormat.BLOCK;
+		VertexFormat format = DefaultVertexFormat.BLOCK; //TODO
 		int vertexSize = format.getVertexSize() / 4;
 		int posOffset = format.getOffset(VertexFormatElement.POSITION) / 4;
 		int uvOffset = format.getOffset(VertexFormatElement.UV) / 4;
 		@SuppressWarnings("unchecked")
 		Pair<TextureAtlasSprite, Integer>[] textures = new Pair[6];
-		List<BakedQuad> originalQuads = ourModel.getQuads(modelState, side, rand);
+		List<BakedQuad> originalQuads = ourModel.getQuads(side);
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
 		for (BakedQuad originalQuad : originalQuads)
 		{
-			Direction modelSide = originalQuad.getDirection();
+			Direction modelSide = originalQuad.direction();
 			int dirIndex = modelSide.get3DDataValue();
 			Pair<TextureAtlasSprite, Integer> texture = textures[dirIndex];
-			if (texture == null) texture = textures[dirIndex] = getSidedTexture(modelState, originalModel, modelSide, rand, vertexSize, posOffset);
+			if (texture == null) texture = textures[dirIndex] = getSidedTexture(originalModel, modelSide, vertexSize, posOffset);
     		bakedQuads.add(retexture(originalQuad, texture.getLeft(), texture.getRight(), vertexSize, uvOffset));
 		}
 		return bakedQuads;
 	}
 
-	public static List<BakedQuad> retexturedQuads(BlockState state, BlockState modelState, Function<BlockState, BakedModel> originalModel, BakedModel ourModel, Direction side, RandomSource rand) {
-		return retexturedQuads(modelState, originalModel.apply(modelState), ourModel, side, rand);
-	}
-
-	public static List<BakedQuad> rotatedQuads(BlockState modelState, BakedModel model, BlockRotation rotation, boolean rotateTex, Direction side, RandomSource rand)
+	public static List<BakedQuad> rotatedQuads(BlockModelPart model, BlockRotation rotation, boolean rotateTex, Direction side)
 	{
-		VertexFormat format = DefaultVertexFormat.BLOCK;
+		VertexFormat format = DefaultVertexFormat.BLOCK; //TODO
 		int vertexSize = format.getVertexSize() / 4;
 		int posOffset = format.getOffset(VertexFormatElement.POSITION) / 4;
 		int uvOffset = format.getOffset(VertexFormatElement.UV) / 4;
-		List<BakedQuad> originalQuads = model.getQuads(modelState, rotation.unapply(side), rand);
+		List<BakedQuad> originalQuads = model.getQuads(rotation.unapply(side));
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
 		for (BakedQuad originalQuad : originalQuads)
 		{
     		bakedQuads.add(new BakedQuad(
-    				rotation.applyVertices(originalQuad.getDirection(), originalQuad.getVertices(), vertexSize, posOffset, uvOffset, rotateTex, originalQuad.getSprite()),
-    				originalQuad.getTintIndex(),
-    				rotation.apply(originalQuad.getDirection()),
-    				originalQuad.getSprite(),
-    				originalQuad.isShade(),
-    				originalQuad.getLightEmission()
-    				));
-		}
-		return bakedQuads;
-	}
-
-	public static List<BakedQuad> rotatedQuads(BlockState modelState, Function<BlockState, BakedModel> model, BlockRotation rotation, boolean rotateTex, Direction side, RandomSource rand) {
-		BakedModel originalModel = model.apply(modelState);
-		return rotatedQuads(modelState, originalModel, rotation, rotateTex, side, rand);
-	}
-
-	public static List<BakedQuad> rotateQuads(BlockState modelState, BakedModel model, BlockRotation rotation, boolean rotateTex, Direction side, RandomSource rand)
-	{
-		VertexFormat format = DefaultVertexFormat.BLOCK;
-		int vertexSize = format.getVertexSize() / 4;
-		int posOffset = format.getOffset(VertexFormatElement.POSITION) / 4;
-		int uvOffset = format.getOffset(VertexFormatElement.UV) / 4;
-		List<BakedQuad> originalQuads = model.getQuads(modelState, rotation.unapply(side), rand);
-		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
-		for (BakedQuad originalQuad : originalQuads)
-		{
-    		bakedQuads.add(new BakedQuad(
-    				rotation.applyVertices(originalQuad.getDirection(), originalQuad.getVertices(), vertexSize, posOffset, uvOffset, rotateTex, originalQuad.getSprite()),
-    				originalQuad.getTintIndex(),
-    				rotation.apply(originalQuad.getDirection()),
-    				originalQuad.getSprite(),
-    				originalQuad.isShade(),
-    				originalQuad.getLightEmission()
+    				rotation.applyVertices(originalQuad.direction(), originalQuad.vertices(), vertexSize, posOffset, uvOffset, rotateTex, originalQuad.sprite()),
+    				originalQuad.tintIndex(),
+    				rotation.apply(originalQuad.direction()),
+    				originalQuad.sprite(),
+    				originalQuad.shade(),
+    				originalQuad.lightEmission()
     				));
 		}
 		return bakedQuads;

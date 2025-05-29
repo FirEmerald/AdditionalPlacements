@@ -16,7 +16,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -27,7 +26,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.biome.Biome;
@@ -144,7 +142,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float damage)
+	public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double damage)
 	{
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().fallOn(level, modelState, pos, entity, damage);
@@ -209,12 +207,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving)
+	public void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean isMoving)
 	{
-		if (!state.is(oldState.getBlock()))
-		{
-			getModelState(state).onRemove(level, pos, oldState, isMoving);
-		}
+		getModelState(state).affectNeighborsAfterRemoval(level, pos, isMoving);
 	}
 
 	@Override
@@ -344,12 +339,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public BlockState mirror(BlockState blockState, Mirror mirror)
 	{
 		return mirrorImpl(blockState, mirror);
-	}
-
-	@Override
-	public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag)
-	{
-		appendHoverTextImpl(stack, context, tooltip, flag);
 	}
 
 	@Override

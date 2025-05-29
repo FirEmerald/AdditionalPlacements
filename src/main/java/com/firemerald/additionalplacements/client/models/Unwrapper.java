@@ -6,22 +6,22 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 
 public class Unwrapper {
-	private static final List<Function<BakedModel, BakedModel>> UNWRAPPERS = new ArrayList<>();
+	private static final List<Function<BlockStateModel, BlockStateModel>> UNWRAPPERS = new ArrayList<>();
 
-	public static void registerUnwrapper(Function<BakedModel, BakedModel> unwrapper) {
+	public static void registerUnwrapper(Function<BlockStateModel, BlockStateModel> unwrapper) {
 		UNWRAPPERS.add(unwrapper);
 	}
 
-	public static BakedModel unwrap(BakedModel model) {
-		Optional<BakedModel> next;
+	public static BlockStateModel unwrap(BlockStateModel model) {
+		Optional<BlockStateModel> next;
 		while ((next = unwrapSingle(model)).isPresent()) model = next.get();
 		return model;
 	}
 
-	private static Optional<BakedModel> unwrapSingle(BakedModel model) {
+	private static Optional<BlockStateModel> unwrapSingle(BlockStateModel model) {
 		return UNWRAPPERS.stream().map(uw -> uw.apply(model)).filter(Objects::nonNull).findFirst();
 	}
 }

@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.client.models.definitions;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalFloorBlock;
 
+import com.mojang.math.Quadrant;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.PressurePlateBlock;
@@ -23,14 +24,14 @@ public class PressurePlateModels {
 
 	static
 	{
-		setStateModelDefinitions(Direction.UP, 180, 0);
-		setStateModelDefinitions(Direction.SOUTH, 270, 180);
-		setStateModelDefinitions(Direction.EAST, 270, 270);
-		setStateModelDefinitions(Direction.NORTH, 270, 0);
-		setStateModelDefinitions(Direction.WEST, 270, 90);
+		setStateModelDefinitions(Direction.UP, Quadrant.R180, Quadrant.R0);
+		setStateModelDefinitions(Direction.SOUTH, Quadrant.R270, Quadrant.R180);
+		setStateModelDefinitions(Direction.EAST, Quadrant.R270, Quadrant.R270);
+		setStateModelDefinitions(Direction.NORTH, Quadrant.R270, Quadrant.R0);
+		setStateModelDefinitions(Direction.WEST, Quadrant.R270, Quadrant.R90);
 	}
 
-	static void setStateModelDefinitions(Direction dir, int rotX, int rotY)
+	static void setStateModelDefinitions(Direction dir, Quadrant rotX, Quadrant rotY)
 	{
 		StateModelDefinition[] array = MODEL_DEFINITIONS[dir.ordinal() - 1];
 		array[0] = new StateModelDefinition("/unpressed", rotX, rotY);

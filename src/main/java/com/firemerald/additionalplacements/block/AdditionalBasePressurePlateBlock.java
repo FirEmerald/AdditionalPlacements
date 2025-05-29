@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.block;
 
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import org.jetbrains.annotations.Nullable;
 
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
@@ -118,7 +119,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity, InsideBlockEffectApplier effectApplier)
 	{
 		if (!level.isClientSide)
 		{
@@ -153,13 +154,10 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving)
+	public void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean isMoving)
 	{
-		if (!isMoving && !state.is(newState.getBlock()))
-		{
-			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
-			super.onRemove(state, level, pos, newState, isMoving);
-		}
+		super.affectNeighborsAfterRemoval(state, level, pos, isMoving);
+		if (!isMoving && plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
 	}
 
 	protected void updateNeighbours(Level level, BlockPos pos, BlockState state)

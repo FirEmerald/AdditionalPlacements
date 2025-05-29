@@ -23,7 +23,7 @@ public interface IStateFixer {
 	}
 
 	static String getPropertyString(CompoundTag tag, Property<?> property) {
-		return tag.getString(property.getName());
+		return tag.getString(property.getName()).orElse(null);
 	}
 
 	static void renameProperty(CompoundTag tag, Property<?> from, Property<?> to) {
