@@ -1,8 +1,10 @@
 package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
-import com.firemerald.additionalplacements.client.models.BakedPlacementModel;
 
+import com.firemerald.additionalplacements.client.models.BakedRetexturedPlacementModel;
+import com.firemerald.additionalplacements.client.models.BakedRotatedPlacementModel;
+import com.firemerald.additionalplacements.client.models.BakingCache;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.Minecraft;
@@ -35,7 +37,11 @@ public class ClientModEventHandler
     	Minecraft.getInstance().getBlockColors().register(new AdditionalBlockColor(), ForgeRegistries.BLOCKS.getValues().stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
     	ClientRegistry.registerKeyBinding(APClientData.AP_PLACEMENT_KEY);
     	((IReloadableResourceManager) Minecraft.getInstance().getResourceManager()).registerReloadListener((ISelectiveResourceReloadListener) (resourceManager, resourcePredicate) -> {
-    		if (resourcePredicate.test(VanillaResourceType.MODELS)) BakedPlacementModel.clearCache();
+    		if (resourcePredicate.test(VanillaResourceType.MODELS)) {
+				BakingCache.clearCache();
+				BakedRotatedPlacementModel.clearCache();
+				BakedRetexturedPlacementModel.clearCache();
+			}
     	});
     }
 }
