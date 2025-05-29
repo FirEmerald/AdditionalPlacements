@@ -1,33 +1,47 @@
 package com.firemerald.additionalplacements.client.models;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.client.resources.model.DelegateBakedModel;
-import net.minecraft.core.Direction;
-import net.minecraft.util.RandomSource;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.DelegateBlockStateModel;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class PlacementModelWrapper extends DelegateBakedModel {
+import net.minecraft.util.RandomSource;
 
-    public PlacementModelWrapper(BakedModel originalModel)
+public abstract class PlacementModelWrapper extends DelegateBlockStateModel {
+    public PlacementModelWrapper(BlockStateModel originalModel)
     {
     	super(originalModel);
     }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand)
-    {
-    	return this.getQuads(state, side, rand, null, null);
+    public void collectParts(RandomSource random, List<BlockModelPart> parts) {
+        //TODO assumes that the added parts are equivalent to collectParts(RandomSource). Additional code may be needed to account for potential other cases.
+        wrapParts(random).forEach(parts::add);
     }
 
-    @NotNull
     @Override
-    public abstract List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @Nullable ModelData extraData, @Nullable RenderType renderType);
+    public @NotNull List<BlockModelPart> collectParts(RandomSource random) {
+        return wrapParts(random).toList();
+    }
+
+    protected abstract Stream<BlockModelPart> wrapParts(RandomSource random);
+
+    @Override
+    public void collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockModelPart> parts) {
+        //TODO assumes that the added parts are equivalent to collectParts(RandomSource). Additional code may be needed to account for potential other cases.
+        wrapParts(level, pos, state, random).forEach(parts::add);
+    }
+
+    @Override
+    public @NotNull List<BlockModelPart> collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+        return wrapParts(level, pos, state, random).toList();
+    }
+
+    protected abstract Stream<BlockModelPart> wrapParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random);
 }

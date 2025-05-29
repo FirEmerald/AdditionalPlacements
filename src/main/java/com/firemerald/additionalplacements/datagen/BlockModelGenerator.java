@@ -8,11 +8,12 @@ import com.firemerald.additionalplacements.client.models.definitions.*;
 import com.google.gson.JsonObject;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
+import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
-import net.minecraft.client.data.models.blockstates.Variant;
-import net.minecraft.client.data.models.blockstates.VariantProperties;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
+import net.minecraft.client.renderer.block.model.Variant;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
@@ -26,11 +27,11 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		clear();
 	}
 	
-	public Variant variantOf(StateModelDefinition modelDef, ResourceLocation modelPrefix) {
-		return Variant.variant()
-				.with(VariantProperties.X_ROT, modelDef.xRotation())
-				.with(VariantProperties.Y_ROT, modelDef.yRotation())
-				.with(VariantProperties.MODEL, modelDef.location(modelPrefix));
+	public MultiVariant variantOf(StateModelDefinition modelDef, ResourceLocation modelPrefix) {
+		return new MultiVariant(WeightedList.of(new Variant(
+				modelDef.location(modelPrefix),
+				new Variant.SimpleModelState(modelDef.xRotation(), modelDef.yRotation(), true)
+		)));
 	}
 	
 	public abstract MultiVariantGenerator generator(U block, ResourceLocation modelPrefix);

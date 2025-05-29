@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.ClickEvent;
-import net.minecraft.network.chat.ClickEvent.Action;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
 import net.minecraft.server.MinecraftServer;
@@ -35,9 +34,9 @@ public class TagMismatchChecker extends Thread
 	private static TagMismatchChecker thread = null;
 	public static final Component MESSAGE =
 			Component.translatable("msg.additionalplacements.mismatchedtags.0")
-			.append(Component.literal("/ap_tags_export").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(Action.RUN_COMMAND, "/ap_tags_export")).withColor(ChatFormatting.BLUE).withUnderlined(true)))
+			.append(Component.literal("/ap_tags_export").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.RunCommand("/ap_tags_export")).withColor(ChatFormatting.BLUE).withUnderlined(true)))
 			.append(Component.translatable("msg.additionalplacements.mismatchedtags.1")).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withUnderlined(false))
-			.append(Component.literal("/reload").setStyle(Style.EMPTY.withClickEvent(new ClickEvent(Action.RUN_COMMAND, "/reload")).withColor(ChatFormatting.BLUE).withUnderlined(true)))
+			.append(Component.literal("/reload").setStyle(Style.EMPTY.withClickEvent(new ClickEvent.RunCommand("/reload")).withColor(ChatFormatting.BLUE).withUnderlined(true)))
 			.append(Component.translatable("msg.additionalplacements.mismatchedtags.2")).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withUnderlined(false));
 	public static final Component FAILED = Component.translatable("msg.additionalplacements.generate.notfixed").setStyle(Style.EMPTY.withColor(ChatFormatting.RED));
 

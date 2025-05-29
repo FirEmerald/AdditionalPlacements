@@ -177,8 +177,8 @@ public class AdditionalStairBlock extends AdditionalPlacementLiquidBlock<StairBl
 				if (properties.contains("shape")) {
 					if (properties.contains("facing")) { //potentially V2
                         AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing potential V2 block state: {}", this, properties);
-						V2StairFacing facing = V2StairFacing.get(properties.getString("facing"));
-						V2StairShape shape = V2StairShape.get(properties.getString("shape"));
+						V2StairFacing facing = V2StairFacing.get(properties.getString("facing").orElse(null));
+						V2StairShape shape = V2StairShape.get(properties.getString("shape").orElse(null));
 						if (facing != null && shape != null) { //V2
                             AdditionalPlacementsMod.LOGGER.debug("{} Fixing V2 block state", this);
 							properties.remove("facing");
@@ -187,8 +187,8 @@ public class AdditionalStairBlock extends AdditionalPlacementLiquidBlock<StairBl
 						}
 					} else if (properties.contains("placing")) { //potentially V1
                         AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing potential V1 block state: {}", this, properties);
-						V1StairPlacing placing = V1StairPlacing.get(properties.getString("placing"));
-						V1StairShape shape = V1StairShape.get(properties.getString("shape"));
+						V1StairPlacing placing = V1StairPlacing.get(properties.getString("placing").orElse(null));
+						V1StairShape shape = V1StairShape.get(properties.getString("shape").orElse(null));
 						if (placing != null && shape != null) { //V1
                             AdditionalPlacementsMod.LOGGER.debug("{} Fixing V1 block state", this);
 							properties.remove("placing");

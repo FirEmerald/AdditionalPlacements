@@ -36,12 +36,11 @@ public class MixinChunkStorage {
 			if (chunkData != null) {
 				NBTUtils.ifListNotEmpty(chunkData, "sections", Tag.TAG_COMPOUND, sections -> sections.forEach(section -> NBTUtils.ifCompoundNotEmpty((CompoundTag) section, "block_states", blockStates -> NBTUtils.ifListNotEmpty(blockStates, "palette", Tag.TAG_COMPOUND, palette -> palette.forEach(blockTag -> {
 					CompoundTag block = (CompoundTag) blockTag;
-					if (block.contains("Name", Tag.TAG_STRING)) {
-						String name = block.getString("Name");
+					block.getString("Name").ifPresent(name -> {
 						Optional<Reference<Block>> optionalBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.parse(name));
 						optionalBlock.ifPresent(blockRef -> {
 							if (blockRef.value() instanceof IStateFixer fixer) {
-								CompoundTag original = block.getCompound("Properties");
+								CompoundTag original = block.getCompoundOrEmpty("Properties");
 								CompoundTag fixed = fixer.fix(original, newBlock -> block.put("Name", StringTag.valueOf(BuiltInRegistries.BLOCK.getKey(newBlock).toString())));
 								if (original != fixed) {
 									if (fixed == null) block.remove("Properties");
@@ -49,7 +48,7 @@ public class MixinChunkStorage {
 								}
 							}
 						});
-					}
+					});
 				})))));
 			}
 		}

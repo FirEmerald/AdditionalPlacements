@@ -20,7 +20,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.neoforge.client.model.data.ModelData;
 
 public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 {
@@ -64,7 +63,7 @@ public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
 	}
 
 	@OnlyIn(Dist.CLIENT)
-    default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand, ModelData extraData)
+    default Function<Direction, Direction> getModelDirectionFunction(BlockState state, Random rand)
 	{
 		return switch(getPlacing(state)) {
 		case UP -> side -> switch (side) {

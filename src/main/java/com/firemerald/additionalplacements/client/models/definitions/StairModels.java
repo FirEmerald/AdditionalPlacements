@@ -5,7 +5,7 @@ import com.firemerald.additionalplacements.block.stairs.common.CommonStairShape;
 import com.firemerald.additionalplacements.block.stairs.common.CommonStairShapeState;
 import com.firemerald.additionalplacements.util.ComplexFacing;
 
-import net.minecraft.client.data.models.blockstates.VariantProperties;
+import com.mojang.math.Quadrant;
 import net.minecraft.resources.ResourceLocation;
 
 public class StairModels {
@@ -40,20 +40,20 @@ public class StairModels {
 	static
 	{
 		/*
-		setUpStairModelDefs(ComplexFacing.SOUTH_UP, ComplexFacing.UP_SOUTH, VariantProperties.Rotation.R0);
-		setUpStairModelDefs(ComplexFacing.WEST_UP, ComplexFacing.UP_WEST, VariantProperties.Rotation.R90);
-		setUpStairModelDefs(ComplexFacing.NORTH_UP, ComplexFacing.UP_NORTH, VariantProperties.Rotation.R180);
-		setUpStairModelDefs(ComplexFacing.EAST_UP, ComplexFacing.UP_EAST, VariantProperties.Rotation.R270);
+		setUpStairModelDefs(ComplexFacing.SOUTH_UP, ComplexFacing.UP_SOUTH, Quadrant.R0);
+		setUpStairModelDefs(ComplexFacing.WEST_UP, ComplexFacing.UP_WEST, Quadrant.R90);
+		setUpStairModelDefs(ComplexFacing.NORTH_UP, ComplexFacing.UP_NORTH, Quadrant.R180);
+		setUpStairModelDefs(ComplexFacing.EAST_UP, ComplexFacing.UP_EAST, Quadrant.R270);
 
-		setDownStairModelDefs(ComplexFacing.SOUTH_DOWN, ComplexFacing.DOWN_SOUTH, VariantProperties.Rotation.R0);
-		setDownStairModelDefs(ComplexFacing.WEST_DOWN, ComplexFacing.DOWN_WEST, VariantProperties.Rotation.R90);
-		setDownStairModelDefs(ComplexFacing.NORTH_DOWN, ComplexFacing.DOWN_NORTH, VariantProperties.Rotation.R180);
-		setDownStairModelDefs(ComplexFacing.EAST_DOWN, ComplexFacing.DOWN_EAST, VariantProperties.Rotation.R270);
+		setDownStairModelDefs(ComplexFacing.SOUTH_DOWN, ComplexFacing.DOWN_SOUTH, Quadrant.R0);
+		setDownStairModelDefs(ComplexFacing.WEST_DOWN, ComplexFacing.DOWN_WEST, Quadrant.R90);
+		setDownStairModelDefs(ComplexFacing.NORTH_DOWN, ComplexFacing.DOWN_NORTH, Quadrant.R180);
+		setDownStairModelDefs(ComplexFacing.EAST_DOWN, ComplexFacing.DOWN_EAST, Quadrant.R270);
 
-		setVerticalStairModelDefs(ComplexFacing.SOUTH_EAST, ComplexFacing.EAST_SOUTH, VariantProperties.Rotation.R0);
-		setVerticalStairModelDefs(ComplexFacing.WEST_SOUTH, ComplexFacing.SOUTH_WEST, VariantProperties.Rotation.R90);
-		setVerticalStairModelDefs(ComplexFacing.NORTH_WEST, ComplexFacing.WEST_NORTH, VariantProperties.Rotation.R180);
-		setVerticalStairModelDefs(ComplexFacing.EAST_NORTH, ComplexFacing.NORTH_EAST, VariantProperties.Rotation.R270);
+		setVerticalStairModelDefs(ComplexFacing.SOUTH_EAST, ComplexFacing.EAST_SOUTH, Quadrant.R0);
+		setVerticalStairModelDefs(ComplexFacing.WEST_SOUTH, ComplexFacing.SOUTH_WEST, Quadrant.R90);
+		setVerticalStairModelDefs(ComplexFacing.NORTH_WEST, ComplexFacing.WEST_NORTH, Quadrant.R180);
+		setVerticalStairModelDefs(ComplexFacing.EAST_NORTH, ComplexFacing.NORTH_EAST, Quadrant.R270);
 
 		Map<StateModelDefinition, List<Pair<ComplexFacing, CommonStairShape>>> map = new LinkedHashMap<>();
 		for (String model : MODELS) for (int i = 0; i < 360; i += 90) map.put(new StateModelDefinition(model, i), new ArrayList<>());
@@ -69,13 +69,13 @@ public class StairModels {
 		});
 		*/
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/top/straight", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
@@ -93,7 +93,7 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/inner", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/inner", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
@@ -111,7 +111,7 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/inner", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/inner", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
@@ -129,7 +129,7 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/inner", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/inner", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
@@ -147,103 +147,103 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/inner", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/inner", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_back", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_back", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_back", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_back", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_back", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_back", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_back", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_back", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_left", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/top/outer_bottom_right", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/outer_both", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/outer_both", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_both", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_both", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_both", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/top/outer_both", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/outer_both", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/top/outer_both", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/top/twist_left", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.UP_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.UP_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.UP_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_UP.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.UP_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/top/twist_right", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/bottom/straight", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
@@ -261,7 +261,7 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/inner", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/inner", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
@@ -279,7 +279,7 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/inner", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/inner", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
@@ -297,7 +297,7 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/inner", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/inner", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.INNER_FRONT_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.INNER_TOP_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
@@ -315,119 +315,119 @@ public class StairModels {
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.INNER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_FRONT_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_TOP_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/inner", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.INNER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/inner", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_back", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_back", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_back", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_back", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_back", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_back", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_back", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_back", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_left", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BOTTOM_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTTOM_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_top_right", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_both", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_both", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_both", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_both", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_both", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] = new StateModelDefinition("/bottom/outer_both", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
 		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BOTH_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_both", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BOTH_RIGHT.ordinal()] = new StateModelDefinition("/bottom/outer_both", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/bottom/twist_left", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.SOUTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.NORTH_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_DOWN.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.DOWN_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/bottom/twist_right", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.STRAIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.STRAIGHT.ordinal()] = new StateModelDefinition("/side/straight", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_LEFT_BOTTOM_RIGHT.ordinal()] = new StateModelDefinition("/side/twist_left", Quadrant.R270);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", VariantProperties.Rotation.R0);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", Quadrant.R0);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_SOUTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", VariantProperties.Rotation.R90);
+		MODEL_DEFINITIONS[ComplexFacing.SOUTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", Quadrant.R90);
 		MODEL_DEFINITIONS[ComplexFacing.WEST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", VariantProperties.Rotation.R180);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_WEST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", Quadrant.R180);
 		MODEL_DEFINITIONS[ComplexFacing.EAST_NORTH.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] =
-		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", VariantProperties.Rotation.R270);
+		MODEL_DEFINITIONS[ComplexFacing.NORTH_EAST.ordinal()][CommonStairShape.OUTER_BACK_RIGHT_BOTTOM_LEFT.ordinal()] = new StateModelDefinition("/side/twist_right", Quadrant.R270);
 	}
 
 	/*
