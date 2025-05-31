@@ -43,6 +43,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	private static final List<Property<?>> copyPropsStatic = new ArrayList<>();
 	public final T parentBlock;
 	private final Property<?>[] copyProps;
+	private final Map<BlockState, BlockState> modelStates;
 
 	public AdditionalPlacementBlock(T parentBlock)
 	{
@@ -50,6 +51,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		this.copyProps = copyPropsStatic.toArray(new Property[copyPropsStatic.size()]);
 		copyPropsStatic.clear();
 		this.parentBlock = parentBlock;
+		modelStates = new HashMap<>(this.getStateDefinition().getPossibleStates().size());
 	}
 
 	@Override
@@ -109,17 +111,18 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		return parentBlock.getDescriptionId();
 	}
 
+	protected BlockState mapState(BlockState ourState, BlockState theirStateWithProperties) {
+		return theirStateWithProperties;
+	}
+
 	public BlockState getOtherBlockState()
 	{
 		return getOtherBlock().defaultBlockState();
 	}
 
-	public BlockState getModelState(BlockState worldState)
-	{
-		return withUnrotatedPlacement(worldState, copyProperties(worldState, getOtherBlockState()));
+	public final BlockState getModelState(BlockState ourState) {
+		return modelStates.computeIfAbsent(ourState, state -> mapState(state, copyProperties(state, parentBlock.defaultBlockState())));
 	}
-
-	public abstract BlockState withUnrotatedPlacement(BlockState worldState, BlockState modelState);
 
 	@Override
 	@Deprecated

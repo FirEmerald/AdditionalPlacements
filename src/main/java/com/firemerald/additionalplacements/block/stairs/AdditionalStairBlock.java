@@ -94,9 +94,9 @@ public class AdditionalStairBlock extends AdditionalPlacementLiquidBlock<StairsB
 	}
 
 	@Override
-	public BlockState withUnrotatedPlacement(BlockState worldState, BlockState modelState) {
-		VanillaStairShapeState modelShapeState = getShapeState(worldState).model();
-		return modelState
+	protected BlockState mapState(BlockState ourState, BlockState theirStateWithProperties) {
+		VanillaStairShapeState modelShapeState = getShapeState(ourState).model();
+		return theirStateWithProperties
 				.setValue(StairsBlock.FACING, modelShapeState.facing)
 				.setValue(StairsBlock.HALF, modelShapeState.half)
 				.setValue(StairsBlock.SHAPE, modelShapeState.shape);

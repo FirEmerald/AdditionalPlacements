@@ -147,11 +147,6 @@ public class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock>
 	}
 
 	@Override
-	public BlockState withUnrotatedPlacement(BlockState worldState, BlockState modelState) {
-		return modelState; //no changes needed
-	}
-
-	@Override
 	@OnlyIn(Dist.CLIENT)
 	public ResourceLocation getBaseModelPrefix() {
 		return SlabModels.BASE_MODEL_FOLDER;

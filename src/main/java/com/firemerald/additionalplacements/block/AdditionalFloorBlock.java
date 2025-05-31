@@ -52,11 +52,6 @@ public abstract class AdditionalFloorBlock<T extends Block> extends AdditionalPl
 	}
 
 	@Override
-	public BlockState withUnrotatedPlacement(BlockState worldState, BlockState modelState) {
-		return modelState;
-	}
-
-	@Override
 	public boolean rotatesLogic(BlockState state) {
 		return rotateLogic;
 	}
