@@ -1,3 +1,7 @@
+# This repository is now obsolete. Please direct all queries to the new repository at https://github.com/FirEmerald/Additional-Placements #
+
+
+
 [![Discord](https://img.shields.io/discord/176190900945289237?style=flat-square&logo=discord&logoColor=ffffff&label=Discord)](https://discord.gg/ykHRhmC)  
 [![CurseForge Downloads](https://img.shields.io/curseforge/dt/674852?style=flat-square&label=Download%20on%20Curse%20%7C%20Forge)](https://www.curseforge.com/minecraft/mc-mods/additional-placements)  
 [![CurseForge Downloads](https://img.shields.io/curseforge/dt/930469?style=flat-square&label=Download%20on%20Curse%20%7C%20Fabric)](https://www.curseforge.com/minecraft/mc-mods/additional-placements-fabric)  
